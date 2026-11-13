@@ -141,8 +141,8 @@
         </div>
 
         <div class="flex items-center gap-2 ml-auto">
-            <button type="button" onclick="openQuickPrintModal()" class="px-3 py-1.5 rounded-lg font-extrabold transition-all bg-amber-500 hover:bg-amber-400 text-slate-950 border border-amber-300 shadow flex items-center gap-1.5" title="Cetak atau Hapus Riwayat Formulir">
-                <i class="fa-solid fa-print"></i> <span>Cetak / Riwayat</span>
+            <button type="button" onclick="openQuickPrintModal()" class="px-3 py-1.5 rounded-lg font-extrabold transition-all bg-amber-500 hover:bg-amber-400 text-slate-950 border border-amber-300 shadow flex items-center gap-1.5" title="Cetak Formulir Pendaftaran Anggota">
+                <i class="fa-solid fa-print"></i> <span>Cetak Formulir</span>
             </button>
             <button type="button" onclick="switchRoleView('user')" id="btnSwitchUser" class="px-3 py-1.5 rounded-lg font-bold transition-all bg-red-700 text-white border border-amber-400 shadow">
                 <i class="fa-solid fa-users mr-1"></i> Tampilan User
@@ -156,7 +156,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL DAFTAR CETAK CEPAT & HAPUS RIWAYAT ANGGOTA ==================== -->
+    <!-- ==================== MODAL DAFTAR CETAK CEPAT FORMULIR ANGGOTA ==================== -->
     <div id="quickPrintListModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <div class="gorga-card w-full max-w-2xl rounded-2xl overflow-hidden border-2 border-amber-400 shadow-2xl">
             <div class="bg-gradient-to-r from-red-950 via-red-900 to-slate-900 px-5 py-4 border-b border-amber-500/40 flex items-center justify-between">
@@ -165,8 +165,8 @@
                         <i class="fa-solid fa-print"></i>
                     </div>
                     <div>
-                        <h3 class="font-batak text-sm sm:text-base font-bold text-amber-300">CETAK FORMULIR &amp; KELOLA RIWAYAT ANGGOTA</h3>
-                        <p class="text-[11px] text-slate-300">Pilih nama Anda untuk mencetak formulir pendaftaran atau menghapus riwayat</p>
+                        <h3 class="font-batak text-sm sm:text-base font-bold text-amber-300">CETAK FORMULIR PENDAFTARAN ANGGOTA</h3>
+                        <p class="text-[11px] text-slate-300">Pilih nama anggota di bawah ini untuk melihat preview &amp; mencetak formulir</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeQuickPrintModal()" class="w-8 h-8 rounded-lg bg-slate-900 text-slate-300 hover:text-white flex items-center justify-center">
@@ -179,7 +179,7 @@
             </div>
             <div id="quickPrintListContainer" class="max-h-96 overflow-y-auto p-4 space-y-2.5"></div>
             <div class="bg-slate-950 px-5 py-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                <span class="text-slate-400">Anda dapat mencetak formulir atau menghapus riwayat kapan saja</span>
+                <span class="text-slate-400">Anggota yang berstatus <strong class="text-emerald-400">DITERIMA</strong> siap dicetak</span>
                 <button type="button" onclick="closeQuickPrintModal()" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold">Tutup</button>
             </div>
         </div>
@@ -345,28 +345,28 @@
                     <!-- BAGIAN KANAN DI ATAS HEADER: ICON PRINT + ICON NOTIFIKASI -->
                     <div class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-2.5">
                         <!-- ICON PRINT LANGSUNG DI HEADER -->
-                        <button type="button" onclick="openQuickPrintModal()" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 hover:bg-amber-400 border-2 border-white text-slate-950 flex flex-col items-center justify-center shadow-xl transition-all group" title="Cetak Formulir & Kelola Riwayat Pendaftaran">
+                        <button type="button" onclick="openQuickPrintModal()" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 hover:bg-amber-400 border-2 border-white text-slate-950 flex flex-col items-center justify-center shadow-xl transition-all group" title="Cetak Formulir Pendaftaran Anggota Baru">
                             <i class="fa-solid fa-print text-lg sm:text-xl group-hover:scale-110 transition-transform"></i>
                             <span class="text-[9px] font-black uppercase tracking-tighter leading-none mt-0.5">PRINT</span>
                         </button>
 
                         <!-- ICON LONCENG NOTIFIKASI -->
                         <div class="relative">
-                            <button type="button" onclick="toggleNotifDropdown()" id="notifBellBtn" class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-950/90 hover:bg-red-900 border-2 border-amber-400 text-amber-300 flex items-center justify-center shadow-xl transition-all group" title="Notifikasi Status Anggota Baru, Cetak & Hapus Riwayat">
+                            <button type="button" onclick="toggleNotifDropdown()" id="notifBellBtn" class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-950/90 hover:bg-red-900 border-2 border-amber-400 text-amber-300 flex items-center justify-center shadow-xl transition-all group" title="Notifikasi Status Anggota Baru & Cetak Formulir">
                                 <i class="fa-solid fa-bell text-xl sm:text-2xl group-hover:scale-110 transition-transform"></i>
                                 <span id="notifRedDot" class="absolute -top-1.5 -right-1.5 flex h-6 min-w-[24px] items-center justify-center rounded-full bg-red-600 px-1.5 text-[11px] font-extrabold text-white border-2 border-white shadow-lg animate-bounce">
                                     0
                                 </span>
                             </button>
 
-                            <!-- Dropdown Daftar Anggota Baru yang Diterima / Ditolak + Tombol Print & Hapus -->
+                            <!-- Dropdown Daftar Anggota Baru yang Diterima / Ditolak + Tombol Print -->
                             <div id="notifDropdownPanel" class="hidden absolute right-0 mt-3 w-80 sm:w-96 gorga-card rounded-2xl border-2 border-amber-400 shadow-2xl overflow-hidden z-50">
                                 <div class="bg-gradient-to-r from-red-900 via-red-800 to-slate-900 px-4 py-3 border-b border-amber-500/40 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <i class="fa-solid fa-bell text-amber-400"></i>
-                                        <span class="font-bold text-xs sm:text-sm text-white">Status, Cetak &amp; Hapus Riwayat</span>
+                                        <span class="font-bold text-xs sm:text-sm text-white">Status Anggota &amp; Print Formulir</span>
                                     </div>
-                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Aktif</span>
+                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Siap Cetak</span>
                                 </div>
                                 <div class="p-2 bg-slate-950/80 border-b border-slate-800">
                                     <input type="text" id="notifSearchInput" oninput="renderHeaderNotifications()" placeholder="Cari nama anggota baru..." 
@@ -376,7 +376,7 @@
                                 </div>
                                 <div class="bg-slate-950/90 px-4 py-2.5 text-center border-t border-slate-800 flex items-center justify-between">
                                     <button type="button" onclick="openQuickPrintModal(); toggleNotifDropdown();" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold">
-                                        <i class="fa-solid fa-print mr-1"></i> Kelola Semua Riwayat
+                                        <i class="fa-solid fa-print mr-1"></i> Lihat Semua Cetak
                                     </button>
                                     <button type="button" onclick="switchUserMenu('pendaftaran'); toggleNotifDropdown();" class="text-xs text-amber-400 hover:text-amber-300 font-bold">
                                         <i class="fa-solid fa-user-plus mr-1"></i> Form Daftar Baru
@@ -628,7 +628,7 @@
             <!-- ==================== 3. MENU FORM PENDAFTARAN KEANGGOTAAN BARU & CETAK FORMULIR ==================== -->
             <section id="userSectionPendaftaran" class="space-y-8 hidden">
 
-                <!-- KOTAK 1: DAFTAR ANGGOTA BARU YANG DITERIMA (TOMBOL CETAK & HAPUS RIWAYAT) -->
+                <!-- KOTAK 1: DAFTAR ANGGOTA BARU YANG DITERIMA (USER HANYA BISA CETAK FORMULIR) -->
                 <div class="gorga-card rounded-3xl overflow-hidden max-w-4xl mx-auto border-2 border-amber-400">
                     <div class="bg-gradient-to-r from-amber-600 via-red-800 to-slate-900 px-6 py-4 border-b border-amber-400 flex flex-wrap items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
@@ -637,10 +637,10 @@
                             </div>
                             <div>
                                 <h3 class="font-batak text-base sm:text-lg font-black text-white">
-                                    CETAK FORMULIR &amp; HAPUS RIWAYAT ANGGOTA DITERIMA
+                                    CETAK FORMULIR ANGGOTA BARU YANG DITERIMA
                                 </h3>
                                 <p class="text-xs text-amber-100">
-                                    Bagi anggota baru yang sudah diterima BPH, silakan klik <strong>Cetak</strong> untuk mencetak formulir atau <strong>Hapus</strong> untuk menghapus riwayat kapan saja:
+                                    Bagi anggota baru yang sudah diterima BPH, silakan klik tombol <strong>Cetak Formulir</strong> di samping nama Anda:
                                 </p>
                             </div>
                         </div>
@@ -954,7 +954,7 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button" onclick="openQuickPrintModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs sm:text-sm shadow-lg transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-print"></i> Cetak / Hapus Riwayat Anggota
+                        <i class="fa-solid fa-print"></i> Cetak &amp; Hapus Riwayat (Admin)
                     </button>
                     <button type="button" onclick="switchRoleView('user')" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg transition-all flex items-center gap-2">
                         <i class="fa-solid fa-eye"></i> Lihat Hasil di Tampilan User
@@ -1018,7 +1018,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="switchAdminMenu('newmember')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5">
-                                <i class="fa-solid fa-print"></i> Kelola &amp; Cetak Pendaftar
+                                <i class="fa-solid fa-print"></i> Kelola &amp; Hapus Pendaftar
                             </button>
                             <button type="button" onclick="simulateNewVisitor()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 text-xs font-bold">
                                 <i class="fa-solid fa-plus mr-1"></i> Simulasi +1 Kunjungan
@@ -1047,7 +1047,7 @@
                     <div class="rounded-2xl bg-slate-900/90 border border-slate-800 p-4 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300">
-                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pengunjung Terakhir (Terdata ke Spreadsheet)
+                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pengunjung Terakhir (Khusus Admin Dapat Menghapus)
                             </h3>
                             <input type="text" id="admVisitorSearchInput" oninput="renderAdminVisitorLogs()" placeholder="Cari nama pengunjung..." 
                                    class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
@@ -1299,12 +1299,12 @@
                     </button>
                 </div>
 
-                <!-- 8. MENU NEW MEMBER ADMIN (Terima / Tolak + Notif WA + Cetak + Hapus Riwayat) -->
+                <!-- 8. MENU NEW MEMBER ADMIN (Terima / Tolak + Notif WA + Cetak + Hapus Riwayat Khusus Admin) -->
                 <div id="admSec_newmember" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <h2 class="font-batak text-xl font-bold text-amber-400">8. MENU NEW MEMBER (VERIFIKASI WA, CETAK &amp; HAPUS RIWAYAT)</h2>
-                            <p class="text-xs text-slate-300">Terima/Tolak pendaftaran dengan notifikasi WhatsApp otomatis, cetak formulir, atau hapus riwayat pendaftar kapan saja.</p>
+                            <p class="text-xs text-slate-300">Terima/Tolak pendaftaran dengan notifikasi WhatsApp otomatis, cetak formulir, atau hapus riwayat pendaftar (Hanya Admin yang dapat menghapus).</p>
                         </div>
                         <input type="text" id="admMemberSearchInput" oninput="renderAdminMemberList()" placeholder="Cari nama pendaftar..." 
                                class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
@@ -2329,7 +2329,7 @@
             syncSoundCloudPlayer(false);
         }
 
-        // ==================== DAFTAR CETAK & HAPUS RIWAYAT DI MENU 3 (USER) ====================
+        // ==================== DAFTAR CETAK DI MENU 3 (USER HANYA BISA CETAK, TIDAK BISA HAPUS) ====================
         function renderUserAcceptedPrintList() {
             const container = document.getElementById('userAcceptedPrintList');
             if (!container) return;
@@ -2354,7 +2354,7 @@
             }
 
             container.innerHTML = filtered.map(m => `
-                <div class="p-3 rounded-2xl bg-slate-900 border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="p-3 rounded-2xl bg-slate-900 border border-amber-500/40 flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
                              onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
@@ -2365,22 +2365,15 @@
                             <div class="text-[10px] text-slate-400 truncate">${m.tubuniBoru} • ${m.domisili}</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1.5 w-full sm:w-auto shrink-0">
-                        <button type="button" onclick="cetakFormulirAnggota('${m.id}')"
-                                class="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-print"></i> Cetak
-                        </button>
-                        <button type="button" onclick="hapusRiwayatAnggota('${m.id}')"
-                                class="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-1"
-                                title="Hapus Riwayat Saya">
-                            <i class="fa-solid fa-trash"></i> Hapus
-                        </button>
-                    </div>
+                    <button type="button" onclick="cetakFormulirAnggota('${m.id}')"
+                            class="shrink-0 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> Cetak Formulir
+                    </button>
                 </div>
             `).join('');
         }
 
-        // ==================== MODAL CETAK CEPAT & HAPUS RIWAYAT DARI HEADER ====================
+        // ==================== MODAL CETAK CEPAT (TOMBOL HAPUS HANYA MUNCUL JIKA ADMIN) ====================
         function openQuickPrintModal() {
             const modal = document.getElementById('quickPrintListModal');
             if (!modal) return;
@@ -2402,7 +2395,8 @@
             const searchEl = document.getElementById('quickPrintSearchInput');
             const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
 
-            const sourceList = appState.currentRole === 'admin'
+            const isAdmin = appState.currentRole === 'admin';
+            const sourceList = isAdmin
                 ? appState.members
                 : appState.members.filter(m => String(m.verificationStatus || '').toUpperCase().trim() === 'DITERIMA');
 
@@ -2427,6 +2421,14 @@
                         ? '<span class="text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-400 font-bold">DITOLAK</span>'
                         : '<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400 font-bold">PENDING</span>');
 
+                // Tombol Hapus Riwayat HANYA muncul jika Admin BPH yang sedang login
+                const adminDeleteBtn = isAdmin ? `
+                    <button type="button" onclick="hapusRiwayatAnggota('${m.id}')"
+                            class="px-3 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white font-bold text-xs transition-all flex items-center gap-1">
+                        <i class="fa-solid fa-trash"></i> Hapus Riwayat
+                    </button>
+                ` : '';
+
                 return `
                     <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
                         <div class="flex items-center gap-3 min-w-0">
@@ -2446,17 +2448,14 @@
                                     class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow flex items-center gap-1.5">
                                 <i class="fa-solid fa-print"></i> Cetak Formulir
                             </button>
-                            <button type="button" onclick="hapusRiwayatAnggota('${m.id}')"
-                                    class="px-3 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white font-bold text-xs transition-all flex items-center gap-1">
-                                <i class="fa-solid fa-trash"></i> Hapus Riwayat
-                            </button>
+                            ${adminDeleteBtn}
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER (CETAK & HAPUS RIWAYAT) ====================
+        // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER (TANPA TOMBOL HAPUS UNTUK USER) ====================
         function renderHeaderNotifications() {
             const allVerified = appState.members.filter(m => {
                 const st = String(m.verificationStatus || '').toUpperCase().trim();
@@ -2491,25 +2490,13 @@
                     : 'bg-red-500/20 border-red-400 text-red-300';
                 const iconClass = isAccepted ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-red-400';
 
-                const actionButtonsHtml = isAccepted ? `
-                    <div class="mt-2 grid grid-cols-2 gap-1.5">
-                        <button type="button" onclick="cetakFormulirAnggota('${m.id}')" 
-                                class="py-1.5 px-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-[11px] shadow flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-print"></i> Cetak Formulir
-                        </button>
-                        <button type="button" onclick="hapusRiwayatAnggota('${m.id}')" 
-                                class="py-1.5 px-2.5 rounded-lg bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white font-bold text-[11px] flex items-center justify-center gap-1 transition-all">
-                            <i class="fa-solid fa-trash"></i> Hapus Riwayat
-                        </button>
-                    </div>
-                ` : `
-                    <div class="mt-2">
-                        <button type="button" onclick="hapusRiwayatAnggota('${m.id}')" 
-                                class="w-full py-1.5 px-2.5 rounded-lg bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-red-300 hover:text-white font-bold text-[11px] flex items-center justify-center gap-1 transition-all">
-                            <i class="fa-solid fa-trash"></i> Hapus Riwayat Notifikasi
-                        </button>
-                    </div>
-                `;
+                // User hanya bisa mencetak formulir, TIDAK BISA menghapus riwayat
+                const printButtonHtml = isAccepted ? `
+                    <button type="button" onclick="cetakFormulirAnggota('${m.id}')" 
+                            class="mt-2 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-print"></i> Cetak Formulir Pendaftaran
+                    </button>
+                ` : '';
 
                 return `
                     <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 flex flex-col gap-1">
@@ -2525,7 +2512,7 @@
                                 </div>
                             </div>
                         </div>
-                        ${actionButtonsHtml}
+                        ${printButtonHtml}
                     </div>
                 `;
             }).join('');
@@ -2660,9 +2647,11 @@
             const searchEl = document.getElementById('admVisitorSearchInput');
             if (!logList) return;
             const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+            const indexedLogs = appState.stats.recentLogs.map((l, idx) => ({ ...l, originalIndex: idx }));
             const logs = q
-                ? appState.stats.recentLogs.filter(l => String(l.name || '').toLowerCase().includes(q))
-                : appState.stats.recentLogs;
+                ? indexedLogs.filter(l => String(l.name || '').toLowerCase().includes(q))
+                : indexedLogs;
 
             if (logs.length === 0) {
                 logList.innerHTML = `<div class="p-3 text-center text-slate-400">Tidak ada nama pengunjung yang cocok.</div>`;
@@ -2670,11 +2659,30 @@
             }
 
             logList.innerHTML = logs.map(l => `
-                <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950 border border-slate-800">
                     <span class="font-bold text-white"><i class="fa-solid fa-user text-amber-400 mr-1.5"></i> ${l.name}</span>
-                    <span class="text-slate-400">${l.page} • <strong class="text-amber-300">${l.time}</strong></span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400">${l.page} • <strong class="text-amber-300">${l.time}</strong></span>
+                        <button type="button" onclick="hapusRiwayatKunjunganAdmin(${l.originalIndex})" class="px-2 py-1 rounded bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-[11px] font-bold transition-all" title="Hapus Riwayat Kunjungan Ini">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        // Hapus riwayat kunjungan khusus Admin BPH
+        function hapusRiwayatKunjunganAdmin(logIndex) {
+            if (appState.currentRole !== 'admin') {
+                showToast('Akses Ditolak! Hanya Admin BPH yang dapat menghapus riwayat.', 'danger');
+                return;
+            }
+            const target = appState.stats.recentLogs[logIndex];
+            if (!target) return;
+            appState.stats.recentLogs.splice(logIndex, 1);
+            renderAdminVisitorLogs();
+            showToast(`Riwayat kunjungan "${target.name}" telah dihapus oleh Admin.`, 'info');
+            callServerSafe('hapusRiwayatKunjungan', [logIndex]);
         }
 
         function renderAdminMemberList() {
@@ -2738,7 +2746,7 @@
                                 <i class="fa-solid fa-print"></i> Cetak Formulir
                             </button>
                             <button type="button" onclick="hapusRiwayatAnggota('${m.id}')" class="col-span-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-red-700 border border-red-500/40 text-red-300 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-trash"></i> Hapus Riwayat
+                                <i class="fa-solid fa-trash"></i> Hapus Riwayat (Admin)
                             </button>
                         </div>
                     </div>
@@ -3179,12 +3187,17 @@
             }
         }
 
-        // ==================== FUNGSI HAPUS RIWAYAT PENDAFTARAN ANGGOTA KAPAN SAJA ====================
+        // ==================== FUNGSI HAPUS RIWAYAT PENDAFTARAN (DIKUNCI KHUSUS ADMIN BPH) ====================
         function hapusRiwayatAnggota(memberId) {
+            if (appState.currentRole !== 'admin') {
+                showToast('Akses Ditolak! Hanya Admin BPH yang dapat menghapus riwayat pendaftaran.', 'danger');
+                return;
+            }
+
             const target = appState.members.find(m => String(m.id) === String(memberId));
             if (!target) return;
 
-            const konfirmasi = confirm(`Apakah Anda yakin ingin menghapus riwayat pendaftaran atas nama "${target.namaLengkap}"?`);
+            const konfirmasi = confirm(`[ADMIN BPH] Apakah Anda yakin ingin menghapus permanen riwayat pendaftaran atas nama "${target.namaLengkap}"?`);
             if (!konfirmasi) return;
 
             appState.members = appState.members.filter(m => String(m.id) !== String(memberId));
@@ -3193,7 +3206,7 @@
             renderAdminAll();
             renderQuickPrintModalList();
 
-            showToast(`Riwayat pendaftaran "${target.namaLengkap}" berhasil dihapus!`, 'info');
+            showToast(`Riwayat pendaftaran "${target.namaLengkap}" berhasil dihapus oleh Admin!`, 'info');
             callServerSafe('hapusRiwayatAnggota', [memberId]);
         }
 
