@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Wajib agar foto dari Google Drive selalu tampil dan tidak diblokir di GitHub Pages -->
+    <meta name="referrer" content="no-referrer">
     <title>PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SoundCloud Widget API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts -->
@@ -701,7 +705,7 @@
                                          class="w-24 h-28 rounded-xl object-cover border-2 border-amber-400 shadow-md shrink-0">
                                     <div class="space-y-2 flex-1 w-full text-center sm:text-left">
                                         <div class="text-xs text-slate-300 font-medium">
-                                            Unggah Pas Foto terbaru Anda (Format JPG/PNG) atau masukkan URL Foto:
+                                            Unggah Pas Foto terbaru Anda (Otomatis tersimpan ke Google Drive Punguan) atau masukkan URL Foto:
                                         </div>
                                         <input type="file" id="regPhotoFile" accept="image/*" onchange="previewRegistrationPhoto(event)"
                                                class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-700 file:text-white hover:file:bg-red-600 cursor-pointer">
@@ -746,6 +750,43 @@
                 <p class="text-xs font-semibold text-slate-300">since 2026</p>
             </div>
         </footer>
+
+        <!-- ==================== POJOK KIRI BAWAH: PEMUTAR MUSIK SOUNDCLOUD ==================== -->
+        <div class="fixed bottom-3 left-3 sm:bottom-5 sm:left-5 z-40 flex flex-col items-start">
+            <!-- Kotak Visual SoundCloud (Bisa dibuka/tutup) -->
+            <div id="scPlayerBox" class="hidden mb-2 w-72 sm:w-80 gorga-card rounded-2xl overflow-hidden border-2 border-amber-400 shadow-2xl p-2">
+                <div class="flex items-center justify-between px-2 pb-1.5 mb-1 border-b border-slate-800 text-[11px] font-bold text-amber-300">
+                    <span><i class="fa-brands fa-soundcloud text-orange-500 mr-1"></i> SoundCloud Player</span>
+                    <button type="button" onclick="toggleScVisualBox()" class="text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <iframe id="scWidgetIframe" width="100%" height="120" scrolling="no" frameborder="no" allow="autoplay"
+                    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/forss/flickermood&color=%23991b1b&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+                </iframe>
+            </div>
+
+            <!-- Tombol Kontrol Musik Melayang -->
+            <div class="gorga-card rounded-2xl p-2 pr-3 border-2 border-amber-400 shadow-2xl flex items-center gap-2.5">
+                <button type="button" onclick="togglePlayMusic()" id="btnPlayPauseMusic"
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-700 to-amber-600 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all"
+                    title="Putar / Jeda Musik">
+                    <i id="iconPlayPauseMusic" class="fa-solid fa-play text-sm"></i>
+                </button>
+                <div class="max-w-[130px] sm:max-w-[175px] cursor-pointer" onclick="toggleScVisualBox()" title="Klik untuk melihat pemutar SoundCloud">
+                    <div class="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-400">
+                        <i id="musicDiscIcon" class="fa-solid fa-compact-disc"></i>
+                        <span id="musicStatusText">Musik Punguan</span>
+                    </div>
+                    <div id="userMusicTitleDisplay" class="text-xs font-bold text-white truncate">
+                        Lagu Batak Pilihan BPH
+                    </div>
+                </div>
+                <button type="button" onclick="toggleScVisualBox()" class="text-slate-400 hover:text-amber-300 text-xs px-1" title="Buka Player SoundCloud">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+            </div>
+        </div>
 
         <!-- ==================== POJOK KANAN BAWAH: ANIMASI COWO CEWEK BATAK ==================== -->
         <div class="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-40 flex flex-col items-end pointer-events-none">
@@ -825,7 +866,7 @@
             </div>
         </div>
 
-        <!-- Layout Menu Admin (9 Menu Lengkap) -->
+        <!-- Layout Menu Admin (10 Menu Lengkap) -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- Navigasi Menu Admin di Samping -->
@@ -861,6 +902,9 @@
                     </button>
                     <button type="button" onclick="switchAdminMenu('akunadmin')" id="admNav_akunadmin" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-amber-300 hover:bg-slate-800/80 border border-amber-500/30 mt-2">
                         <i class="fa-solid fa-key w-5 text-center"></i> 9. Menu Profil Admin (Ubah Sandi)
+                    </button>
+                    <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
+                        <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 10. Menu Musik SoundCloud
                     </button>
                 </div>
             </aside>
@@ -915,7 +959,7 @@
                 <div id="admSec_header" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4">
                         <h2 class="font-batak text-xl font-bold text-amber-400">2. MENU HEADER &amp; LOGO WEBSITE</h2>
-                        <p class="text-xs text-slate-300">Ubah kapan saja foto pada Header website dan Logo Punguan di pojok kiri atas</p>
+                        <p class="text-xs text-slate-300">Ubah kapan saja foto pada Header website dan Logo Punguan di pojok kiri atas (Otomatis masuk ke Google Drive)</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -998,7 +1042,7 @@
                 <div id="admSec_album" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4">
                         <h2 class="font-batak text-xl font-bold text-amber-400">5. MENU MENGUBAH FOTO ALBUM KEGIATAN</h2>
-                        <p class="text-xs text-slate-300">Tambahkan foto kegiatan baru ke dalam album atau hapus foto yang sudah ada</p>
+                        <p class="text-xs text-slate-300">Tambahkan foto kegiatan baru ke dalam album (Otomatis tersimpan ke Google Drive Punguan) atau hapus foto yang sudah ada</p>
                     </div>
 
                     <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
@@ -1024,7 +1068,7 @@
                     <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-2">
                         <div>
                             <h2 class="font-batak text-xl font-bold text-amber-400">6. MENU PROFIL &amp; STRUKTUR PENGURUS</h2>
-                            <p class="text-xs text-slate-300">Ubah kapan saja nama dan foto profil ke-8 jabatan pengurus Punguan</p>
+                            <p class="text-xs text-slate-300">Ubah kapan saja nama dan foto profil ke-8 jabatan pengurus Punguan (Otomatis tersimpan ke Google Drive)</p>
                         </div>
                         <button type="button" onclick="saveAdminPengurus()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-amber-600 text-white font-bold text-xs sm:text-sm shadow-lg">
                             <i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Semua Perubahan Pengurus
@@ -1184,6 +1228,46 @@
                             <i class="fa-solid fa-key mr-1.5"></i> Simpan Username &amp; Kata Sandi Admin
                         </button>
                     </div>
+                </div>
+
+                <!-- 10. MENU MUSIK SOUNDCLOUD ADMIN -->
+                <div id="admSec_musik" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
+                    <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h2 class="font-batak text-xl font-bold text-amber-400">10. MENU MUSIK LATAR (SOUNDCLOUD)</h2>
+                            <p class="text-xs text-slate-300">Ganti lagu latar website kapan saja cukup dengan menempelkan link lagu dari SoundCloud</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-orange-500/20 border border-orange-400 text-orange-300 text-xs font-bold">
+                            <i class="fa-brands fa-soundcloud mr-1"></i> SoundCloud Audio
+                        </span>
+                    </div>
+
+                    <div class="space-y-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-amber-300 mb-1.5">Judul Lagu / Gondang yang Ditampilkan</label>
+                            <input type="text" id="admMusicTitleInput" placeholder="Contoh: Gondang Batak Toba / Lagu Naposo Simatupang"
+                                   class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-amber-300 mb-1.5">Link Lagu SoundCloud (URL atau Kode Embed)</label>
+                            <input type="text" id="admMusicUrlInput" placeholder="Contoh: https://soundcloud.com/nama-artis/judul-lagu-batak"
+                                   class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                            <p class="text-[11px] text-slate-400 mt-1.5">
+                                <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>
+                                Buka aplikasi/web SoundCloud, cari lagu Batak yang diinginkan, klik tombol <strong>Share / Copy Link</strong>, lalu tempelkan link-nya di atas.
+                            </p>
+                        </div>
+
+                        <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+                            <input type="checkbox" id="admMusicAutoplayInput" checked class="accent-amber-500 w-4 h-4">
+                            <span class="text-xs font-semibold text-slate-200">Putar musik otomatis saat pengunjung membuka &amp; masuk ke website</span>
+                        </label>
+                    </div>
+
+                    <button type="button" onclick="saveAdminMusic()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-600 via-red-700 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-sm shadow-lg">
+                        <i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan &amp; Terapkan Musik SoundCloud
+                    </button>
                 </div>
 
             </div>
@@ -1412,26 +1496,38 @@
                     verificationStatus: 'PENDING',
                     timestamp: 'Baru saja'
                 }
-            ]
+            ],
+
+            // 10. Data Musik Latar SoundCloud (Bisa diubah Admin kapan saja)
+            music: {
+                title: 'Musik & Lagu Batak Punguan',
+                soundcloudUrl: 'https://soundcloud.com/forss/flickermood',
+                autoPlay: true
+            }
         };
 
         // Buffer gambar sementara saat user upload Pas Foto
         let currentUploadedRegPhoto = 'https://placehold.co/150x180/7f1d1d/ffffff?text=PAS+FOTO';
 
         // =========================================================================
-        // URL WEB APP APPS SCRIPT ANDA SUDAH TERPASANG DI BAWAH INI
+        // URL WEB APP APPS SCRIPT ANDA (TERHUBUNG KE GOOGLE SHEETS & GOOGLE DRIVE)
         // =========================================================================
         const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec";
 
         /**
-         * PENGHUBUNG GITHUB KE GOOGLE SHEETS (PENGGANTI google.script.run)
-         * Semua perubahan Admin otomatis terbang ke Google Sheets & dilihat semua orang!
+         * PENGHUBUNG GITHUB KE GOOGLE SHEETS & GOOGLE DRIVE
+         * Timeout diatur 20 detik agar upload foto ke Google Drive berjalan mulus.
          */
-        function callServerSafe(fnName, argsArray, onSuccess, onFallback, timeoutMs = 8000) {
+        function callServerSafe(fnName, argsArray, onSuccess, onFallback, timeoutMs = 20000) {
             if (!GOOGLE_SHEET_WEB_APP_URL || GOOGLE_SHEET_WEB_APP_URL.includes("TEMPEL_URL")) {
                 console.warn("URL Google Sheets belum dipasang!");
                 if (typeof onFallback === 'function') onFallback('url_belum_diisi');
                 return;
+            }
+
+            const syncBadge = document.getElementById('syncStatusBadge');
+            if (syncBadge && fnName !== 'getInitialAppData') {
+                syncBadge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-fade text-amber-400"></i> Menyimpan ke Cloud...';
             }
 
             let isDone = false;
@@ -1445,7 +1541,7 @@
             fetch(GOOGLE_SHEET_WEB_APP_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8' // Bebas blokir CORS di GitHub Pages
+                    'Content-Type': 'text/plain;charset=utf-8'
                 },
                 body: JSON.stringify({
                     fnName: fnName,
@@ -1457,7 +1553,13 @@
                 if (!isDone) {
                     isDone = true;
                     clearTimeout(timer);
+                    if (syncBadge) {
+                        syncBadge.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-400"></i> Tersinkron Drive & Sheet';
+                    }
                     if (typeof onSuccess === 'function') onSuccess(res);
+                    if (['simpanPengaturanHeader', 'tambahFotoAlbumSpreadsheet', 'simpanStrukturPengurusSpreadsheet', 'simpanPendaftaranAnggotaBaru'].includes(fnName)) {
+                        refreshStateFromServerSilent();
+                    }
                 }
             })
             .catch(err => {
@@ -1470,7 +1572,43 @@
             });
         }
 
-        // Helper Kompresi Gambar Otomatis agar Base64 < 35.000 karakter (Aman untuk batas sel Google Spreadsheet)
+        // Mengambil link foto Google Drive & pengaturan terbaru dari Spreadsheet secara otomatis
+        function refreshStateFromServerSilent() {
+            fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ fnName: 'getInitialAppData', args: [] })
+            })
+            .then(r => r.json())
+            .then(serverData => {
+                if (!serverData) return;
+                applyServerDataToState(serverData);
+                renderAllUserViews();
+                renderAdminAll();
+            })
+            .catch(() => {});
+        }
+
+        function applyServerDataToState(serverData) {
+            if (!serverData) return;
+            if (serverData.adminAuth) {
+                appState.adminAuth.username = serverData.adminAuth.username || 'admin';
+                appState.adminAuth.password = serverData.adminAuth.password || 'admin123';
+            }
+            Object.assign(appState.stats, serverData.stats || {});
+            Object.assign(appState.header, serverData.header || {});
+            if (serverData.runningText) appState.runningText = serverData.runningText;
+            if (serverData.visi) appState.visi = serverData.visi;
+            if (serverData.misi && serverData.misi.length) appState.misi = serverData.misi;
+            if (serverData.agendas) appState.agendas = serverData.agendas;
+            if (serverData.albums) appState.albums = serverData.albums;
+            if (serverData.pengurus && serverData.pengurus.length) appState.pengurus = serverData.pengurus;
+            if (serverData.contacts) Object.assign(appState.contacts, serverData.contacts);
+            if (serverData.members) appState.members = serverData.members;
+            if (serverData.music) Object.assign(appState.music, serverData.music);
+        }
+
+        // Helper Kompresi Gambar Otomatis agar cepat diunggah ke Google Drive
         function compressImageFile(file, maxWidth, callback) {
             if (!file) return;
             const reader = new FileReader();
@@ -1488,7 +1626,7 @@
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.80);
                     callback(compressedDataUrl);
                 };
                 img.onerror = function() {
@@ -1534,6 +1672,134 @@
                 box.classList.add('hidden');
             }, 4000);
         }
+
+        // ==================== LOGIKA PEMUTAR MUSIK SOUNDCLOUD ====================
+        let scWidget = null;
+        let isMusicPlaying = false;
+        let currentLoadedScUrl = '';
+
+        function cleanSoundCloudUrl(rawInput) {
+            if (!rawInput) return '';
+            let str = rawInput.trim();
+            if (str.includes('<iframe')) {
+                const match = str.match(/url=([^&"]+)/);
+                if (match && match[1]) return decodeURIComponent(match[1]);
+            }
+            return str;
+        }
+
+        function buildScEmbedSrc(trackUrl, autoPlay = false) {
+            const cleanUrl = cleanSoundCloudUrl(trackUrl) || 'https://soundcloud.com/forss/flickermood';
+            return `https://w.soundcloud.com/player/?url=${encodeURIComponent(cleanUrl)}&color=%23991b1b&auto_play=${autoPlay}&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+        }
+
+        function updateMusicUI(playing) {
+            isMusicPlaying = playing;
+            const icon = document.getElementById('iconPlayPauseMusic');
+            const disc = document.getElementById('musicDiscIcon');
+            const statusTxt = document.getElementById('musicStatusText');
+
+            if (icon) icon.className = playing ? 'fa-solid fa-pause text-sm' : 'fa-solid fa-play text-sm';
+            if (disc) {
+                if (playing) disc.classList.add('fa-spin');
+                else disc.classList.remove('fa-spin');
+            }
+            if (statusTxt) statusTxt.textContent = playing ? 'Sedang Diputar' : 'Musik Dijeda';
+        }
+
+        function initScWidgetEvents() {
+            const iframe = document.getElementById('scWidgetIframe');
+            if (!iframe || typeof SC === 'undefined' || !SC.Widget) return;
+            scWidget = SC.Widget(iframe);
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.bind(SC.Widget.Events.PLAY, () => updateMusicUI(true));
+                scWidget.bind(SC.Widget.Events.PAUSE, () => updateMusicUI(false));
+                scWidget.bind(SC.Widget.Events.FINISH, () => {
+                    scWidget.seekTo(0);
+                    scWidget.play();
+                });
+            });
+        }
+
+        function syncSoundCloudPlayer(forceAutoPlay = false) {
+            const titleEl = document.getElementById('userMusicTitleDisplay');
+            if (titleEl) titleEl.textContent = appState.music.title || 'Musik Punguan';
+
+            const cleanUrl = cleanSoundCloudUrl(appState.music.soundcloudUrl);
+            const iframe = document.getElementById('scWidgetIframe');
+            if (!iframe || !cleanUrl) return;
+
+            const shouldPlay = forceAutoPlay || appState.music.autoPlay;
+
+            if (!scWidget && typeof SC !== 'undefined' && SC.Widget) {
+                initScWidgetEvents();
+            }
+
+            if (currentLoadedScUrl !== cleanUrl) {
+                currentLoadedScUrl = cleanUrl;
+                if (scWidget && typeof scWidget.load === 'function') {
+                    scWidget.load(cleanUrl, {
+                        auto_play: shouldPlay,
+                        color: '#991b1b',
+                        hide_related: true,
+                        show_comments: false,
+                        show_user: true,
+                        show_reposts: false,
+                        show_teaser: false,
+                        callback: () => {
+                            if (shouldPlay) scWidget.play();
+                        }
+                    });
+                } else {
+                    iframe.src = buildScEmbedSrc(cleanUrl, shouldPlay);
+                    initScWidgetEvents();
+                }
+            } else if (forceAutoPlay && scWidget) {
+                scWidget.play();
+            }
+        }
+
+        function togglePlayMusic() {
+            const iframe = document.getElementById('scWidgetIframe');
+            if (!scWidget && iframe && typeof SC !== 'undefined' && SC.Widget) {
+                initScWidgetEvents();
+            }
+            if (scWidget) {
+                scWidget.toggle();
+            }
+        }
+
+        function toggleScVisualBox() {
+            const box = document.getElementById('scPlayerBox');
+            if (box) box.classList.toggle('hidden');
+        }
+
+        function saveAdminMusic() {
+            const title = document.getElementById('admMusicTitleInput').value.trim();
+            const rawUrl = document.getElementById('admMusicUrlInput').value.trim();
+            const autoPlay = document.getElementById('admMusicAutoplayInput').checked;
+
+            if (!rawUrl) {
+                showToast('Masukkan link lagu SoundCloud terlebih dahulu!', 'danger');
+                return;
+            }
+
+            appState.music.title = title || 'Lagu Batak Punguan';
+            appState.music.soundcloudUrl = cleanSoundCloudUrl(rawUrl);
+            appState.music.autoPlay = autoPlay;
+
+            currentLoadedScUrl = ''; // Paksa muat ulang lagu baru
+            syncSoundCloudPlayer(true);
+            showToast('Musik SoundCloud berhasil diperbarui & disimpan ke Spreadsheet!', 'success');
+            callServerSafe('simpanMusikSpreadsheet', [appState.music]);
+        }
+
+        // Pemicu otomatis saat pengunjung menyentuh layar pertama kali
+        document.addEventListener('click', function autoStartMusicOnFirstTap() {
+            if (appState.music.autoPlay && scWidget && !isMusicPlaying) {
+                scWidget.play();
+            }
+        }, { once: true });
 
         // ==================== FUNGSI LOGIN & SWITCH ROLE ====================
         function selectLoginTab(role) {
@@ -1614,7 +1880,7 @@
                             showToast('Username atau Kata Sandi Admin tidak sesuai!', 'danger');
                         }
                     },
-                    6000
+                    8000
                 );
             } else {
                 const inputEl = document.getElementById('visitorNameInput');
@@ -1649,11 +1915,16 @@
                     page: 'Login Pengunjung (Tercatat)'
                 });
 
-                // Langsung buka halaman tanpa menunggu proses simpan selesai agar tidak pernah stuck
                 document.getElementById('loginModal').classList.add('hidden');
                 switchRoleView('user');
-                showToast(`Horas, ${appState.visitorName}! Nama Anda telah tercatat di daftar kunjungan.`, 'success');
 
+                // Putar musik SoundCloud otomatis tepat saat pengunjung klik Masuk
+                if (appState.music && appState.music.autoPlay) {
+                    syncSoundCloudPlayer(true);
+                    if (scWidget) scWidget.play();
+                }
+
+                showToast(`Horas, ${appState.visitorName}! Nama Anda telah tercatat di daftar kunjungan.`, 'success');
                 callServerSafe('simpanKunjunganPengunjung', [visitData]);
             }
         }
@@ -1769,7 +2040,7 @@
                 albumGrid.innerHTML = appState.albums.map(alb => `
                     <div class="group rounded-2xl overflow-hidden bg-slate-900 border border-amber-500/30 shadow-xl flex flex-col">
                         <div class="relative h-52 overflow-hidden bg-slate-950">
-                            <img src="${alb.imageUrl}" alt="${alb.caption}" 
+                            <img src="${alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer"
                                  onerror="this.src='https://placehold.co/600x400/7f1d1d/fbbf24?text=Foto+Kegiatan'"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-amber-400/40 text-amber-300 text-[11px] font-bold">
@@ -1790,7 +2061,7 @@
                     <div class="h-2 bg-gradient-to-r from-red-800 via-amber-500 to-red-800"></div>
                     <div class="p-5 flex-1 flex flex-col items-center">
                         <div class="relative mb-3">
-                            <img src="${p.photoUrl}" alt="${p.nama}" 
+                            <img src="${p.photoUrl}" alt="${p.nama}" referrerpolicy="no-referrer"
                                  onerror="this.src='https://placehold.co/300x300/7f1d1d/fbbf24?text=PENGURUS'"
                                  class="w-24 h-24 rounded-2xl object-cover border-2 border-amber-400 shadow-md">
                         </div>
@@ -1822,6 +2093,9 @@
 
             // 8. Render Notifikasi Anggota Diterima / Ditolak di Pojok Kanan Atas Header
             renderHeaderNotifications();
+
+            // 10. Sinkronisasi Musik Latar SoundCloud
+            syncSoundCloudPlayer(false);
         }
 
         // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER ====================
@@ -1857,7 +2131,7 @@
 
                 return `
                     <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 flex items-center gap-3">
-                        <img src="${m.pasFoto}" alt="${m.namaLengkap}" 
+                        <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
                              onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
                              class="w-11 h-11 rounded-xl object-cover border border-amber-400/50 shrink-0">
                         <div class="min-w-0 flex-1">
@@ -1881,7 +2155,7 @@
         function previewRegistrationPhoto(event) {
             const file = event.target.files[0];
             if (!file) return;
-            compressImageFile(file, 360, function(compressedDataUrl) {
+            compressImageFile(file, 500, function(compressedDataUrl) {
                 currentUploadedRegPhoto = compressedDataUrl;
                 document.getElementById('regPhotoPreview').src = currentUploadedRegPhoto;
             });
@@ -1922,7 +2196,7 @@
 
             renderAllUserViews();
             renderAdminAll();
-            showToast(`Mauliate ${newMember.namaPanggilan}! Pendaftaran berhasil dikirim & menunggu verifikasi Admin BPH.`, 'success');
+            showToast(`Mauliate ${newMember.namaPanggilan}! Pendaftaran & Pas Foto sedang dikirim ke Google Drive & Spreadsheet.`, 'success');
 
             callServerSafe('simpanPendaftaranAnggotaBaru', [newMember]);
         }
@@ -1944,9 +2218,9 @@
             setTimeout(() => bubble.classList.remove('scale-105'), 250);
         }
 
-        // ==================== FUNGSI PANEL ADMIN (9 MENU) ====================
+        // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'akunadmin'];
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'akunadmin', 'musik'];
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
@@ -2015,7 +2289,7 @@
                 return `
                     <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div class="flex items-start gap-4">
-                            <img src="${m.pasFoto}" alt="${m.namaLengkap}" 
+                            <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
                                  onerror="this.src='https://placehold.co/150x180/7f1d1d/ffffff?text=FOTO'"
                                  class="w-20 h-24 rounded-xl object-cover border-2 border-amber-400 shrink-0">
                             <div class="space-y-1 text-xs">
@@ -2085,7 +2359,7 @@
             const admAlbumGrid = document.getElementById('admAlbumGrid');
             admAlbumGrid.innerHTML = appState.albums.map(alb => `
                 <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-800 flex flex-col">
-                    <img src="${alb.imageUrl}" alt="${alb.caption}" class="w-full h-36 object-cover">
+                    <img src="${alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer" class="w-full h-36 object-cover">
                     <div class="p-3 flex-1 flex flex-col justify-between gap-2">
                         <div>
                             <div class="text-[10px] text-amber-400 font-bold">${alb.date}</div>
@@ -2103,7 +2377,7 @@
             pengEditor.innerHTML = appState.pengurus.map((p, idx) => `
                 <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
                     <div class="flex items-center gap-3">
-                        <img id="admPengPreview_${idx}" src="${p.photoUrl}" class="w-14 h-14 rounded-xl object-cover border border-amber-400">
+                        <img id="admPengPreview_${idx}" src="${p.photoUrl}" referrerpolicy="no-referrer" class="w-14 h-14 rounded-xl object-cover border border-amber-400">
                         <div>
                             <span class="px-2.5 py-0.5 rounded-md bg-red-800 text-amber-300 text-[10px] font-extrabold uppercase">${p.jabatan}</span>
                             <div class="text-xs text-slate-400 mt-1">Ubah Nama &amp; Foto Profil</div>
@@ -2140,13 +2414,21 @@
             const pendingCount = appState.members.filter(m => m.verificationStatus === 'PENDING').length;
             document.getElementById('admPendingBadge').textContent = pendingCount;
             renderAdminMemberList();
+
+            // 10. Menu Musik SoundCloud
+            const musicTitleIn = document.getElementById('admMusicTitleInput');
+            const musicUrlIn = document.getElementById('admMusicUrlInput');
+            const musicAutoIn = document.getElementById('admMusicAutoplayInput');
+            if (musicTitleIn) musicTitleIn.value = appState.music.title || '';
+            if (musicUrlIn) musicUrlIn.value = appState.music.soundcloudUrl || '';
+            if (musicAutoIn) musicAutoIn.checked = appState.music.autoPlay !== false;
         }
 
         // Helper Upload File di Admin
         function handleAdminFileUpload(event, targetInputId, previewImgId) {
             const file = event.target.files[0];
             if (!file) return;
-            compressImageFile(file, 600, function(dataUrl) {
+            compressImageFile(file, 800, function(dataUrl) {
                 if (targetInputId) document.getElementById(targetInputId).value = dataUrl;
                 if (previewImgId) document.getElementById(previewImgId).src = dataUrl;
             });
@@ -2221,7 +2503,7 @@
                     applyAdminUpdateLocally();
                     showToast(`Berhasil! Username Admin diubah menjadi "${newUsername}" & Kata Sandi telah diperbarui.`, 'success');
                 },
-                6000
+                8000
             );
         }
 
@@ -2233,7 +2515,7 @@
 
             renderAllUserViews();
             renderAdminAll();
-            showToast('Foto Header & Logo berhasil diperbarui!', 'success');
+            showToast('Foto Header & Logo sedang disimpan ke Google Drive & Spreadsheet!', 'success');
             callServerSafe('simpanPengaturanHeader', [appState.header.logoUrl, appState.header.bannerUrl]);
         }
 
@@ -2321,7 +2603,7 @@
 
             renderAllUserViews();
             renderAdminAll();
-            showToast('Foto baru berhasil ditambahkan ke Album Kegiatan!', 'success');
+            showToast('Foto baru sedang diunggah ke Google Drive & Album Kegiatan!', 'success');
             callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto]);
         }
 
@@ -2345,7 +2627,7 @@
 
             renderAllUserViews();
             renderAdminAll();
-            showToast('Struktur & Foto Profil Pengurus berhasil diperbarui!', 'success');
+            showToast('Struktur & Foto Profil Pengurus sedang disimpan ke Google Drive & Spreadsheet!', 'success');
             callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus]);
         }
 
@@ -2421,6 +2703,7 @@
             isAppInitialized = true;
 
             try {
+                initScWidgetEvents();
                 renderAllUserViews();
                 renderAdminAll();
             } catch (err) {
@@ -2433,23 +2716,10 @@
                 [],
                 (serverData) => {
                     if (!serverData) return;
-                    if (serverData.adminAuth) {
-                        appState.adminAuth.username = serverData.adminAuth.username || 'admin';
-                        appState.adminAuth.password = serverData.adminAuth.password || 'admin123';
-                    }
-                    Object.assign(appState.stats, serverData.stats || {});
-                    Object.assign(appState.header, serverData.header || {});
-                    if (serverData.runningText) appState.runningText = serverData.runningText;
-                    if (serverData.visi) appState.visi = serverData.visi;
-                    if (serverData.misi && serverData.misi.length) appState.misi = serverData.misi;
-                    if (serverData.agendas) appState.agendas = serverData.agendas;
-                    if (serverData.albums) appState.albums = serverData.albums;
-                    if (serverData.pengurus && serverData.pengurus.length) appState.pengurus = serverData.pengurus;
-                    if (serverData.contacts) Object.assign(appState.contacts, serverData.contacts);
-                    if (serverData.members) appState.members = serverData.members;
+                    applyServerDataToState(serverData);
 
                     if (syncBadge) {
-                        syncBadge.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-400"></i> Tersinkron Spreadsheet';
+                        syncBadge.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-400"></i> Tersinkron Drive & Sheet';
                     }
                     renderAllUserViews();
                     renderAdminAll();
@@ -2459,7 +2729,7 @@
                         syncBadge.innerHTML = '<i class="fa-solid fa-bolt text-amber-400"></i> Mode Cepat Aktif';
                     }
                 },
-                8000
+                10000
             );
         }
 
