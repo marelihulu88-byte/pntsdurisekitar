@@ -1418,14 +1418,19 @@
         // Buffer gambar sementara saat user upload Pas Foto
         let currentUploadedRegPhoto = 'https://placehold.co/150x180/7f1d1d/ffffff?text=PAS+FOTO';
 
+        // =========================================================================
+        // URL WEB APP APPS SCRIPT ANDA SUDAH TERPASANG DI BAWAH INI
+        // =========================================================================
+        const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec";
+
         /**
-         * HELPER ANTI-STUCK GOOGLE APPS SCRIPT
-         * Menjalankan fungsi di Code.gs dengan batas waktu aman (default 3.5 detik).
-         * Jika koneksi lambat / diblokir cookie browser, aplikasi TIDAK AKAN STUCK.
+         * PENGHUBUNG GITHUB KE GOOGLE SHEETS (PENGGANTI google.script.run)
+         * Semua perubahan Admin otomatis terbang ke Google Sheets & dilihat semua orang!
          */
-        function callServerSafe(fnName, argsArray, onSuccess, onFallback, timeoutMs = 3500) {
-            if (typeof google === 'undefined' || !google.script || !google.script.run) {
-                if (typeof onFallback === 'function') onFallback('offline');
+        function callServerSafe(fnName, argsArray, onSuccess, onFallback, timeoutMs = 8000) {
+            if (!GOOGLE_SHEET_WEB_APP_URL || GOOGLE_SHEET_WEB_APP_URL.includes("TEMPEL_URL")) {
+                console.warn("URL Google Sheets belum dipasang!");
+                if (typeof onFallback === 'function') onFallback('url_belum_diisi');
                 return;
             }
 
@@ -1437,37 +1442,32 @@
                 }
             }, timeoutMs);
 
-            try {
-                const runner = google.script.run
-                    .withSuccessHandler((res) => {
-                        if (!isDone) {
-                            isDone = true;
-                            clearTimeout(timer);
-                            if (typeof onSuccess === 'function') onSuccess(res);
-                        }
-                    })
-                    .withFailureHandler((err) => {
-                        if (!isDone) {
-                            isDone = true;
-                            clearTimeout(timer);
-                            console.warn('Apps Script Error (' + fnName + '):', err);
-                            if (typeof onFallback === 'function') onFallback(err);
-                        }
-                    });
-
-                if (typeof runner[fnName] === 'function') {
-                    runner[fnName].apply(runner, argsArray || []);
-                } else {
-                    clearTimeout(timer);
-                    if (typeof onFallback === 'function') onFallback('fn_not_found');
-                }
-            } catch (e) {
-                clearTimeout(timer);
+            fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8' // Bebas blokir CORS di GitHub Pages
+                },
+                body: JSON.stringify({
+                    fnName: fnName,
+                    args: argsArray || []
+                })
+            })
+            .then(response => response.json())
+            .then(res => {
                 if (!isDone) {
                     isDone = true;
-                    if (typeof onFallback === 'function') onFallback(e);
+                    clearTimeout(timer);
+                    if (typeof onSuccess === 'function') onSuccess(res);
                 }
-            }
+            })
+            .catch(err => {
+                if (!isDone) {
+                    isDone = true;
+                    clearTimeout(timer);
+                    console.warn('Gagal menghubungi Google Sheets (' + fnName + '):', err);
+                    if (typeof onFallback === 'function') onFallback(err);
+                }
+            });
         }
 
         // Helper Kompresi Gambar Otomatis agar Base64 < 35.000 karakter (Aman untuk batas sel Google Spreadsheet)
@@ -1614,7 +1614,7 @@
                             showToast('Username atau Kata Sandi Admin tidak sesuai!', 'danger');
                         }
                     },
-                    3000
+                    6000
                 );
             } else {
                 const inputEl = document.getElementById('visitorNameInput');
@@ -2221,7 +2221,7 @@
                     applyAdminUpdateLocally();
                     showToast(`Berhasil! Username Admin diubah menjadi "${newUsername}" & Kata Sandi telah diperbarui.`, 'success');
                 },
-                3500
+                6000
             );
         }
 
@@ -2414,7 +2414,7 @@
             }
         });
 
-        // Inisialisasi tahan-banting & Anti-Stuck untuk Google Apps Script HtmlService
+        // Inisialisasi tahan-banting & Anti-Stuck untuk GitHub Pages + Google Sheets
         let isAppInitialized = false;
         function initWebApp() {
             if (isAppInitialized) return;
@@ -2459,7 +2459,7 @@
                         syncBadge.innerHTML = '<i class="fa-solid fa-bolt text-amber-400"></i> Mode Cepat Aktif';
                     }
                 },
-                4000
+                8000
             );
         }
 
