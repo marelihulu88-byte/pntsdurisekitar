@@ -312,7 +312,7 @@
                                 <input type="text" id="notifSearchInput" oninput="renderHeaderNotifications()" placeholder="Cari nama anggota baru..." 
                                        class="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
                             </div>
-                            <div id="notifListContainer" class="max-h-72 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-1.5">
+                            <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2">
                             </div>
                             <div class="bg-slate-950/90 px-4 py-2.5 text-center border-t border-slate-800">
                                 <button type="button" onclick="switchUserMenu('pendaftaran'); toggleNotifDropdown();" class="text-xs text-amber-400 hover:text-amber-300 font-bold">
@@ -1132,12 +1132,12 @@
                     </button>
                 </div>
 
-                <!-- 8. MENU NEW MEMBER ADMIN (Terima / Tolak Pendaftaran -> Masuk ke Notif User) -->
+                <!-- 8. MENU NEW MEMBER ADMIN (Terima / Tolak / Cetak Formulir Pendaftaran) -->
                 <div id="admSec_newmember" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <h2 class="font-batak text-xl font-bold text-amber-400">8. MENU NEW MEMBER (VERIFIKASI PENDAFTARAN ANGGOTA BARU)</h2>
-                            <p class="text-xs text-slate-300">Terima atau Tolak pendaftaran anggota baru. Nama anggota yang Diterima maupun Ditolak akan otomatis muncul pada Icon Notifikasi di pojok kanan atas Header User.</p>
+                            <h2 class="font-batak text-xl font-bold text-amber-400">8. MENU NEW MEMBER (VERIFIKASI &amp; CETAK FORMULIR ANGGOTA BARU)</h2>
+                            <p class="text-xs text-slate-300">Terima, Tolak, atau Cetak formulir pendaftaran anggota baru. Anggota yang Diterima otomatis dapat mencetak formulirnya dari Icon Notifikasi Header.</p>
                         </div>
                         <input type="text" id="admMemberSearchInput" oninput="renderAdminMemberList()" placeholder="Cari nama pendaftar..." 
                                class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
@@ -2098,7 +2098,7 @@
             syncSoundCloudPlayer(false);
         }
 
-        // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER ====================
+        // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER (DILENGKAPI TOMBOL CETAK) ====================
         function renderHeaderNotifications() {
             const allVerified = appState.members.filter(m => m.verificationStatus === 'DITERIMA' || m.verificationStatus === 'DITOLAK');
             const redDot = document.getElementById('notifRedDot');
@@ -2129,18 +2129,29 @@
                     : 'bg-red-500/20 border-red-400 text-red-300';
                 const iconClass = isAccepted ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-red-400';
 
+                // Tombol Cetak Formulir khusus untuk Anggota Baru yang DITERIMA
+                const printButtonHtml = isAccepted ? `
+                    <button type="button" onclick="cetakFormulirAnggota(${m.id})" 
+                            class="mt-2 w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-[11px] shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-print"></i> Cetak Formulir Pendaftaran
+                    </button>
+                ` : '';
+
                 return `
-                    <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 flex items-center gap-3">
-                        <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
-                             onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
-                             class="w-11 h-11 rounded-xl object-cover border border-amber-400/50 shrink-0">
-                        <div class="min-w-0 flex-1">
-                            <div class="font-bold text-xs text-white truncate">${m.namaLengkap}</div>
-                            <div class="text-[11px] text-slate-400 truncate">${m.tubuniBoru} • ${m.domisili}</div>
-                            <div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-extrabold ${badgeClass}">
-                                <i class="fa-solid ${iconClass}"></i> ${m.verificationStatus} OLEH PENGURUS
+                    <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 flex flex-col gap-1">
+                        <div class="flex items-center gap-3">
+                            <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
+                                 onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
+                                 class="w-11 h-11 rounded-xl object-cover border border-amber-400/50 shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <div class="font-bold text-xs text-white truncate">${m.namaLengkap}</div>
+                                <div class="text-[11px] text-slate-400 truncate">${m.tubuniBoru} • ${m.domisili}</div>
+                                <div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-extrabold ${badgeClass}">
+                                    <i class="fa-solid ${iconClass}"></i> ${m.verificationStatus} OLEH PENGURUS
+                                </div>
                             </div>
                         </div>
+                        ${printButtonHtml}
                     </div>
                 `;
             }).join('');
@@ -2304,12 +2315,15 @@
                             </div>
                         </div>
 
-                        <div class="flex sm:flex-col gap-2 w-full md:w-auto shrink-0">
-                            <button type="button" onclick="verifyMemberStatus(${m.id}, 'DITERIMA')" class="flex-1 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
+                        <div class="flex flex-wrap sm:flex-col gap-2 w-full md:w-auto shrink-0">
+                            <button type="button" onclick="verifyMemberStatus(${m.id}, 'DITERIMA')" class="flex-1 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-user-check"></i> Terima Anggota
                             </button>
-                            <button type="button" onclick="verifyMemberStatus(${m.id}, 'DITOLAK')" class="flex-1 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
+                            <button type="button" onclick="verifyMemberStatus(${m.id}, 'DITOLAK')" class="flex-1 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-user-xmark"></i> Tolak Anggota
+                            </button>
+                            <button type="button" onclick="cetakFormulirAnggota(${m.id})" class="flex-1 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-print"></i> Cetak Formulir
                             </button>
                         </div>
                     </div>
@@ -2656,12 +2670,171 @@
             renderAdminAll();
 
             if (statusDecision === 'DITERIMA') {
-                showToast(`Anggota "${target.namaLengkap}" DITERIMA & namanya kini tampil di Icon Notifikasi Header!`, 'success');
+                showToast(`Anggota "${target.namaLengkap}" DITERIMA & kini dapat mencetak formulir di Icon Notifikasi Header!`, 'success');
             } else {
                 showToast(`Anggota "${target.namaLengkap}" DITOLAK & statusnya kini tampil di Icon Notifikasi Header.`, 'danger');
             }
 
             callServerSafe('updateStatusAnggota', [memberId, statusDecision]);
+        }
+
+        // ==================== FUNGSI CETAK (PRINT) FORMULIR PENDAFTARAN ====================
+        function cetakFormulirAnggota(memberId) {
+            const m = appState.members.find(item => String(item.id) === String(memberId));
+            if (!m) {
+                showToast('Data anggota tidak ditemukan!', 'danger');
+                return;
+            }
+
+            const ketuaObj = appState.pengurus.find(p => p.id === 'ketua') || { nama: 'Ketua BPH' };
+            const sekreObj = appState.pengurus.find(p => p.id === 'sekretaris') || { nama: 'Sekretaris BPH' };
+            const tanggalCetak = new Date().toLocaleDateString('id-ID', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            });
+
+            const statusColor = m.verificationStatus === 'DITERIMA' ? '#047857' : (m.verificationStatus === 'DITOLAK' ? '#b91c1c' : '#b45309');
+            const statusLabel = m.verificationStatus === 'DITERIMA'
+                ? 'RESMI DITERIMA SEBAGAI ANGGOTA'
+                : (m.verificationStatus === 'DITOLAK' ? 'PENDAFTARAN DITOLAK' : 'MENUNGGU VERIFIKASI BPH');
+
+            const printWindow = window.open('', '_blank', 'width=900,height=950');
+            if (!printWindow) {
+                showToast('Izinkan pop-up di browser Anda untuk mencetak formulir!', 'danger');
+                return;
+            }
+
+            const htmlContent = `
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <title>Formulir Pendaftaran - ${m.namaLengkap}</title>
+    <style>
+        @page { size: A4 portrait; margin: 14mm; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; padding: 20px; color: #0f172a; background: #ffffff; }
+        .sheet { max-width: 760px; margin: 0 auto; border: 2px solid #991b1b; padding: 24px 28px; position: relative; }
+        .gorga-line {
+            height: 10px;
+            background: repeating-linear-gradient(45deg, #991b1b 0px, #991b1b 10px, #ffffff 10px, #ffffff 15px, #0f172a 15px, #0f172a 25px, #f59e0b 25px, #f59e0b 30px);
+            border-top: 2px solid #f59e0b; border-bottom: 2px solid #f59e0b; margin: 12px 0 18px 0;
+        }
+        .header { display: flex; align-items: center; gap: 16px; }
+        .header img { width: 78px; height: 78px; object-fit: cover; border-radius: 12px; border: 2px solid #991b1b; }
+        .header-text { flex: 1; text-align: center; }
+        .header-text h1 { margin: 0; font-size: 18px; font-weight: 900; color: #991b1b; letter-spacing: 0.5px; }
+        .header-text h2 { margin: 3px 0 0 0; font-size: 12px; font-weight: 800; color: #0f172a; }
+        .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-style: italic; }
+        .doc-title { text-align: center; margin-bottom: 18px; }
+        .doc-title h3 { margin: 0; font-size: 15px; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.8px; }
+        .doc-title .reg-no { font-size: 11px; color: #475569; margin-top: 3px; font-weight: 600; }
+        .status-stamp {
+            display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 999px;
+            font-size: 11px; font-weight: 800; color: #ffffff; background: ${statusColor};
+        }
+        .content-wrap { display: flex; gap: 22px; align-items: flex-start; margin-top: 14px; }
+        .bio-table { flex: 1; width: 100%; border-collapse: collapse; }
+        .bio-table td { padding: 7px 6px; vertical-align: top; font-size: 12.5px; border-bottom: 1px dashed #cbd5e1; }
+        .bio-table td.label { width: 38%; font-weight: 700; color: #1e293b; }
+        .bio-table td.sep { width: 3%; font-weight: 700; }
+        .bio-table td.val { font-weight: 600; color: #0f172a; }
+        .photo-box { width: 130px; text-align: center; flex-shrink: 0; }
+        .photo-box img { width: 120px; height: 155px; object-fit: cover; border: 2px solid #991b1b; border-radius: 8px; padding: 2px; background: #f8fafc; }
+        .photo-box span { display: block; font-size: 10px; font-weight: 700; color: #64748b; margin-top: 4px; }
+        .statement { margin-top: 16px; padding: 10px 14px; background: #fef2f2; border-left: 4px solid #991b1b; font-size: 11.5px; line-height: 1.5; color: #1e293b; }
+        .signatures { display: flex; justify-content: space-between; margin-top: 28px; text-align: center; font-size: 12px; }
+        .sig-col { width: 32%; }
+        .sig-space { height: 60px; }
+        .sig-name { font-weight: 800; text-decoration: underline; color: #0f172a; }
+        .sig-role { font-size: 11px; color: #475569; }
+        .no-print-bar { max-width: 760px; margin: 0 auto 14px auto; display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-print { background: #991b1b; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+        .btn-close { background: #e2e8f0; color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+        @media print { .no-print-bar { display: none !important; } body { padding: 0; } }
+    </style>
+</head>
+<body>
+    <div class="no-print-bar">
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+        <button class="btn-close" onclick="window.close()">Tutup</button>
+    </div>
+    <div class="sheet">
+        <div class="header">
+            <img src="${appState.header.logoUrl}" alt="Logo Punguan" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/150x150/991b1b/fbbf24?text=PNTS'">
+            <div class="header-text">
+                <h1>PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</h1>
+                <h2>(SIANTURI • SIBURIAN • TOGATOROP • BORU • BERE &amp; IBEBERE)</h2>
+                <p>Sekretariat: Kota Duri, Kecamatan Mandau, Kabupaten Bengkalis - Provinsi Riau</p>
+                <p>"Dalihan Na Tolu: Somba Marhula-hula, Manat Mardongan Tubu, Elek Marboru"</p>
+            </div>
+        </div>
+
+        <div class="gorga-line"></div>
+
+        <div class="doc-title">
+            <h3>FORMULIR PENDAFTARAN KEANGGOTAAN BARU</h3>
+            <div class="reg-no">Nomor Registrasi: PNTS-DURI/${m.id} • Tanggal Daftar: ${m.timestamp || tanggalCetak}</div>
+            <div class="status-stamp">${statusLabel}</div>
+        </div>
+
+        <div class="content-wrap">
+            <table class="bio-table">
+                <tr><td class="label">1. Nama Lengkap</td><td class="sep">:</td><td class="val">${m.namaLengkap}</td></tr>
+                <tr><td class="label">2. Nama Panggilan</td><td class="sep">:</td><td class="val">${m.namaPanggilan}</td></tr>
+                <tr><td class="label">3. Tempat, Tanggal Lahir</td><td class="sep">:</td><td class="val">${m.ttl}</td></tr>
+                <tr><td class="label">4. Asal (Bona Pasogit)</td><td class="sep">:</td><td class="val">${m.asal}</td></tr>
+                <tr><td class="label">5. Domisili di Duri</td><td class="sep">:</td><td class="val">${m.domisili}</td></tr>
+                <tr><td class="label">6. Tubu ni Boru (Marga Ibu)</td><td class="sep">:</td><td class="val">${m.tubuniBoru}</td></tr>
+                <tr><td class="label">7. Aktivitas Saat Ini</td><td class="sep">:</td><td class="val">${m.pekerjaan}</td></tr>
+                <tr><td class="label">8. Status Keanggotaan</td><td class="sep">:</td><td class="val">${m.status}</td></tr>
+                <tr><td class="label">9. Jenis Kelamin</td><td class="sep">:</td><td class="val">${m.gender}</td></tr>
+                <tr><td class="label">10. Alasan Bergabung</td><td class="sep">:</td><td class="val">"${m.alasan}"</td></tr>
+            </table>
+
+            <div class="photo-box">
+                <img src="${m.pasFoto}" alt="Pas Foto" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/150x180/7f1d1d/ffffff?text=PAS+FOTO'">
+                <span>PAS FOTO ANGGOTA</span>
+            </div>
+        </div>
+
+        <div class="statement">
+            Dengan ini saya menyatakan bersedia bergabung menjadi anggota <strong>Punguan Naposo Toga Simatupang Se-Duri</strong> serta siap menjaga nama baik punguan, mengikuti kegiatan Partangiangan, dan menjunjung tinggi nilai kekeluargaan Dalihan Na Tolu.
+        </div>
+
+        <div style="text-align: right; font-size: 12px; margin-top: 16px; font-weight: 600;">
+            Duri, ${tanggalCetak}
+        </div>
+
+        <div class="signatures">
+            <div class="sig-col">
+                <div class="sig-role">Mengetahui,<br><strong>Ketua BPH</strong></div>
+                <div class="sig-space"></div>
+                <div class="sig-name">${ketuaObj.nama}</div>
+            </div>
+            <div class="sig-col">
+                <div class="sig-role">Diverifikasi Oleh,<br><strong>Sekretaris BPH</strong></div>
+                <div class="sig-space"></div>
+                <div class="sig-name">${sekreObj.nama}</div>
+            </div>
+            <div class="sig-col">
+                <div class="sig-role">Hormat Saya,<br><strong>Anggota Pendaftar</strong></div>
+                <div class="sig-space"></div>
+                <div class="sig-name">${m.namaLengkap}</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() { window.print(); }, 500);
+        };
+    <\/script>
+</body>
+</html>`;
+
+            printWindow.document.open();
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
         }
 
         function simulateNewVisitor() {
