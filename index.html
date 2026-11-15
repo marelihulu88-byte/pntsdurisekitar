@@ -3604,7 +3604,11 @@
                     <body>
                         ${formHtml}
                         <script>window.onload = function(){ setTimeout(function(){ window.print(); }, 400); };<\/script>
-                    </body>
+                    
+
+
+
+</body>
                     </html>
                 `);
                 printWindow.document.close();
@@ -3676,5 +3680,58 @@
         }
         window.addEventListener('load', initWebApp);
     </script>
+<!-- ================================================================
+     HORAS AI - ASISTEN VIRTUAL DAN FORM PENGADUAN PNTS SE-DURI
+     ================================================================ -->
+<style>
+#horasAiLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:999px;padding:13px 18px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;gap:10px;cursor:pointer}
+#horasAiPanel{position:fixed;right:20px;bottom:84px;width:min(390px,calc(100vw - 28px));height:min(590px,calc(100dvh - 115px));z-index:9999;background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:20px;box-shadow:0 20px 70px #000b;display:none;overflow:hidden;font-family:Arial,sans-serif}
+#horasAiPanel.horas-open{display:flex;flex-direction:column}
+.horas-head{background:linear-gradient(110deg,#7f1d1d,#991b1b);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #f59e0b}
+.horas-tabs{display:flex;gap:7px;padding:10px;background:#111c31}
+.horas-tab{flex:1;border:1px solid #475569;border-radius:10px;padding:9px 5px;background:#1e293b;color:#cbd5e1;font-weight:700;font-size:12px;cursor:pointer}
+.horas-tab.active{background:#f59e0b;color:#111827;border-color:#fbbf24}
+.horas-view{display:none;flex:1;min-height:0;flex-direction:column;padding:12px;gap:10px}.horas-view.active{display:flex}
+#horasAiMessages{flex:1;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:2px}
+.horas-bubble{max-width:88%;padding:10px 12px;border-radius:13px;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.horas-bubble.bot{align-self:flex-start;background:#1e293b;border:1px solid #334155}.horas-bubble.me{align-self:flex-end;background:#7f1d1d;border:1px solid #b91c1c}
+.horas-input-row{display:flex;gap:7px}.horas-input{width:100%;background:#020617;border:1px solid #475569;border-radius:10px;padding:10px;color:white;font-size:13px;outline:none}.horas-input:focus{border-color:#f59e0b}
+.horas-send{background:#f59e0b;color:#111827;border-radius:10px;padding:0 14px;font-weight:800;border:0;cursor:pointer}.horas-send:disabled{opacity:.5;cursor:wait}
+.horas-label{font-size:12px;color:#cbd5e1;font-weight:700}.horas-submit{background:#f59e0b;color:#111827;border:0;border-radius:10px;padding:11px;font-weight:800;cursor:pointer}.horas-note{font-size:11px;line-height:1.45;color:#94a3b8}
+@media(max-width:480px){#horasAiLauncher{right:13px;bottom:14px;padding:12px 15px}#horasAiPanel{right:8px;bottom:72px;width:calc(100vw - 16px);height:calc(100dvh - 90px)}}
+</style>
+<button id="horasAiLauncher" type="button" aria-label="Buka HORAS AI" onclick="horasTogglePanel()"><span style="font-size:20px">✦</span><span>HORAS AI</span></button>
+<section id="horasAiPanel" aria-label="HORAS AI Asisten PNTS">
+  <header class="horas-head"><div><div style="font-weight:900;font-size:15px;color:#fbbf24">✦ HORAS AI</div><div style="font-size:11px;color:#fee2e2;margin-top:3px">Asisten Virtual PNTS Se-Duri</div></div><button type="button" onclick="horasTogglePanel(false)" style="background:#ffffff20;color:white;border:0;border-radius:8px;padding:7px 10px;cursor:pointer">✕</button></header>
+  <div class="horas-tabs"><button class="horas-tab active" id="horasTabChat" onclick="horasSetTab('chat')">💬 Tanya AI</button><button class="horas-tab" id="horasTabReport" onclick="horasSetTab('report')">📝 Pengaduan</button></div>
+  <div class="horas-view active" id="horasChatView">
+    <div id="horasAiMessages"><div class="horas-bubble bot">Horas! Saya HORAS AI. Silakan tanyakan informasi umum atau seputar PNTS Se-Duri. Untuk pengaduan resmi, gunakan tab Pengaduan.</div></div>
+    <div class="horas-input-row"><input id="horasChatInput" class="horas-input" maxlength="1500" placeholder="Tulis pertanyaan Anda..." onkeydown="if(event.key==='Enter')horasSendChat()"><button id="horasChatSend" class="horas-send" onclick="horasSendChat()">Kirim</button></div>
+    <div class="horas-note">Jawaban AI dapat keliru. Informasi resmi yang belum tersedia akan diarahkan ke BPH.</div>
+  </div>
+  <form class="horas-view" id="horasReportView" onsubmit="horasSubmitComplaint(event)">
+    <label class="horas-label" for="horasReportName">Nama lengkap <span style="color:#fca5a5">*</span></label><input id="horasReportName" class="horas-input" required minlength="3" maxlength="100" placeholder="Nama Anda">
+    <label class="horas-label" for="horasReportPhone">Nomor WhatsApp (opsional)</label><input id="horasReportPhone" class="horas-input" maxlength="30" placeholder="08xxxxxxxxxx">
+    <label class="horas-label" for="horasReportCategory">Kategori pengaduan</label><select id="horasReportCategory" class="horas-input"><option>Umum</option><option>Kegiatan / Agenda</option><option>Keanggotaan</option><option>Pelayanan Pengurus</option><option>Saran dan Kritik</option><option>Lainnya</option></select>
+    <label class="horas-label" for="horasReportPriority">Prioritas</label><select id="horasReportPriority" class="horas-input"><option>Normal</option><option>Penting</option><option>Mendesak</option></select>
+    <label class="horas-label" for="horasReportMessage">Isi pengaduan <span style="color:#fca5a5">*</span></label><textarea id="horasReportMessage" class="horas-input" required minlength="10" maxlength="3000" rows="4" placeholder="Jelaskan pengaduan atau saran Anda..."></textarea>
+    <label style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#cbd5e1"><input id="horasReportConsent" type="checkbox" required style="margin-top:2px"> Saya menyetujui nama dan isi pengaduan dikirim kepada Admin BPH untuk ditindaklanjuti.</label>
+    <button id="horasReportSubmit" class="horas-submit" type="submit">Kirim Pengaduan</button>
+    <div class="horas-note">Nama wajib diisi. Pengaduan disimpan di Spreadsheet dan notifikasi dikirim ke Admin. Jangan masukkan kata sandi atau data sangat rahasia.</div>
+  </form>
+</section>
+<script>
+(function(){
+  const endpoint = 'https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec';
+  const history = [];
+  function clientId(){try{let id=localStorage.getItem('pnts_horas_client');if(!id){id='pnts_'+(crypto.randomUUID?crypto.randomUUID():Date.now()+'_'+Math.random().toString(36).slice(2));localStorage.setItem('pnts_horas_client',id)}return id}catch(e){return 'pnts_guest'}}
+  window.horasTogglePanel=function(force){const p=document.getElementById('horasAiPanel');if(!p)return;const open=typeof force==='boolean'?force:!p.classList.contains('horas-open');p.classList.toggle('horas-open',open)};
+  window.horasSetTab=function(tab){const chat=tab==='chat';document.getElementById('horasChatView').classList.toggle('active',chat);document.getElementById('horasReportView').classList.toggle('active',!chat);document.getElementById('horasTabChat').classList.toggle('active',chat);document.getElementById('horasTabReport').classList.toggle('active',!chat)};
+  function bubble(text,who){const el=document.createElement('div');el.className='horas-bubble '+who;el.textContent=text;const box=document.getElementById('horasAiMessages');box.appendChild(el);box.scrollTop=box.scrollHeight;return el}
+  async function post(fnName,args){const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:fnName,args:args})});const data=await response.json();if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');return data}
+  window.horasSendChat=async function(){const input=document.getElementById('horasChatInput'),btn=document.getElementById('horasChatSend');const text=input.value.trim();if(!text)return;input.value='';bubble(text,'me');btn.disabled=true;btn.textContent='...';const pending=bubble('HORAS AI sedang menyiapkan jawaban...','bot');try{const res=await post('horasAiChat',[{message:text,history:history.slice(-8),clientId:clientId()}]);pending.textContent=res.answer||'Maaf, jawaban belum tersedia.';history.push({role:'user',text:text},{role:'model',text:res.answer||''});while(history.length>10)history.shift()}catch(err){pending.textContent='Maaf, HORAS AI belum dapat menjawab. '+err.message}finally{btn.disabled=false;btn.textContent='Kirim';input.focus()}};
+  window.horasSubmitComplaint=async function(event){event.preventDefault();const btn=document.getElementById('horasReportSubmit');const payload={name:document.getElementById('horasReportName').value,phone:document.getElementById('horasReportPhone').value,category:document.getElementById('horasReportCategory').value,priority:document.getElementById('horasReportPriority').value,message:document.getElementById('horasReportMessage').value,clientId:clientId()};btn.disabled=true;btn.textContent='Mengirim...';try{const res=await post('simpanPengaduanHorasAi',[payload]);alert('Pengaduan berhasil dikirim.\nNomor tiket: '+res.ticket+'\n'+(res.emailSent?'Notifikasi email Admin berhasil dikirim.':'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));document.getElementById('horasReportView').reset();}catch(err){alert('Pengaduan belum berhasil dikirim: '+err.message)}finally{btn.disabled=false;btn.textContent='Kirim Pengaduan'}};
+})();
+</script>
 </body>
 </html>
