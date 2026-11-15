@@ -2251,11 +2251,10 @@
                 appState.visitorName = nameInput;
                 document.getElementById('welcomeVisitorName').textContent = appState.visitorName;
 
-                const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
                 const visitData = {
+                    deviceId: getPntssDeviceId(),
                     namaPengunjung: appState.visitorName,
-                    waktuKunjungan: 'Hari ini, ' + nowStr,
-                    role: 'USER / PENGUNJUNG'
+                    page: 'Halaman Utama'
                 };
 
                 document.getElementById('loginModal').classList.add('hidden');
@@ -2266,7 +2265,30 @@
                     if (scWidget) scWidget.play();
                 }
 
-                showToast(`Horas, ${appState.visitorName}! Nama Anda telah tercatat di daftar kunjungan.`, 'success');
+                // Kirim nama yang benar-benar diisi pengunjung ke Google Apps Script.
+                // Server akan memperbarui catatan generik hari ini jika perangkat sudah tercatat.
+                showToast(`Horas, ${appState.visitorName}! Sedang menyimpan kunjungan...`, 'info');
+                callServerSafe('simpanKunjunganPengunjung', [visitData], (res) => {
+                    if (res && res.success) {
+                        if (res.stats) Object.assign(appState.stats, res.stats);
+                        renderPublicDashboard();
+                        renderAdminAll();
+                        showToast(
+                            res.nameUpdated
+                                ? `Horas, ${appState.visitorName}! Nama kunjungan berhasil diperbarui di Spreadsheet.`
+                                : `Horas, ${appState.visitorName}! Kunjungan berhasil diproses.`,
+                            'success'
+                        );
+                    } else {
+                        showToast(
+                            (res && res.message) || 'Nama belum berhasil disimpan. Silakan coba masuk kembali.',
+                            'danger'
+                        );
+                    }
+                }, (err) => {
+                    console.warn('Gagal menyimpan nama pengunjung:', err);
+                    showToast('Nama belum dapat dikonfirmasi tersimpan. Periksa koneksi lalu coba lagi.', 'danger');
+                });
             }
         }
 
