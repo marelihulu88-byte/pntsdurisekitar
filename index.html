@@ -2784,6 +2784,8 @@
                 if (res && res.success) {
                     if (res.stats) Object.assign(appState.stats, res.stats);
                     renderAdminAll();
+                    // Ambil ulang statistik dari server agar dashboard admin dan publik memakai data terbaru.
+                    refreshStateFromServerSilent();
                     showToast(res.message || 'Total kunjungan bulan ini berhasil direset.', 'success');
                 } else showToast((res && res.message) || 'Reset total kunjungan gagal.', 'danger');
             }, () => showToast('Server tidak dapat dihubungi. Reset belum dikonfirmasi.', 'danger'));
@@ -2796,6 +2798,8 @@
                 if (res && res.success) {
                     if (res.stats) Object.assign(appState.stats, res.stats);
                     renderAdminAll();
+                    // Sinkronkan ulang dashboard publik dan admin dari server.
+                    refreshStateFromServerSilent();
                     showToast(res.message || 'Riwayat hari ini berhasil direset.', 'success');
                 } else showToast((res && res.message) || 'Reset riwayat gagal.', 'danger');
             }, () => showToast('Server tidak dapat dihubungi. Reset belum dikonfirmasi.', 'danger'));
