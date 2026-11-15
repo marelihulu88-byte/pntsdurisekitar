@@ -1811,6 +1811,23 @@
                 syncBadge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-fade text-amber-400"></i> Menyimpan ke Cloud...';
             }
 
+            // Sertakan kredensial sesi Admin pada semua perintah tulis yang dilindungi.
+            const adminWriteFunctions = [
+                'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
+                'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
+                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota'
+            ];
+            const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
+            if (adminWriteFunctions.includes(fnName)) {
+                if (appState.currentRole !== 'admin') {
+                    showToast('Silakan login sebagai Admin untuk melakukan perubahan.', 'danger');
+                    if (typeof onFallback === 'function') onFallback('admin_required');
+                    return;
+                }
+                requestArgs.push(getAdminVisitorCredentials());
+            }
+
             let isDone = false;
             const timer = setTimeout(() => {
                 if (!isDone) {
@@ -1826,7 +1843,7 @@
                 },
                 body: JSON.stringify({
                     fnName: fnName,
-                    args: argsArray || []
+                    args: requestArgs
                 })
             })
             .then(response => response.json())
