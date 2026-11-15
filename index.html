@@ -2894,9 +2894,16 @@
             }
             const mode = document.getElementById('admMemberCountMode').value;
             const manual = Math.max(0, parseInt(document.getElementById('admMemberCountManual').value || '0', 10) || 0);
-            const pin = prompt('Masukkan PIN khusus pengaturan dashboard:');
-            if (!pin) return;
-            const payload = {modeAnggota:mode, totalAnggotaManual:manual, pin:pin};
+            // Gunakan kredensial sesi Admin yang sudah berhasil login.
+            // Server tetap memvalidasi kredensial ini terhadap data admin di Spreadsheet.
+            const payload = {
+                modeAnggota: mode,
+                totalAnggotaManual: manual,
+                adminCredentials: {
+                    username: appState.adminAuth.username,
+                    password: appState.adminAuth.password
+                }
+            };
             const statusEl = document.getElementById('admDashboardSettingStatus');
             if (statusEl) statusEl.textContent = 'Menyimpan...';
             callServerSafe('simpanInfoManualPunguan', [payload], (res) => {
