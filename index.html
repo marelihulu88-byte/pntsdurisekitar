@@ -483,6 +483,32 @@
             </div>
         </header>
 
+        <!-- DASHBOARD INFO ORGANISASI + JAM WIB -->
+        <section class="max-w-7xl mx-auto px-3 sm:px-6 mt-4" aria-label="Statistik PNTSS">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="gorga-card rounded-2xl p-4 border border-amber-500/40">
+                    <div class="text-[10px] uppercase tracking-wider text-amber-300 font-extrabold"><i class="fa-solid fa-users mr-1"></i> Anggota Punguan</div>
+                    <div id="publicMemberCount" class="text-2xl sm:text-3xl font-black text-white mt-1">—</div>
+                    <div class="text-[10px] text-slate-400 mt-1">Anggota berstatus diterima</div>
+                </div>
+                <div class="gorga-card rounded-2xl p-4 border border-amber-500/40">
+                    <div class="text-[10px] uppercase tracking-wider text-amber-300 font-extrabold"><i class="fa-solid fa-calendar-days mr-1"></i> Tanggal</div>
+                    <div id="publicDate" class="text-base sm:text-lg font-extrabold text-white mt-2">—</div>
+                    <div class="text-[10px] text-slate-400 mt-1">Kalender Indonesia</div>
+                </div>
+                <div class="gorga-card rounded-2xl p-4 border border-amber-500/40">
+                    <div class="text-[10px] uppercase tracking-wider text-amber-300 font-extrabold"><i class="fa-solid fa-clock mr-1"></i> Jam Sekarang</div>
+                    <div id="publicClock" class="text-xl sm:text-2xl font-black text-white mt-2 tabular-nums">—</div>
+                    <div class="text-[10px] text-slate-400 mt-1">Waktu Indonesia Barat</div>
+                </div>
+                <div class="gorga-card rounded-2xl p-4 border border-amber-500/40">
+                    <div class="text-[10px] uppercase tracking-wider text-amber-300 font-extrabold"><i class="fa-solid fa-eye mr-1"></i> Pengunjung Hari Ini</div>
+                    <div id="publicTodayVisits" class="text-2xl sm:text-3xl font-black text-white mt-1">—</div>
+                    <div class="text-[10px] text-slate-400 mt-1">Unik per perangkat / hari</div>
+                </div>
+            </div>
+        </section>
+
         <!-- NAVIGASI 3 MENU UTAMA USER -->
         <nav class="max-w-7xl mx-auto px-3 sm:px-6 mt-6">
             <div class="gorga-card p-2 rounded-2xl flex flex-wrap sm:flex-nowrap items-center justify-center gap-2">
@@ -1088,8 +1114,8 @@
                             <button type="button" onclick="switchAdminMenu('newmember')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5">
                                 <i class="fa-solid fa-print"></i> Kelola &amp; Hapus Pendaftar
                             </button>
-                            <button type="button" onclick="simulateNewVisitor()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 text-xs font-bold">
-                                <i class="fa-solid fa-plus mr-1"></i> Simulasi +1 Kunjungan
+                            <button type="button" onclick="refreshStateFromServerSilent()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 text-xs font-bold">
+                                <i class="fa-solid fa-rotate mr-1"></i> Perbarui Statistik
                             </button>
                         </div>
                     </div>
@@ -1112,13 +1138,35 @@
                         </div>
                     </div>
 
+                    <div class="rounded-2xl bg-slate-900/90 border border-amber-500/30 p-4 space-y-3">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-300"><i class="fa-solid fa-sliders mr-1"></i> Pengaturan Jumlah Anggota &amp; Jam</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <label class="text-xs text-slate-300">Mode jumlah anggota
+                                <select id="admMemberCountMode" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white">
+                                    <option value="AUTO">Otomatis dari anggota DITERIMA</option>
+                                    <option value="MANUAL">Manual (diisi admin)</option>
+                                </select>
+                            </label>
+                            <label class="text-xs text-slate-300">Jumlah anggota manual
+                                <input id="admMemberCountManual" type="number" min="0" step="1" value="0" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white">
+                            </label>
+                        </div>
+                        <div class="text-[11px] text-slate-400">Mode otomatis menghitung anggota dengan status DITERIMA. Mode manual menggunakan angka yang dimasukkan admin. Tanggal, bulan, tahun, dan jam selalu otomatis mengikuti WIB.</div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="saveDashboardSettings()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Pengaturan</button>
+                            <span id="admDashboardSettingStatus" class="text-[11px] text-slate-400"></span>
+                        </div>
+                    </div>
+
                     <div class="rounded-2xl bg-slate-900/90 border border-slate-800 p-4 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300">
                                 <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pengunjung Terakhir (Khusus Admin Dapat Menghapus)
                             </h3>
-                            <input type="text" id="admVisitorSearchInput" oninput="renderAdminVisitorLogs()" placeholder="Cari nama pengunjung..." 
-                                   class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
+                            <div class="flex flex-wrap gap-2">
+                                <input type="text" id="admVisitorSearchInput" oninput="renderAdminVisitorLogs()" placeholder="Cari pengunjung..." class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
+                                <input type="date" id="admVisitorDateFilter" oninput="renderAdminVisitorLogs()" class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
+                            </div>
                         </div>
                         <div id="admVisitorLogList" class="space-y-2 max-h-56 overflow-y-auto text-xs"></div>
                     </div>
@@ -1524,13 +1572,9 @@
 
             // Statistik Kunjungan untuk Dashboard Admin
             stats: {
-                totalVisits: 128,
-                todayVisits: 19,
-                recentLogs: [
-                    { name: 'Andi Sianturi (Duri)', time: 'Hari ini, 14:10 WIB', page: 'Login Pengunjung (Tercatat)' },
-                    { name: 'Putri Boru Siburian', time: 'Hari ini, 14:25 WIB', page: 'Login Pengunjung (Tercatat)' },
-                    { name: 'Kevin Togatorop', time: 'Hari ini, 14:40 WIB', page: 'Login Pengunjung (Tercatat)' }
-                ]
+                totalVisits: 0,
+                todayVisits: 0,
+                recentLogs: []
             },
 
             // 2. Data Header & Logo
@@ -1840,6 +1884,9 @@
             if (serverData.contacts) Object.assign(appState.contacts, serverData.contacts);
             if (Array.isArray(serverData.members)) appState.members = serverData.members;
             if (serverData.music) Object.assign(appState.music, serverData.music);
+            if (serverData.dashboardInfo || serverData.infoManual) {
+                appState.dashboardInfo = serverData.dashboardInfo || serverData.infoManual;
+            }
         }
 
         // ==================== HELPER FORMAT & PENGIRIMAN NOTIFIKASI WHATSAPP ====================
@@ -2211,14 +2258,6 @@
                     role: 'USER / PENGUNJUNG'
                 };
 
-                appState.stats.totalVisits += 1;
-                appState.stats.todayVisits += 1;
-                appState.stats.recentLogs.unshift({
-                    name: visitData.namaPengunjung,
-                    time: visitData.waktuKunjungan,
-                    page: 'Login Pengunjung (Tercatat)'
-                });
-
                 document.getElementById('loginModal').classList.add('hidden');
                 switchRoleView('user');
 
@@ -2228,7 +2267,6 @@
                 }
 
                 showToast(`Horas, ${appState.visitorName}! Nama Anda telah tercatat di daftar kunjungan.`, 'success');
-                callServerSafe('simpanKunjunganPengunjung', [visitData]);
             }
         }
 
@@ -2296,6 +2334,7 @@
 
         // ==================== RENDER DATA KE TAMPILAN USER ====================
         function renderAllUserViews() {
+            renderPublicDashboard();
             document.getElementById('userHeaderLogo').src = appState.header.logoUrl;
             document.getElementById('userHeaderBanner').src = appState.header.bannerUrl;
 
@@ -2713,44 +2752,111 @@
         function renderAdminVisitorLogs() {
             const logList = document.getElementById('admVisitorLogList');
             const searchEl = document.getElementById('admVisitorSearchInput');
+            const dateEl = document.getElementById('admVisitorDateFilter');
             if (!logList) return;
             const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
-
-            const indexedLogs = appState.stats.recentLogs.map((l, idx) => ({ ...l, originalIndex: idx }));
-            const logs = q
-                ? indexedLogs.filter(l => String(l.name || '').toLowerCase().includes(q))
-                : indexedLogs;
-
+            const dateFilter = dateEl ? dateEl.value : '';
+            const logs = (appState.stats.recentLogs || []).filter(l => {
+                const matchesName = !q || String(l.name || '').toLowerCase().includes(q);
+                const matchesDate = !dateFilter || String(l.dateKey || '').slice(0,10) === dateFilter;
+                return matchesName && matchesDate;
+            });
             if (logs.length === 0) {
-                logList.innerHTML = `<div class="p-3 text-center text-slate-400">Tidak ada nama pengunjung yang cocok.</div>`;
+                logList.innerHTML = `<div class="p-3 text-center text-slate-400">Belum ada riwayat yang cocok. Riwayat lengkap tersimpan di Spreadsheet.</div>`;
                 return;
             }
-
             logList.innerHTML = logs.map(l => `
-                <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950 border border-slate-800">
-                    <span class="font-bold text-white"><i class="fa-solid fa-user text-amber-400 mr-1.5"></i> ${l.name}</span>
-                    <div class="flex items-center gap-2">
-                        <span class="text-slate-400">${l.page} • <strong class="text-amber-300">${l.time}</strong></span>
-                        <button type="button" onclick="hapusRiwayatKunjunganAdmin(${l.originalIndex})" class="px-2 py-1 rounded bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-[11px] font-bold transition-all" title="Hapus Riwayat Kunjungan Ini">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                    <span class="font-bold text-white"><i class="fa-solid fa-user text-amber-400 mr-1.5"></i> ${escapeHtml(l.name || 'Pengunjung Website')}</span>
+                    <span class="text-slate-400"><i class="fa-regular fa-clock mr-1"></i><strong class="text-amber-300">${escapeHtml(l.time || '')}</strong> • ${escapeHtml(l.page || 'Halaman Utama')}</span>
                 </div>
             `).join('');
         }
 
-        // Hapus riwayat kunjungan khusus Admin BPH
-        function hapusRiwayatKunjunganAdmin(logIndex) {
+        function escapeHtml(value) {
+            return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch) {
+                return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]);
+            });
+        }
+
+        function getPntssDeviceId() {
+            const key = 'pntss_visitor_device_id_v1';
+            let id = '';
+            try { id = localStorage.getItem(key) || ''; } catch (e) {}
+            if (!id) {
+                id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('pntss-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+                try { localStorage.setItem(key, id); } catch (e) {}
+            }
+            return id;
+        }
+
+        function recordVisitorOncePerDay() {
+            const deviceId = getPntssDeviceId();
+            const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jakarta', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date());
+            const partMap = {};
+            parts.forEach(p => { if (p.type !== 'literal') partMap[p.type] = p.value; });
+            const today = partMap.year + '-' + partMap.month + '-' + partMap.day;
+            const localKey = 'pntss_last_visit_day_v1';
+            let lastDay = '';
+            try { lastDay = localStorage.getItem(localKey) || ''; } catch (e) {}
+            if (lastDay === today) return;
+            // Server tetap melakukan pemeriksaan utama agar aman dari tab/perangkat yang membuka bersamaan.
+            callServerSafe('simpanKunjunganPengunjung', [{deviceId:deviceId, namaPengunjung:'Pengunjung Website', page:'Halaman Utama'}], (res) => {
+                if (res && res.success) {
+                    try { localStorage.setItem(localKey, today); } catch (e) {}
+                    if (res.stats) Object.assign(appState.stats, res.stats);
+                    renderPublicDashboard();
+                    renderAdminAll();
+                }
+            }, (err) => console.warn('Pencatatan pengunjung belum berhasil:', err));
+        }
+
+        function updateWibClock() {
+            const now = new Date();
+            const dateText = new Intl.DateTimeFormat('id-ID', {timeZone:'Asia/Jakarta', weekday:'long', day:'numeric', month:'long', year:'numeric'}).format(now);
+            const timeText = new Intl.DateTimeFormat('id-ID', {timeZone:'Asia/Jakarta', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false}).format(now);
+            const d = document.getElementById('publicDate');
+            const t = document.getElementById('publicClock');
+            if (d) d.textContent = dateText;
+            if (t) t.textContent = timeText + ' WIB';
+        }
+
+        function renderPublicDashboard() {
+            const info = appState.dashboardInfo || {};
+            const memberCount = Number(info.totalAnggota != null ? info.totalAnggota : (appState.members || []).filter(m => String(m.verificationStatus || m.decision || '').toUpperCase() === 'DITERIMA').length) || 0;
+            const memberEl = document.getElementById('publicMemberCount');
+            const visitEl = document.getElementById('publicTodayVisits');
+            if (memberEl) memberEl.textContent = memberCount.toLocaleString('id-ID');
+            if (visitEl) visitEl.textContent = Number(appState.stats.todayVisits || 0).toLocaleString('id-ID');
+            updateWibClock();
+        }
+
+        function saveDashboardSettings() {
             if (appState.currentRole !== 'admin') {
-                showToast('Akses Ditolak! Hanya Admin BPH yang dapat menghapus riwayat.', 'danger');
+                showToast('Hanya Admin yang dapat mengubah pengaturan dashboard.', 'danger');
                 return;
             }
-            const target = appState.stats.recentLogs[logIndex];
-            if (!target) return;
-            appState.stats.recentLogs.splice(logIndex, 1);
-            renderAdminVisitorLogs();
-            showToast(`Riwayat kunjungan "${target.name}" telah dihapus oleh Admin.`, 'info');
-            callServerSafe('hapusRiwayatKunjungan', [logIndex]);
+            const mode = document.getElementById('admMemberCountMode').value;
+            const manual = Math.max(0, parseInt(document.getElementById('admMemberCountManual').value || '0', 10) || 0);
+            const pin = prompt('Masukkan PIN khusus pengaturan dashboard:');
+            if (!pin) return;
+            const payload = {modeAnggota:mode, totalAnggotaManual:manual, pin:pin};
+            const statusEl = document.getElementById('admDashboardSettingStatus');
+            if (statusEl) statusEl.textContent = 'Menyimpan...';
+            callServerSafe('simpanInfoManualPunguan', [payload], (res) => {
+                if (res && res.success) {
+                    appState.dashboardInfo = res.data || {};
+                    renderPublicDashboard();
+                    if (statusEl) statusEl.textContent = 'Tersimpan.';
+                    showToast('Pengaturan dashboard berhasil disimpan.', 'success');
+                } else {
+                    if (statusEl) statusEl.textContent = (res && res.message) || 'Gagal menyimpan.';
+                    showToast((res && res.message) || 'Gagal menyimpan pengaturan.', 'danger');
+                }
+            }, () => {
+                if (statusEl) statusEl.textContent = 'Koneksi gagal. Coba lagi.';
+                showToast('Pengaturan belum tersimpan. Periksa koneksi Apps Script.', 'danger');
+            });
         }
 
         function renderAdminMemberList() {
@@ -2832,6 +2938,12 @@
             document.getElementById('admStatToday').textContent = appState.stats.todayVisits;
             document.getElementById('admStatMembers').textContent = appState.members.length;
             renderAdminVisitorLogs();
+            renderPublicDashboard();
+            const dashInfo = appState.dashboardInfo || {};
+            const modeEl = document.getElementById('admMemberCountMode');
+            const manualEl = document.getElementById('admMemberCountManual');
+            if (modeEl) modeEl.value = dashInfo.modeAnggota || 'AUTO';
+            if (manualEl && document.activeElement !== manualEl) manualEl.value = dashInfo.totalAnggotaManual != null ? dashInfo.totalAnggotaManual : 0;
 
             document.getElementById('admPreviewLogo').src = appState.header.logoUrl;
             document.getElementById('admInputLogoUrl').value = appState.header.logoUrl;
@@ -3422,25 +3534,7 @@
         }
 
         function simulateNewVisitor() {
-            const sampleNames = ['Yohana Boru Sianturi', 'Brema Bere Simatupang', 'Tulus Siburian', 'Debora Boru Togatorop'];
-            const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)];
-            const timeNow = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
-
-            appState.stats.totalVisits += 1;
-            appState.stats.todayVisits += 1;
-            appState.stats.recentLogs.unshift({
-                name: randomName,
-                time: 'Hari ini, ' + timeNow,
-                page: 'Menu Dashboard'
-            });
-
-            renderAdminAll();
-            showToast(`Pengunjung baru (${randomName}) tercatat di statistik!`, 'info');
-            callServerSafe('simpanKunjunganPengunjung', [{
-                namaPengunjung: randomName,
-                waktuKunjungan: 'Hari ini, ' + timeNow,
-                role: 'USER / PENGUNJUNG'
-            }]);
+            showToast('Simulasi kunjungan dinonaktifkan agar statistik tetap akurat.', 'info');
         }
 
         document.addEventListener('click', (e) => {
@@ -3461,6 +3555,12 @@
                 initScWidgetEvents();
                 renderAllUserViews();
                 renderAdminAll();
+                updateWibClock();
+                setInterval(updateWibClock, 1000);
+                recordVisitorOncePerDay();
+                document.addEventListener('visibilitychange', function() {
+                    if (!document.hidden) { updateWibClock(); recordVisitorOncePerDay(); }
+                });
             } catch (err) {
                 console.error('Render awal error:', err);
             }
@@ -3478,6 +3578,7 @@
                     }
                     renderAllUserViews();
                     renderAdminAll();
+                    renderPublicDashboard();
                 },
                 () => {
                     if (syncBadge) {
