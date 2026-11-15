@@ -3705,8 +3705,8 @@
   <header class="horas-head"><div><div style="font-weight:900;font-size:15px;color:#fbbf24">✦ HORAS AI</div><div style="font-size:11px;color:#fee2e2;margin-top:3px">Asisten Virtual PNTS Se-Duri</div></div><button type="button" onclick="horasTogglePanel(false)" style="background:#ffffff20;color:white;border:0;border-radius:8px;padding:7px 10px;cursor:pointer">✕</button></header>
   <div class="horas-tabs"><button class="horas-tab active" id="horasTabChat" onclick="horasSetTab('chat')">💬 Tanya AI</button><button class="horas-tab" id="horasTabReport" onclick="horasSetTab('report')">📝 Pengaduan</button></div>
   <div class="horas-view active" id="horasChatView">
-    <div id="horasAiMessages"><div class="horas-bubble bot">Horas! Saya HORAS AI. Silakan tanyakan informasi umum atau seputar PNTS Se-Duri. Untuk pengaduan resmi, gunakan tab Pengaduan.</div></div>
-    <div class="horas-input-row"><input id="horasChatInput" class="horas-input" maxlength="1500" placeholder="Tulis pertanyaan Anda..." onkeydown="if(event.key==='Enter')horasSendChat()"><button id="horasChatSend" class="horas-send" onclick="horasSendChat()">Kirim</button></div>
+    <div id="horasAiMessages"><div class="horas-bubble bot">Horas! Saya HORAS AI. Saya bisa membantu pertanyaan umum seperti pendidikan, teknologi, bisnis, matematika, penulisan, dan banyak topik lainnya, juga informasi PNTS Se-Duri. Untuk pengaduan resmi, gunakan tab Pengaduan.</div></div>
+    <div class="horas-input-row"><input id="horasChatInput" class="horas-input" maxlength="1500" placeholder="Tanyakan apa saja: umum atau seputar PNTS..." onkeydown="if(event.key==='Enter')horasSendChat()"><button id="horasChatSend" class="horas-send" onclick="horasSendChat()">Kirim</button></div>
     <div class="horas-note">Jawaban AI dapat keliru. Informasi resmi yang belum tersedia akan diarahkan ke BPH.</div>
   </div>
   <form class="horas-view" id="horasReportView" onsubmit="horasSubmitComplaint(event)">
