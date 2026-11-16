@@ -2272,6 +2272,7 @@
 
                 const visitData = {
                     deviceId: getPntssDeviceId(),
+                    sessionId: getPntssVisitSessionId(),
                     namaPengunjung: appState.visitorName,
                     page: 'Halaman Utama'
                 };
@@ -2863,25 +2864,41 @@
             return id;
         }
 
+        // ID sesi dibuat baru setiap halaman dimuat.
+        // Jadi perangkat yang sama membuka website lagi tetap tercatat sebagai kunjungan baru.
+        let pntssVisitSessionId = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : ('pntss-session-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        let pntssVisitSentThisPage = false;
+
+        function getPntssVisitSessionId() {
+            return pntssVisitSessionId;
+        }
+
         function recordVisitorOncePerDay() {
-            const deviceId = getPntssDeviceId();
-            const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jakarta', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date());
-            const partMap = {};
-            parts.forEach(p => { if (p.type !== 'literal') partMap[p.type] = p.value; });
-            const today = partMap.year + '-' + partMap.month + '-' + partMap.day;
-            const localKey = 'pntss_last_visit_day_v1';
-            let lastDay = '';
-            try { lastDay = localStorage.getItem(localKey) || ''; } catch (e) {}
-            if (lastDay === today) return;
-            // Server tetap melakukan pemeriksaan utama agar aman dari tab/perangkat yang membuka bersamaan.
-            callServerSafe('simpanKunjunganPengunjung', [{deviceId:deviceId, namaPengunjung:'Pengunjung Website', page:'Halaman Utama'}], (res) => {
+            // Nama fungsi lama dipertahankan agar pemanggil yang sudah ada tidak rusak.
+            // Pencatatan dilakukan satu kali per pemuatan halaman, bukan satu kali per hari.
+            if (pntssVisitSentThisPage) return;
+            pntssVisitSentThisPage = true;
+
+            callServerSafe('simpanKunjunganPengunjung', [{
+                deviceId: getPntssDeviceId(),
+                sessionId: getPntssVisitSessionId(),
+                namaPengunjung: 'Pengunjung Website',
+                page: 'Halaman Utama'
+            }], (res) => {
                 if (res && res.success) {
-                    try { localStorage.setItem(localKey, today); } catch (e) {}
                     if (res.stats) Object.assign(appState.stats, res.stats);
                     renderPublicDashboard();
                     renderAdminAll();
+                } else {
+                    pntssVisitSentThisPage = false;
+                    console.warn('Pencatatan pengunjung belum berhasil:', res);
                 }
-            }, (err) => console.warn('Pencatatan pengunjung belum berhasil:', err));
+            }, (err) => {
+                pntssVisitSentThisPage = false;
+                console.warn('Pencatatan pengunjung belum berhasil:', err);
+            });
         }
 
         function updateWibClock() {
