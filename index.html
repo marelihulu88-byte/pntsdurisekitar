@@ -2272,7 +2272,6 @@
 
                 const visitData = {
                     deviceId: getPntssDeviceId(),
-                    sessionId: getPntssVisitSessionId(),
                     namaPengunjung: appState.visitorName,
                     page: 'Halaman Utama'
                 };
@@ -2864,41 +2863,25 @@
             return id;
         }
 
-        // ID sesi dibuat baru setiap halaman dimuat.
-        // Jadi perangkat yang sama membuka website lagi tetap tercatat sebagai kunjungan baru.
-        let pntssVisitSessionId = (window.crypto && crypto.randomUUID)
-            ? crypto.randomUUID()
-            : ('pntss-session-' + Date.now() + '-' + Math.random().toString(36).slice(2));
-        let pntssVisitSentThisPage = false;
-
-        function getPntssVisitSessionId() {
-            return pntssVisitSessionId;
-        }
-
         function recordVisitorOncePerDay() {
-            // Nama fungsi lama dipertahankan agar pemanggil yang sudah ada tidak rusak.
-            // Pencatatan dilakukan satu kali per pemuatan halaman, bukan satu kali per hari.
-            if (pntssVisitSentThisPage) return;
-            pntssVisitSentThisPage = true;
-
-            callServerSafe('simpanKunjunganPengunjung', [{
-                deviceId: getPntssDeviceId(),
-                sessionId: getPntssVisitSessionId(),
-                namaPengunjung: 'Pengunjung Website',
-                page: 'Halaman Utama'
-            }], (res) => {
+            const deviceId = getPntssDeviceId();
+            const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Jakarta', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date());
+            const partMap = {};
+            parts.forEach(p => { if (p.type !== 'literal') partMap[p.type] = p.value; });
+            const today = partMap.year + '-' + partMap.month + '-' + partMap.day;
+            const localKey = 'pntss_last_visit_day_v1';
+            let lastDay = '';
+            try { lastDay = localStorage.getItem(localKey) || ''; } catch (e) {}
+            if (lastDay === today) return;
+            // Server tetap melakukan pemeriksaan utama agar aman dari tab/perangkat yang membuka bersamaan.
+            callServerSafe('simpanKunjunganPengunjung', [{deviceId:deviceId, namaPengunjung:'Pengunjung Website', page:'Halaman Utama'}], (res) => {
                 if (res && res.success) {
+                    try { localStorage.setItem(localKey, today); } catch (e) {}
                     if (res.stats) Object.assign(appState.stats, res.stats);
                     renderPublicDashboard();
                     renderAdminAll();
-                } else {
-                    pntssVisitSentThisPage = false;
-                    console.warn('Pencatatan pengunjung belum berhasil:', res);
                 }
-            }, (err) => {
-                pntssVisitSentThisPage = false;
-                console.warn('Pencatatan pengunjung belum berhasil:', err);
-            });
+            }, (err) => console.warn('Pencatatan pengunjung belum berhasil:', err));
         }
 
         function updateWibClock() {
@@ -3625,116 +3608,6 @@
 
 
 
-
-<!-- ================================================================
-     RESPONSIVE MOBILE PATCH PNTS DURI
-     Khusus layar HP/tablet; tampilan desktop dan fungsi aplikasi dipertahankan.
-     ================================================================ -->
-<style id="pnts-mobile-responsive-patch">
-  *, *::before, *::after { box-sizing: border-box; }
-  html { width: 100%; max-width: 100%; overflow-x: clip; -webkit-text-size-adjust: 100%; }
-  body { width: 100%; max-width: 100%; overflow-x: clip; }
-  img, iframe, video { max-width: 100%; }
-  button, input, select, textarea { max-width: 100%; }
-
-  @media (max-width: 767px) {
-    body { background-attachment: scroll; }
-    .max-w-7xl { max-width: 100% !important; }
-
-    /* Bar menu atas: boleh digeser, tidak memaksa halaman melebar */
-    body > div.sticky.top-0 {
-      position: sticky;
-      top: 0;
-      padding: 8px 10px !important;
-      gap: 8px !important;
-      align-items: center;
-    }
-    body > div.sticky.top-0 > div { min-width: 0; }
-    body > div.sticky.top-0 > div:last-child {
-      width: 100%;
-      margin-left: 0 !important;
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-    body > div.sticky.top-0 > div:last-child::-webkit-scrollbar { display:none; }
-    body > div.sticky.top-0 button { flex: 0 0 auto; font-size: 11px; padding: 8px 10px; }
-
-    /* Jarak tepi dan header utama */
-    #userAppView, #adminAppView { padding-bottom: 110px !important; }
-    #userAppView > header { padding-left: 10px !important; padding-right: 10px !important; padding-top: 10px !important; }
-    #userAppView > header > div { border-radius: 18px !important; }
-    #userAppView header .h-56 { height: 250px !important; }
-    #userAppView header .absolute.top-4.left-4 {
-      top: 12px !important; left: 12px !important; right: 92px !important;
-      align-items: flex-start !important; gap: 9px !important;
-    }
-    #userAppView header #userHeaderLogo { width: 46px !important; height: 46px !important; border-radius: 12px !important; }
-    #userAppView header .absolute.top-4.left-4 h1 {
-      font-size: clamp(12px, 3.6vw, 17px) !important;
-      line-height: 1.25 !important;
-      overflow-wrap: anywhere;
-    }
-    #userAppView header .absolute.top-4.left-4 span { font-size: 8px !important; letter-spacing: .04em !important; }
-    #userAppView header .absolute.top-4.right-4 { top: 12px !important; right: 10px !important; gap: 5px !important; }
-    #userAppView header .absolute.top-4.right-4 button { width: 36px !important; height: 36px !important; border-radius: 10px !important; }
-    #userAppView header .absolute.bottom-4 { left: 12px !important; right: 12px !important; bottom: 10px !important; }
-    #userAppView header .absolute.bottom-4 > div:last-child { font-size: 9px !important; line-height: 1.35; }
-
-    /* Kartu statistik, menu dan konten */
-    #userAppView section, #userAppView nav, #userAppView main,
-    #adminAppView section, #adminAppView main {
-      scroll-margin-top: 76px;
-    }
-    #userAppView main, #adminAppView main {
-      padding-left: 10px !important; padding-right: 10px !important;
-    }
-    #userAppView main > *, #adminAppView main > * { min-width: 0; }
-    #userAppView nav, #adminAppView nav { padding-left: 10px !important; padding-right: 10px !important; }
-    #userAppView nav > div, #adminAppView nav > div { display:flex; flex-wrap:nowrap; overflow-x:auto; gap:7px; scrollbar-width:none; }
-    #userAppView nav > div::-webkit-scrollbar, #adminAppView nav > div::-webkit-scrollbar { display:none; }
-    #userAppView nav button, #adminAppView nav button { flex:0 0 auto; min-width:max-content; font-size:11px !important; padding:10px 12px !important; }
-
-    /* Formulir dan modal */
-    #loginModal, #quickPrintListModal, #printPreviewModal { padding: 8px !important; }
-    #loginModal > div, #quickPrintListModal > div, #printPreviewModal > div { max-height: 94dvh; overflow-y:auto; border-radius: 16px !important; }
-    #loginModal .p-6, #loginModal .sm\:p-7 { padding: 18px !important; }
-    #memberRegistrationForm { padding: 16px !important; }
-    #printPreviewBody { padding: 10px !important; }
-    #notifDropdownPanel { position: fixed !important; top: 82px !important; left: 10px !important; right: 10px !important; width: auto !important; max-height: 72dvh; overflow-y:auto; }
-
-    /* Widget AI: tidak menutupi tombol penting di HP */
-    #horasAiLauncher { right: 12px !important; bottom: 76px !important; padding: 10px 13px !important; font-size: 12px !important; }
-    #horasAiPanel {
-      right: 8px !important; left: 8px !important; bottom: 126px !important;
-      width: auto !important; height: min(68dvh, 570px) !important;
-      max-height: calc(100dvh - 150px) !important; border-radius: 16px !important;
-    }
-    .horas-view { overflow-y:auto; }
-    #horasAiMessages { min-height: 100px; }
-
-    /* Pemutar musik dibuat ringkas; animasi dekoratif disembunyikan agar tidak bertumpuk */
-    body > div.fixed.bottom-3.left-3 { left: 8px !important; bottom: 8px !important; }
-    body > div.fixed.bottom-3.left-3 > div:last-child { padding: 6px 9px !important; gap: 7px !important; }
-    body > div.fixed.bottom-3.left-3 button:first-child { width: 34px !important; height: 34px !important; }
-    body > div.fixed.bottom-3.right-3 { display:none !important; }
-
-    /* Elemen teks/tabel panjang tidak menyebabkan geser ke kanan */
-    table { display:block; max-width:100%; overflow-x:auto; }
-    pre, code { overflow-wrap:anywhere; }
-    .overflow-x-auto { max-width:100%; }
-  }
-
-  @media (max-width: 380px) {
-    #userAppView header .absolute.top-4.left-4 { right: 82px !important; }
-    #userAppView header .absolute.top-4.left-4 h1 { font-size: 11px !important; }
-    #horasAiLauncher { bottom: 72px !important; }
-    #horasAiPanel { bottom: 120px !important; height: 66dvh !important; }
-  }
-</style>
-
 </body>
                     </html>
                 `);
@@ -3827,12 +3700,12 @@
 .horas-label{font-size:12px;color:#cbd5e1;font-weight:700}.horas-submit{background:#f59e0b;color:#111827;border:0;border-radius:10px;padding:11px;font-weight:800;cursor:pointer}.horas-note{font-size:11px;line-height:1.45;color:#94a3b8}
 @media(max-width:480px){#horasAiLauncher{right:13px;bottom:14px;padding:12px 15px}#horasAiPanel{right:8px;bottom:72px;width:calc(100vw - 16px);height:calc(100dvh - 90px)}}
 </style>
-<button id="horasAiLauncher" type="button" aria-label="Buka PNTS AI" onclick="horasTogglePanel()"><span style="font-size:20px">✦</span><span>PNTS AI</span></button>
-<section id="horasAiPanel" aria-label="PNTS AI Asisten PNTS">
-  <header class="horas-head"><div><div style="font-weight:900;font-size:15px;color:#fbbf24">✦ PNTS AI</div><div style="font-size:11px;color:#fee2e2;margin-top:3px">Asisten Virtual PNTS Se-Duri</div></div><button type="button" onclick="horasTogglePanel(false)" style="background:#ffffff20;color:white;border:0;border-radius:8px;padding:7px 10px;cursor:pointer">✕</button></header>
+<button id="horasAiLauncher" type="button" aria-label="Buka HORAS AI" onclick="horasTogglePanel()"><span style="font-size:20px">✦</span><span>HORAS AI</span></button>
+<section id="horasAiPanel" aria-label="HORAS AI Asisten PNTS">
+  <header class="horas-head"><div><div style="font-weight:900;font-size:15px;color:#fbbf24">✦ HORAS AI</div><div style="font-size:11px;color:#fee2e2;margin-top:3px">Asisten Virtual PNTS Se-Duri</div></div><button type="button" onclick="horasTogglePanel(false)" style="background:#ffffff20;color:white;border:0;border-radius:8px;padding:7px 10px;cursor:pointer">✕</button></header>
   <div class="horas-tabs"><button class="horas-tab active" id="horasTabChat" onclick="horasSetTab('chat')">💬 Tanya AI</button><button class="horas-tab" id="horasTabReport" onclick="horasSetTab('report')">📝 Pengaduan</button></div>
   <div class="horas-view active" id="horasChatView">
-    <div id="horasAiMessages"><div class="horas-bubble bot">Horas! Saya PNTS AI. Silakan tanyakan informasi umum atau seputar PNTS Se-Duri. Untuk pengaduan resmi, gunakan tab Pengaduan.</div></div>
+    <div id="horasAiMessages"><div class="horas-bubble bot">Horas! Saya HORAS AI. Silakan tanyakan informasi umum atau seputar PNTS Se-Duri. Untuk pengaduan resmi, gunakan tab Pengaduan.</div></div>
     <div class="horas-input-row"><input id="horasChatInput" class="horas-input" maxlength="1500" placeholder="Tulis pertanyaan Anda..." onkeydown="if(event.key==='Enter')horasSendChat()"><button id="horasChatSend" class="horas-send" onclick="horasSendChat()">Kirim</button></div>
     <div class="horas-note">Jawaban AI dapat keliru. Informasi resmi yang belum tersedia akan diarahkan ke BPH.</div>
   </div>
@@ -3849,23 +3722,14 @@
 </section>
 <script>
 (function(){
-  // Gunakan alamat Web App yang sama dengan seluruh fitur website.
-  // Jika URL deployment berubah, cukup perbarui GOOGLE_SHEET_WEB_APP_URL di script utama.
-  const endpoint = (typeof GOOGLE_SHEET_WEB_APP_URL !== 'undefined') ? GOOGLE_SHEET_WEB_APP_URL : '';
+  const endpoint = 'https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec';
   const history = [];
   function clientId(){try{let id=localStorage.getItem('pnts_horas_client');if(!id){id='pnts_'+(crypto.randomUUID?crypto.randomUUID():Date.now()+'_'+Math.random().toString(36).slice(2));localStorage.setItem('pnts_horas_client',id)}return id}catch(e){return 'pnts_guest'}}
   window.horasTogglePanel=function(force){const p=document.getElementById('horasAiPanel');if(!p)return;const open=typeof force==='boolean'?force:!p.classList.contains('horas-open');p.classList.toggle('horas-open',open)};
   window.horasSetTab=function(tab){const chat=tab==='chat';document.getElementById('horasChatView').classList.toggle('active',chat);document.getElementById('horasReportView').classList.toggle('active',!chat);document.getElementById('horasTabChat').classList.toggle('active',chat);document.getElementById('horasTabReport').classList.toggle('active',!chat)};
   function bubble(text,who){const el=document.createElement('div');el.className='horas-bubble '+who;el.textContent=text;const box=document.getElementById('horasAiMessages');box.appendChild(el);box.scrollTop=box.scrollHeight;return el}
-  async function post(fnName,args){
-    if(!endpoint) throw new Error('Alamat Google Apps Script belum tersedia. Periksa GOOGLE_SHEET_WEB_APP_URL pada script utama index.html.');
-    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:fnName,args:args})});
-    let data={};
-    try{data=await response.json()}catch(parseError){throw new Error('Balasan server bukan JSON yang valid. Periksa deployment Google Apps Script.')}
-    if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');
-    return data;
-  }
-  window.horasSendChat=async function(){const input=document.getElementById('horasChatInput'),btn=document.getElementById('horasChatSend');const text=input.value.trim();if(!text)return;input.value='';bubble(text,'me');btn.disabled=true;btn.textContent='...';const pending=bubble('PNTS AI sedang menyiapkan jawaban...','bot');try{const res=await post('horasAiChat',[{message:text,history:history.slice(-8),clientId:clientId()}]);if(!res.answer) throw new Error('Server terhubung, tetapi jawaban AI kosong. Periksa konfigurasi HORAS AI di Apps Script.');pending.textContent=res.answer;history.push({role:'user',text:text},{role:'model',text:res.answer});while(history.length>10)history.shift()}catch(err){pending.textContent='Maaf, PNTS AI belum dapat menjawab. '+err.message}finally{btn.disabled=false;btn.textContent='Kirim';input.focus()}};
+  async function post(fnName,args){const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:fnName,args:args})});const data=await response.json();if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');return data}
+  window.horasSendChat=async function(){const input=document.getElementById('horasChatInput'),btn=document.getElementById('horasChatSend');const text=input.value.trim();if(!text)return;input.value='';bubble(text,'me');btn.disabled=true;btn.textContent='...';const pending=bubble('HORAS AI sedang menyiapkan jawaban...','bot');try{const res=await post('horasAiChat',[{message:text,history:history.slice(-8),clientId:clientId()}]);pending.textContent=res.answer||'Maaf, jawaban belum tersedia.';history.push({role:'user',text:text},{role:'model',text:res.answer||''});while(history.length>10)history.shift()}catch(err){pending.textContent='Maaf, HORAS AI belum dapat menjawab. '+err.message}finally{btn.disabled=false;btn.textContent='Kirim';input.focus()}};
   window.horasSubmitComplaint=async function(event){event.preventDefault();const btn=document.getElementById('horasReportSubmit');const payload={name:document.getElementById('horasReportName').value,phone:document.getElementById('horasReportPhone').value,category:document.getElementById('horasReportCategory').value,priority:document.getElementById('horasReportPriority').value,message:document.getElementById('horasReportMessage').value,clientId:clientId()};btn.disabled=true;btn.textContent='Mengirim...';try{const res=await post('simpanPengaduanHorasAi',[payload]);alert('Pengaduan berhasil dikirim.\nNomor tiket: '+res.ticket+'\n'+(res.emailSent?'Notifikasi email Admin berhasil dikirim.':'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));document.getElementById('horasReportView').reset();}catch(err){alert('Pengaduan belum berhasil dikirim: '+err.message)}finally{btn.disabled=false;btn.textContent='Kirim Pengaduan'}};
 })();
 </script>
