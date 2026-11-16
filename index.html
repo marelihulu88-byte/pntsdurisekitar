@@ -3849,14 +3849,23 @@
 </section>
 <script>
 (function(){
-  const endpoint = 'https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec';
+  // Gunakan alamat Web App yang sama dengan seluruh fitur website.
+  // Jika URL deployment berubah, cukup perbarui GOOGLE_SHEET_WEB_APP_URL di script utama.
+  const endpoint = (typeof GOOGLE_SHEET_WEB_APP_URL !== 'undefined') ? GOOGLE_SHEET_WEB_APP_URL : '';
   const history = [];
   function clientId(){try{let id=localStorage.getItem('pnts_horas_client');if(!id){id='pnts_'+(crypto.randomUUID?crypto.randomUUID():Date.now()+'_'+Math.random().toString(36).slice(2));localStorage.setItem('pnts_horas_client',id)}return id}catch(e){return 'pnts_guest'}}
   window.horasTogglePanel=function(force){const p=document.getElementById('horasAiPanel');if(!p)return;const open=typeof force==='boolean'?force:!p.classList.contains('horas-open');p.classList.toggle('horas-open',open)};
   window.horasSetTab=function(tab){const chat=tab==='chat';document.getElementById('horasChatView').classList.toggle('active',chat);document.getElementById('horasReportView').classList.toggle('active',!chat);document.getElementById('horasTabChat').classList.toggle('active',chat);document.getElementById('horasTabReport').classList.toggle('active',!chat)};
   function bubble(text,who){const el=document.createElement('div');el.className='horas-bubble '+who;el.textContent=text;const box=document.getElementById('horasAiMessages');box.appendChild(el);box.scrollTop=box.scrollHeight;return el}
-  async function post(fnName,args){const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:fnName,args:args})});const data=await response.json();if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');return data}
-  window.horasSendChat=async function(){const input=document.getElementById('horasChatInput'),btn=document.getElementById('horasChatSend');const text=input.value.trim();if(!text)return;input.value='';bubble(text,'me');btn.disabled=true;btn.textContent='...';const pending=bubble('PNTS AI sedang menyiapkan jawaban...','bot');try{const res=await post('horasAiChat',[{message:text,history:history.slice(-8),clientId:clientId()}]);pending.textContent=res.answer||'Maaf, jawaban belum tersedia.';history.push({role:'user',text:text},{role:'model',text:res.answer||''});while(history.length>10)history.shift()}catch(err){pending.textContent='Maaf, PNTS AI belum dapat menjawab. '+err.message}finally{btn.disabled=false;btn.textContent='Kirim';input.focus()}};
+  async function post(fnName,args){
+    if(!endpoint) throw new Error('Alamat Google Apps Script belum tersedia. Periksa GOOGLE_SHEET_WEB_APP_URL pada script utama index.html.');
+    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:fnName,args:args})});
+    let data={};
+    try{data=await response.json()}catch(parseError){throw new Error('Balasan server bukan JSON yang valid. Periksa deployment Google Apps Script.')}
+    if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');
+    return data;
+  }
+  window.horasSendChat=async function(){const input=document.getElementById('horasChatInput'),btn=document.getElementById('horasChatSend');const text=input.value.trim();if(!text)return;input.value='';bubble(text,'me');btn.disabled=true;btn.textContent='...';const pending=bubble('PNTS AI sedang menyiapkan jawaban...','bot');try{const res=await post('horasAiChat',[{message:text,history:history.slice(-8),clientId:clientId()}]);if(!res.answer) throw new Error('Server terhubung, tetapi jawaban AI kosong. Periksa konfigurasi HORAS AI di Apps Script.');pending.textContent=res.answer;history.push({role:'user',text:text},{role:'model',text:res.answer});while(history.length>10)history.shift()}catch(err){pending.textContent='Maaf, PNTS AI belum dapat menjawab. '+err.message}finally{btn.disabled=false;btn.textContent='Kirim';input.focus()}};
   window.horasSubmitComplaint=async function(event){event.preventDefault();const btn=document.getElementById('horasReportSubmit');const payload={name:document.getElementById('horasReportName').value,phone:document.getElementById('horasReportPhone').value,category:document.getElementById('horasReportCategory').value,priority:document.getElementById('horasReportPriority').value,message:document.getElementById('horasReportMessage').value,clientId:clientId()};btn.disabled=true;btn.textContent='Mengirim...';try{const res=await post('simpanPengaduanHorasAi',[payload]);alert('Pengaduan berhasil dikirim.\nNomor tiket: '+res.ticket+'\n'+(res.emailSent?'Notifikasi email Admin berhasil dikirim.':'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));document.getElementById('horasReportView').reset();}catch(err){alert('Pengaduan belum berhasil dikirim: '+err.message)}finally{btn.disabled=false;btn.textContent='Kirim Pengaduan'}};
 })();
 </script>
