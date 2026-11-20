@@ -188,6 +188,9 @@
             border-radius: 9999px;
             border: 1px solid #f59e0b;
         }
+        .pnts-popup-star{font-size:2.35rem;line-height:1;color:#64748b;transition:transform .15s,color .15s;}
+        .pnts-popup-star.selected{color:#fbbf24;transform:scale(1.12);}
+        .pnts-popup-star:focus-visible{outline:2px solid #fbbf24;outline-offset:4px;border-radius:6px;}
     </style>
 </head>
 <body class="selection:bg-red-700 selection:text-amber-200">
@@ -523,6 +526,10 @@
                 <button type="button" onclick="switchUserMenu('pendaftaran')" id="userTabPendaftaran" class="flex-1 min-w-[160px] py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700">
                     <i class="fa-solid fa-id-card-clip"></i>
                     <span>FORM PENDAFTARAN &amp; CETAK</span>
+                </button>
+                <button type="button" onclick="switchUserMenu('ulasan')" id="userTabUlasan" class="flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700">
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                    <span>ULASAN</span>
                 </button>
             </div>
         </nav>
@@ -931,6 +938,84 @@
                 </div>
             </section>
 
+        <!-- POPUP RATING PENGUNJUNG: TETAP DIPERTAHANKAN -->
+        <div id="pntsRatingPopup" class="fixed inset-0 z-[90] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" role="dialog" aria-modal="true" aria-labelledby="pntsPopupTitle">
+          <div class="w-full max-w-md rounded-3xl overflow-hidden border border-amber-400/50 bg-gradient-to-br from-slate-950 via-slate-900 to-red-950 shadow-2xl">
+            <div class="p-6 text-center">
+              <div class="mx-auto mb-3 w-14 h-14 rounded-2xl bg-amber-400/15 border border-amber-300/40 flex items-center justify-center text-amber-300 text-2xl"><i class="fa-solid fa-star"></i></div>
+              <p class="text-[10px] tracking-[.25em] uppercase font-extrabold text-amber-300">Suara Pengunjung PNTS</p>
+              <h2 id="pntsPopupTitle" class="font-batak text-xl text-white mt-2">Bagaimana pengalaman Anda?</h2>
+              <p id="pntsPopupVisitorName" class="text-xs text-slate-400 mt-2">Nama pengunjung</p>
+              <div class="flex justify-center gap-2 mt-5" role="group" aria-label="Pilih bintang untuk rating">
+                <button type="button" class="pnts-popup-star" data-rating="1" onclick="pntsSelectPopupRating(1)" aria-label="1 bintang">★</button>
+                <button type="button" class="pnts-popup-star" data-rating="2" onclick="pntsSelectPopupRating(2)" aria-label="2 bintang">★</button>
+                <button type="button" class="pnts-popup-star" data-rating="3" onclick="pntsSelectPopupRating(3)" aria-label="3 bintang">★</button>
+                <button type="button" class="pnts-popup-star" data-rating="4" onclick="pntsSelectPopupRating(4)" aria-label="4 bintang">★</button>
+                <button type="button" class="pnts-popup-star" data-rating="5" onclick="pntsSelectPopupRating(5)" aria-label="5 bintang">★</button>
+              </div>
+              <p id="pntsPopupRatingHint" class="text-xs text-slate-400 mt-2">Pilih 1 sampai 5 bintang</p>
+              <textarea id="pntsPopupComment" maxlength="500" rows="3" class="w-full mt-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-amber-400 outline-none text-sm text-white p-3" placeholder="Tulis ulasan atau saran Anda (opsional)..."></textarea>
+              <p id="pntsPopupMessage" class="text-xs text-slate-300 mt-3" aria-live="polite"></p>
+              <button id="pntsPopupSubmit" type="button" onclick="pntsSubmitPopupRating()" class="w-full mt-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-extrabold py-3">Kirim rating &amp; ulasan</button>
+              <button type="button" onclick="pntsCloseRatingPopup()" class="mt-3 text-xs text-slate-400 hover:text-white">Nanti saja</button>
+              <p class="text-[10px] text-slate-500 mt-3">Ulasan akan diperiksa Admin sebelum ditampilkan untuk umum.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== MENU ULASAN PUBLIK PNTS DURI ==================== -->
+        <section id="userSectionUlasan" class="hidden max-w-7xl mx-auto px-3 sm:px-6 mt-6 mb-10 space-y-5">
+          <div class="rounded-3xl overflow-hidden border border-amber-400/30 bg-gradient-to-br from-slate-950 via-slate-900 to-red-950 shadow-2xl">
+            <div class="p-6 sm:p-8 border-b border-white/10">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p class="text-xs uppercase tracking-[.25em] text-amber-300 font-extrabold">PNT S • SUARA PENGUNJUNG</p>
+                  <h2 class="font-batak text-2xl sm:text-3xl text-white mt-2">Ulasan Website PNTS Duri</h2>
+                  <p class="text-sm text-slate-300 mt-2 max-w-2xl">Bagikan pengalaman Anda. Penilaian dan komentar membantu kami membuat website punguan semakin baik.</p>
+                </div>
+                <div class="rounded-2xl border border-amber-300/30 bg-black/20 px-5 py-4 min-w-[145px]">
+                  <div class="flex items-center gap-2"><span id="pntsRatingAverage" class="text-4xl font-black text-white">—</span><span class="text-amber-300 text-xl">★</span></div>
+                  <div id="pntsRatingTotal" class="text-xs text-slate-300 mt-1">Memuat ulasan...</div>
+                  <div id="pntsRatingAverageStars" class="text-amber-400 tracking-widest mt-1">★★★★★</div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 p-5 sm:p-7">
+              <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-5">
+                <h3 class="text-white font-extrabold text-lg">Ringkasan penilaian</h3>
+                <p class="text-xs text-slate-400 mt-1">Distribusi rating dari seluruh ulasan yang masuk</p>
+                <div id="pntsRatingBreakdown" class="space-y-3 mt-5"><p class="text-sm text-slate-400">Memuat statistik rating...</p></div>
+              </div>
+              <div class="rounded-2xl bg-slate-950/70 border border-amber-400/20 p-5">
+                <h3 class="text-white font-extrabold text-lg">Berikan ulasan Anda</h3>
+                <p id="pntsRatingSignedName" class="text-xs text-slate-400 mt-1">Nama akan mengikuti nama saat Anda masuk website.</p>
+                <div class="mt-5">
+                  <div class="text-xs font-bold text-amber-200 mb-2">Seberapa puas Anda?</div>
+                  <div class="flex items-center gap-2" role="group" aria-label="Pilih rating bintang">
+                    <button class="pnts-review-star" data-rating="1" type="button" onclick="pntsSelectRating(1)" aria-label="1 bintang">★</button>
+                    <button class="pnts-review-star" data-rating="2" type="button" onclick="pntsSelectRating(2)" aria-label="2 bintang">★</button>
+                    <button class="pnts-review-star" data-rating="3" type="button" onclick="pntsSelectRating(3)" aria-label="3 bintang">★</button>
+                    <button class="pnts-review-star" data-rating="4" type="button" onclick="pntsSelectRating(4)" aria-label="4 bintang">★</button>
+                    <button class="pnts-review-star" data-rating="5" type="button" onclick="pntsSelectRating(5)" aria-label="5 bintang">★</button>
+                  </div>
+                  <p id="pntsRatingHint" class="text-xs text-slate-400 mt-2">Pilih bintang 1 sampai 5</p>
+                </div>
+                <label for="pntsRatingComment" class="block text-xs font-bold text-amber-200 mt-4 mb-2">Tulis pengalaman atau saran (opsional)</label>
+                <textarea id="pntsRatingComment" maxlength="500" rows="3" class="w-full rounded-xl bg-slate-900 border border-slate-700 focus:border-amber-400 outline-none text-sm text-white p-3" placeholder="Ceritakan pengalaman Anda menggunakan website PNTS Duri..."></textarea>
+                <button id="pntsRatingSubmit" type="button" onclick="pntsSubmitRating()" class="mt-4 w-full rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-extrabold py-3 shadow-lg">Kirim ulasan</button>
+                <p id="pntsRatingFormMessage" class="text-xs text-slate-400 mt-3" aria-live="polite">Nama pengunjung diambil otomatis dari sesi masuk website.</p>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-3xl bg-slate-950/90 border border-white/10 p-5 sm:p-7 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+              <div><h3 class="text-xl font-extrabold text-white">Ulasan pengunjung</h3><p class="text-xs text-slate-400 mt-1">Komentar terbaru dari pengunjung website</p></div>
+              <button type="button" onclick="pntsLoadRatingSummary()" class="text-xs font-bold text-amber-300 hover:text-amber-200"><i class="fa-solid fa-rotate mr-1"></i>Perbarui</button>
+            </div>
+            <div id="pntsRatingReviews" class="grid grid-cols-1 md:grid-cols-2 gap-3"><p class="text-sm text-slate-400">Memuat ulasan...</p></div>
+          </div>
+        </section>
+
         </main>
 
         <!-- FOOTER UMUM -->
@@ -1057,7 +1142,7 @@
             </div>
         </div>
 
-        <!-- Layout Menu Admin (10 Menu Lengkap) -->
+        <!-- Layout Menu Admin (11 Menu Lengkap) -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- Navigasi Menu Admin di Samping -->
@@ -1091,11 +1176,15 @@
                         <span class="flex items-center gap-3"><i class="fa-solid fa-print w-5 text-center text-amber-400"></i> 8. New Member &amp; WA</span>
                         <span id="admPendingBadge" class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold">1</span>
                     </button>
+                    <button type="button" onclick="switchAdminMenu('ulasan')" id="admNav_ulasan" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-between text-slate-300 hover:bg-slate-800/80 border border-amber-500/20">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-star w-5 text-center text-amber-400"></i> 9. Moderasi Rating &amp; Ulasan</span>
+                        <span id="admRatingPendingBadge" class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-extrabold">0</span>
+                    </button>
                     <button type="button" onclick="switchAdminMenu('akunadmin')" id="admNav_akunadmin" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-amber-300 hover:bg-slate-800/80 border border-amber-500/30 mt-2">
-                        <i class="fa-solid fa-key w-5 text-center"></i> 9. Menu Profil Admin (Ubah Sandi)
+                        <i class="fa-solid fa-key w-5 text-center"></i> 10. Menu Profil Admin (Ubah Sandi)
                     </button>
                     <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
-                        <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 10. Menu Musik SoundCloud
+                        <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 11. Menu Musik SoundCloud
                     </button>
                 </div>
             </aside>
@@ -1430,11 +1519,25 @@
                     <div id="admMemberList" class="space-y-4"></div>
                 </div>
 
-                <!-- 9. MENU PROFIL ADMIN -->
+                <!-- 10. MENU PROFIL ADMIN -->
+                <div id="admSec_ulasan" class="gorga-card rounded-2xl p-6 space-y-5 hidden">
+                    <div class="border-b border-slate-800 pb-4">
+                        <h2 class="font-batak text-xl font-bold text-amber-400">9. MODERASI RATING &amp; ULASAN</h2>
+                        <p class="text-xs text-slate-300 mt-1">Periksa ulasan pengunjung. Hanya ulasan yang diterima Admin yang akan tampil di menu ULASAN publik.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="rounded-xl bg-slate-950 border border-amber-500/30 p-4"><div class="text-xs text-slate-400">Menunggu pemeriksaan</div><div id="admRatingPendingCount" class="text-3xl font-black text-amber-300">0</div></div>
+                        <div class="rounded-xl bg-slate-950 border border-emerald-500/30 p-4"><div class="text-xs text-slate-400">Diterima</div><div id="admRatingApprovedCount" class="text-3xl font-black text-emerald-300">0</div></div>
+                        <div class="rounded-xl bg-slate-950 border border-rose-500/30 p-4"><div class="text-xs text-slate-400">Ditolak</div><div id="admRatingRejectedCount" class="text-3xl font-black text-rose-300">0</div></div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2"><h3 class="font-bold text-white">Daftar rating &amp; ulasan</h3><button type="button" onclick="pntsLoadAdminRatings()" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold"><i class="fa-solid fa-rotate mr-1"></i> Perbarui</button></div>
+                    <div id="admRatingModerationList" class="space-y-3"><p class="text-sm text-slate-400">Memuat data rating...</p></div>
+                </div>
+
                 <div id="admSec_akunadmin" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-2">
                         <div>
-                            <h2 class="font-batak text-xl font-bold text-amber-400">9. MENU PROFIL ADMIN (PENGATURAN USERNAME &amp; ULANG KATA SANDI)</h2>
+                            <h2 class="font-batak text-xl font-bold text-amber-400">10. MENU PROFIL ADMIN (PENGATURAN USERNAME &amp; ULANG KATA SANDI)</h2>
                             <p class="text-xs text-slate-300">Ubah Username Admin dan Kata Sandi (Password) Admin kapan saja. Data otomatis tersimpan di Google Spreadsheet.</p>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400 text-amber-300 text-xs font-bold">
@@ -1515,11 +1618,11 @@
                     </div>
                 </div>
 
-                <!-- 10. MENU MUSIK SOUNDCLOUD ADMIN -->
+                <!-- 11. MENU MUSIK SOUNDCLOUD ADMIN -->
                 <div id="admSec_musik" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
                     <div class="border-b border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-2">
                         <div>
-                            <h2 class="font-batak text-xl font-bold text-amber-400">10. MENU MUSIK LATAR (SOUNDCLOUD)</h2>
+                            <h2 class="font-batak text-xl font-bold text-amber-400">11. MENU MUSIK LATAR (SOUNDCLOUD)</h2>
                             <p class="text-xs text-slate-300">Ganti lagu latar website kapan saja cukup dengan menempelkan link lagu dari SoundCloud</p>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-orange-500/20 border border-orange-400 text-orange-300 text-xs font-bold">
@@ -1816,7 +1919,7 @@
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
                 'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
-                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota'
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
             if (adminWriteFunctions.includes(fnName)) {
@@ -2279,7 +2382,6 @@
 
                 document.getElementById('loginModal').classList.add('hidden');
                 switchRoleView('user');
-                if (typeof window.pntsScheduleRatingPrompt === 'function') window.pntsScheduleRatingPrompt();
 
                 if (appState.music && appState.music.autoPlay) {
                     syncSoundCloudPlayer(true);
@@ -2337,6 +2439,7 @@
                 btnUser.className = 'px-3 py-1.5 rounded-lg font-bold transition-all bg-red-700 text-white border border-amber-400 shadow';
                 btnAdmin.className = 'px-3 py-1.5 rounded-lg font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-600';
                 renderAllUserViews();
+                if (typeof pntsScheduleRatingPopup === 'function') pntsScheduleRatingPopup();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -2346,10 +2449,12 @@
             const secDash = document.getElementById('userSectionDashboard');
             const secPeng = document.getElementById('userSectionPengurus');
             const secPend = document.getElementById('userSectionPendaftaran');
+            const secUlas = document.getElementById('userSectionUlasan');
 
             const tabDash = document.getElementById('userTabDashboard');
             const tabPeng = document.getElementById('userTabPengurus');
             const tabPend = document.getElementById('userTabPendaftaran');
+            const tabUlas = document.getElementById('userTabUlasan');
 
             const activeClass = 'flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-red-800 to-red-600 text-white border border-amber-400 shadow-lg';
             const inactiveClass = 'flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700';
@@ -2357,10 +2462,12 @@
             secDash.classList.add('hidden');
             secPeng.classList.add('hidden');
             secPend.classList.add('hidden');
+            secUlas.classList.add('hidden');
 
             tabDash.className = inactiveClass;
             tabPeng.className = inactiveClass;
             tabPend.className = inactiveClass;
+            tabUlas.className = inactiveClass;
 
             if (menuName === 'pengurus') {
                 secPeng.classList.remove('hidden');
@@ -2369,6 +2476,10 @@
                 secPend.classList.remove('hidden');
                 tabPend.className = activeClass;
                 renderUserAcceptedPrintList();
+            } else if (menuName === 'ulasan') {
+                secUlas.classList.remove('hidden');
+                tabUlas.className = activeClass;
+                pntsLoadRatingSummary();
             } else {
                 secDash.classList.remove('hidden');
                 tabDash.className = activeClass;
@@ -2775,7 +2886,7 @@
 
         // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'akunadmin', 'musik'];
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik'];
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
@@ -2790,6 +2901,7 @@
                     nav.classList.add('text-slate-300', 'hover:bg-slate-800/80');
                 }
             });
+            if (menuKey === 'ulasan' && typeof pntsLoadAdminRatings === 'function') pntsLoadAdminRatings();
         }
 
         function getAdminVisitorCredentials() {
@@ -3683,7 +3795,7 @@
         window.addEventListener('load', initWebApp);
     </script>
 <!-- ================================================================
-     TOMBOL PENGADUAN PNTS DURI + POPUP RATING PENGUNJUNG
+     TOMBOL PENGADUAN PNTS DURI
      ================================================================ -->
 <style>
 #pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:999px;padding:13px 18px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;gap:10px;cursor:pointer}
@@ -3697,42 +3809,15 @@
 .pnts-label{display:block;font-size:12px;color:#fcd34d;font-weight:700;margin:10px 0 5px}
 .pnts-submit{width:100%;background:#f59e0b;color:#111827;border:0;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;margin-top:14px}
 .pnts-submit:disabled{opacity:.55;cursor:wait}
-.pnts-stars{display:flex;justify-content:center;gap:8px;margin:18px 0}
-.pnts-star{border:0;background:transparent;color:#64748b;font-size:38px;line-height:1;cursor:pointer;padding:3px}
-.pnts-star.selected{color:#fbbf24}
 .pnts-muted{font-size:11px;line-height:1.5;color:#94a3b8}
+.pnts-review-star{font-size:34px;line-height:1;color:#475569;background:transparent;border:0;padding:2px;cursor:pointer;transition:transform .15s,color .15s}
+.pnts-review-star:hover{transform:scale(1.12)}
+.pnts-review-star.selected{color:#fbbf24}
+.pnts-review-bar{height:9px;flex:1;background:#334155;border-radius:99px;overflow:hidden}
+.pnts-review-bar>span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:99px}
 @media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;padding:12px 15px}.pnts-modal{padding:16px}}
 </style>
-
-<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsOpenComplaint()">
-  <span style="font-size:18px">📝</span><span>PENGADUAN</span>
-</button>
-
-<div id="pntsRatingOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsRatingTitle">
-  <section class="pnts-modal">
-    <div class="pnts-modal-head">
-      <h2 id="pntsRatingTitle" style="font-weight:900;color:#fbbf24;font-size:18px">Beri Rating Website PNTS Duri</h2>
-      <button type="button" class="pnts-close" onclick="pntsCloseRating()" aria-label="Tutup">✕</button>
-    </div>
-    <p style="font-size:13px;color:#cbd5e1">Horas! Bagaimana pengalaman Anda mengunjungi website kami?</p>
-    <div style="margin-top:12px;background:#1e293b;border:1px solid #475569;border-radius:10px;padding:10px">
-      <div class="pnts-muted">Rating dari pengunjung:</div>
-      <div id="pntsRatingVisitorName" style="font-weight:800;color:#fff;margin-top:3px">Pengunjung</div>
-    </div>
-    <div class="pnts-stars" role="group" aria-label="Pilih jumlah bintang">
-      <button class="pnts-star" type="button" data-rating="1" onclick="pntsSelectRating(1)" aria-label="1 bintang">★</button>
-      <button class="pnts-star" type="button" data-rating="2" onclick="pntsSelectRating(2)" aria-label="2 bintang">★</button>
-      <button class="pnts-star" type="button" data-rating="3" onclick="pntsSelectRating(3)" aria-label="3 bintang">★</button>
-      <button class="pnts-star" type="button" data-rating="4" onclick="pntsSelectRating(4)" aria-label="4 bintang">★</button>
-      <button class="pnts-star" type="button" data-rating="5" onclick="pntsSelectRating(5)" aria-label="5 bintang">★</button>
-    </div>
-    <div id="pntsRatingHint" class="pnts-muted" style="text-align:center">Pilih bintang 1 sampai 5</div>
-    <label class="pnts-label" for="pntsRatingComment">Komentar (opsional)</label>
-    <textarea id="pntsRatingComment" class="pnts-field" rows="3" maxlength="500" placeholder="Tulis saran atau komentar Anda..."></textarea>
-    <button id="pntsRatingSubmit" type="button" class="pnts-submit" onclick="pntsSubmitRating()">Kirim Rating</button>
-    <p class="pnts-muted" style="margin-top:9px;text-align:center">Terima kasih sudah membantu kami meningkatkan website PNTS Duri.</p>
-  </section>
-</div>
+<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsOpenComplaint()"><span style="font-size:18px">📝</span><span>PENGADUAN</span></button>
 
 <div id="pntsComplaintOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsComplaintTitle">
   <section class="pnts-modal">
@@ -3772,130 +3857,125 @@
 <script>
 (function(){
   let selectedRating = 0;
-  let ratingPromptTimer = null;
-  const RATING_SEEN_KEY = 'pnts_rating_prompt_seen_v1';
-  const RATING_SUBMITTED_KEY = 'pnts_rating_submitted_v1';
-
   function currentVisitorName(){
-    let name = '';
-    try { name = String(appState.visitorName || '').trim(); } catch(e) {}
-    if (!name || name === 'Pengunjung') {
-      try { name = String(sessionStorage.getItem('pnts_current_visitor_name') || '').trim(); } catch(e) {}
-    }
+    let name='';
+    try{name=String(appState.visitorName||'').trim();}catch(e){}
+    if(!name||name==='Pengunjung'){try{name=String(sessionStorage.getItem('pnts_current_visitor_name')||'').trim();}catch(e){}}
     return name;
   }
-
   function currentDeviceId(){
-    if (typeof getPntssDeviceId === 'function') return getPntssDeviceId();
-    const key = 'pntss_visitor_device_id_v1';
-    try {
-      let id = localStorage.getItem(key);
-      if (!id) {
-        id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('pnts-' + Date.now() + '-' + Math.random().toString(36).slice(2));
-        localStorage.setItem(key,id);
-      }
-      return id;
-    } catch(e) { return 'pnts_guest'; }
+    if(typeof getPntssDeviceId==='function') return getPntssDeviceId();
+    const key='pntss_visitor_device_id_v1';
+    try{let id=localStorage.getItem(key);if(!id){id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('pnts-'+Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem(key,id);}return id;}catch(e){return 'pnts_guest';}
   }
-
-  window.pntsScheduleRatingPrompt = function(){
-    if (ratingPromptTimer) clearTimeout(ratingPromptTimer);
-    let alreadySeen = false, alreadySubmitted = false;
-    try {
-      alreadySeen = localStorage.getItem(RATING_SEEN_KEY) === '1';
-      alreadySubmitted = localStorage.getItem(RATING_SUBMITTED_KEY) === '1';
-    } catch(e) {}
-    if (alreadySeen || alreadySubmitted || !currentVisitorName()) return;
-    ratingPromptTimer = setTimeout(function(){
-      const name = currentVisitorName();
-      if (!name) return;
-      document.getElementById('pntsRatingVisitorName').textContent = name;
-      document.getElementById('pntsRatingOverlay').classList.add('open');
-      try { localStorage.setItem(RATING_SEEN_KEY,'1'); } catch(e) {}
+  function safeText(value){return String(value==null?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  window.pntsSelectRating=function(value){
+    selectedRating=Number(value)||0;
+    document.querySelectorAll('.pnts-review-star').forEach(btn=>btn.classList.toggle('selected',Number(btn.dataset.rating)<=selectedRating));
+    document.getElementById('pntsRatingHint').textContent=selectedRating+' dari 5 bintang';
+  };
+  window.pntsLoadRatingSummary=function(){
+    const list=document.getElementById('pntsRatingReviews');
+    if(list) list.innerHTML='<p class="text-sm text-slate-400">Memuat ulasan...</p>';
+    callServerSafe('getRatingPublikPNTS',[],function(res){
+      if(!res||!res.success){if(list)list.innerHTML='<p class="text-sm text-rose-300">Ulasan belum dapat dimuat. Silakan coba lagi.</p>';return;}
+      const total=Number(res.total||0),avg=Number(res.average||0),counts=res.counts||{};
+      document.getElementById('pntsRatingAverage').textContent=total?avg.toFixed(1):'—';
+      document.getElementById('pntsRatingTotal').textContent=total+' ulasan';
+      document.getElementById('pntsRatingAverageStars').textContent=total?'★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg)):'Belum ada rating';
+      document.getElementById('pntsRatingBreakdown').innerHTML=[5,4,3,2,1].map(n=>{
+        const count=Number(counts[n]||0),pct=total?Math.round(count/total*100):0;
+        return `<div class="flex items-center gap-3 text-xs"><span class="w-3 text-slate-300">${n}</span><span class="text-amber-400">★</span><div class="pnts-review-bar"><span style="width:${pct}%"></span></div><span class="w-8 text-right text-slate-400">${count}</span></div>`;
+      }).join('');
+      const reviews=Array.isArray(res.reviews)?res.reviews:[];
+      list.innerHTML=reviews.length?reviews.map(item=>{
+        const rating=Math.max(1,Math.min(5,Number(item.rating)||0));
+        return `<article class="rounded-2xl border border-white/10 bg-slate-900/80 p-4"><div class="flex items-start justify-between gap-3"><div class="font-bold text-white text-sm">${safeText(item.name||'Pengunjung')}</div><div class="text-amber-400 tracking-widest text-sm">${'★'.repeat(rating)}<span class="text-slate-600">${'☆'.repeat(5-rating)}</span></div></div><p class="text-xs text-slate-500 mt-1">${safeText(item.date||'')}</p><p class="text-sm text-slate-300 mt-3 whitespace-pre-wrap">${safeText(item.comment||'Memberikan penilaian tanpa komentar.')}</p></article>`;
+      }).join(''):'<p class="text-sm text-slate-400">Belum ada ulasan. Jadilah pengunjung pertama yang memberikan penilaian.</p>';
+    },function(){if(list)list.innerHTML='<p class="text-sm text-rose-300">Koneksi ke Spreadsheet gagal. Silakan perbarui.</p>';},12000);
+    const name=currentVisitorName();
+    document.getElementById('pntsRatingSignedName').textContent=name?'Ulasan sebagai: '+name:'Silakan masuk website agar nama Anda terisi otomatis.';
+  };
+  window.pntsSubmitRating=function(){
+    const name=currentVisitorName(),btn=document.getElementById('pntsRatingSubmit'),msg=document.getElementById('pntsRatingFormMessage');
+    if(!name){msg.textContent='Silakan masuk website terlebih dahulu.';if(typeof openLoginModal==='function')openLoginModal('user');return;}
+    if(selectedRating<1||selectedRating>5){msg.textContent='Silakan pilih bintang terlebih dahulu.';return;}
+    const payload={deviceId:currentDeviceId(),name:name,rating:selectedRating,comment:document.getElementById('pntsRatingComment').value.trim()};
+    btn.disabled=true;btn.textContent='Mengirim ulasan...';
+    callServerSafe('simpanRatingPengunjung',[payload],function(res){
+      btn.disabled=false;btn.textContent='Kirim ulasan';
+      if(res&&res.success){msg.textContent=(res.message||'Terima kasih! Ulasan Anda menunggu pemeriksaan Admin.');try{localStorage.setItem('pnts_rating_submitted_v1','1');}catch(e){};document.getElementById('pntsRatingComment').value='';selectedRating=0;document.querySelectorAll('.pnts-review-star').forEach(b=>b.classList.remove('selected'));document.getElementById('pntsRatingHint').textContent='Pilih bintang 1 sampai 5';pntsLoadRatingSummary();}
+      else msg.textContent=(res&&res.message)||'Ulasan belum berhasil disimpan.';
+    },function(){btn.disabled=false;btn.textContent='Kirim ulasan';msg.textContent='Koneksi ke Spreadsheet gagal. Silakan coba lagi.';});
+  };
+  let popupRating = 0;
+  window.pntsSelectPopupRating=function(value){
+    popupRating=Number(value)||0;
+    document.querySelectorAll('.pnts-popup-star').forEach(btn=>btn.classList.toggle('selected',Number(btn.dataset.rating)<=popupRating));
+    document.getElementById('pntsPopupRatingHint').textContent=popupRating+' dari 5 bintang';
+  };
+  window.pntsCloseRatingPopup=function(){
+    const el=document.getElementById('pntsRatingPopup'); if(el) el.classList.add('hidden');
+    try{localStorage.setItem('pnts_rating_prompt_seen_v2','1');}catch(e){}
+  };
+  window.pntsScheduleRatingPopup=function(){
+    let seen=false; try{seen=localStorage.getItem('pnts_rating_prompt_seen_v1')==='1'||localStorage.getItem('pnts_rating_prompt_seen_v2')==='1'||localStorage.getItem('pnts_rating_submitted_v1')==='1';}catch(e){}
+    if(seen||!currentVisitorName()) return;
+    setTimeout(function(){
+      if(!currentVisitorName()) return;
+      const nameEl=document.getElementById('pntsPopupVisitorName'); if(nameEl) nameEl.textContent='Ulasan sebagai: '+currentVisitorName();
+      const popup=document.getElementById('pntsRatingPopup'); if(popup) popup.classList.remove('hidden');
+      try{localStorage.setItem('pnts_rating_prompt_seen_v2','1');}catch(e){}
     },10000);
   };
-
-  window.pntsCloseRating = function(){
-    document.getElementById('pntsRatingOverlay').classList.remove('open');
-  };
-
-  window.pntsSelectRating = function(value){
-    selectedRating = Number(value) || 0;
-    document.querySelectorAll('.pnts-star').forEach(function(btn){
-      btn.classList.toggle('selected', Number(btn.dataset.rating) <= selectedRating);
-    });
-    document.getElementById('pntsRatingHint').textContent = selectedRating + ' dari 5 bintang';
-  };
-
-  window.pntsSubmitRating = function(){
-    const name = currentVisitorName();
-    const btn = document.getElementById('pntsRatingSubmit');
-    if (!name) { alert('Nama pengunjung tidak ditemukan. Silakan masuk kembali.'); return; }
-    if (selectedRating < 1 || selectedRating > 5) { alert('Silakan pilih bintang terlebih dahulu.'); return; }
-    const payload = {
-      deviceId: currentDeviceId(),
-      name: name,
-      rating: selectedRating,
-      comment: document.getElementById('pntsRatingComment').value.trim()
-    };
-    btn.disabled = true; btn.textContent = 'Menyimpan...';
+  window.pntsSubmitPopupRating=function(){
+    const name=currentVisitorName(),btn=document.getElementById('pntsPopupSubmit'),msg=document.getElementById('pntsPopupMessage');
+    if(!name){msg.textContent='Silakan masuk website terlebih dahulu.';return;}
+    if(popupRating<1||popupRating>5){msg.textContent='Pilih bintang terlebih dahulu.';return;}
+    const payload={deviceId:currentDeviceId(),name:name,rating:popupRating,comment:document.getElementById('pntsPopupComment').value.trim()};
+    btn.disabled=true;btn.textContent='Mengirim...';msg.textContent='';
     callServerSafe('simpanRatingPengunjung',[payload],function(res){
-      btn.disabled = false; btn.textContent = 'Kirim Rating';
-      if (res && res.success) {
-        try { localStorage.setItem(RATING_SUBMITTED_KEY,'1'); } catch(e) {}
-        document.getElementById('pntsRatingOverlay').classList.remove('open');
-        alert('Terima kasih! Rating Anda berhasil disimpan.');
-      } else {
-        alert((res && res.message) || 'Rating belum berhasil disimpan. Silakan coba lagi.');
-      }
-    },function(){
-      btn.disabled = false; btn.textContent = 'Kirim Rating';
-      alert('Koneksi ke Spreadsheet gagal. Silakan coba lagi.');
-    });
+      btn.disabled=false;btn.textContent='Kirim rating & ulasan';
+      if(res&&res.success){msg.textContent=res.message||'Terima kasih. Ulasan Anda menunggu pemeriksaan Admin.';try{localStorage.setItem('pnts_rating_submitted_v1','1');}catch(e){};setTimeout(function(){window.pntsCloseRatingPopup();},1800);}
+      else msg.textContent=(res&&res.message)||'Rating belum berhasil dikirim.';
+    },function(){btn.disabled=false;btn.textContent='Kirim rating & ulasan';msg.textContent='Koneksi gagal. Silakan coba kembali.';});
+  };
+  window.pntsLoadAdminRatings=function(){
+    const list=document.getElementById('admRatingModerationList'); if(!list)return;
+    list.innerHTML='<p class="text-sm text-slate-400">Memuat rating...</p>';
+    callServerSafe('getRatingAdminPNTS',[getAdminVisitorCredentials()],function(res){
+      if(!res||!res.success){list.innerHTML='<p class="text-sm text-rose-300">Data moderasi gagal dimuat.</p>';return;}
+      const rows=Array.isArray(res.reviews)?res.reviews:[];
+      const counts=res.counts||{};
+      document.getElementById('admRatingPendingCount').textContent=counts.MENUNGGU||0;
+      document.getElementById('admRatingApprovedCount').textContent=counts.DITERIMA||0;
+      document.getElementById('admRatingRejectedCount').textContent=counts.DITOLAK||0;
+      document.getElementById('admRatingPendingBadge').textContent=counts.MENUNGGU||0;
+      list.innerHTML=rows.length?rows.map(item=>{
+        const status=String(item.status||'MENUNGGU'),color=status==='DITERIMA'?'text-emerald-300':status==='DITOLAK'?'text-rose-300':'text-amber-300';
+        const actions=status==='MENUNGGU'?`<div class="flex gap-2 mt-4"><button type="button" onclick="pntsModerateRating(${Number(item.rowNumber)},'DITERIMA')" class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">Terima</button><button type="button" onclick="pntsModerateRating(${Number(item.rowNumber)},'DITOLAK')" class="px-4 py-2 rounded-lg bg-rose-800 hover:bg-rose-700 text-white text-xs font-bold">Tolak</button></div>`:'';
+        return `<article class="rounded-2xl bg-slate-950 border border-slate-700 p-4"><div class="flex flex-wrap justify-between gap-2"><div class="font-bold text-white">${safeText(item.name||'Pengunjung')}</div><span class="text-xs font-extrabold ${color}">${safeText(status)}</span></div><div class="text-amber-400 mt-2">${'★'.repeat(Number(item.rating)||0)}<span class="text-slate-600">${'☆'.repeat(5-(Number(item.rating)||0))}</span></div><p class="text-xs text-slate-500 mt-1">${safeText(item.date||'')}</p><p class="text-sm text-slate-300 mt-3 whitespace-pre-wrap">${safeText(item.comment||'Tanpa komentar')}</p>${actions}</article>`;
+      }).join(''):'<p class="text-sm text-slate-400">Belum ada rating atau ulasan.</p>';
+    },function(){list.innerHTML='<p class="text-sm text-rose-300">Server tidak dapat dihubungi.</p>';});
+  };
+  window.pntsModerateRating=function(rowNumber,status){
+    if(!confirm('Yakin ingin '+(status==='DITERIMA'?'MENERIMA':'MENOLAK')+' ulasan ini?'))return;
+    callServerSafe('moderasiRatingPengunjung',[rowNumber,status],function(res){
+      if(res&&res.success){showToast(res.message||'Status ulasan diperbarui.','success');pntsLoadAdminRatings();pntsLoadRatingSummary();}
+      else showToast((res&&res.message)||'Moderasi gagal.','danger');
+    },function(){showToast('Server tidak dapat dihubungi. Status belum dipastikan.','danger');});
   };
 
-  window.pntsOpenComplaint = function(){
-    const name = currentVisitorName();
-    if (!name) {
-      alert('Silakan isi nama dan marga pada halaman masuk terlebih dahulu.');
-      if (typeof openLoginModal === 'function') openLoginModal('user');
-      return;
-    }
-    document.getElementById('pntsComplaintVisitorName').textContent = name;
-    document.getElementById('pntsComplaintOverlay').classList.add('open');
+  window.pntsOpenComplaint=function(){
+    const name=currentVisitorName();if(!name){alert('Silakan isi nama dan marga pada halaman masuk terlebih dahulu.');if(typeof openLoginModal==='function')openLoginModal('user');return;}
+    document.getElementById('pntsComplaintVisitorName').textContent=name;document.getElementById('pntsComplaintOverlay').classList.add('open');
   };
-  window.pntsCloseComplaint = function(){
-    document.getElementById('pntsComplaintOverlay').classList.remove('open');
-  };
-
-  window.pntsSubmitComplaint = function(event){
-    event.preventDefault();
-    const name = currentVisitorName();
-    const btn = document.getElementById('pntsComplaintSubmit');
-    if (!name) { alert('Nama pengunjung tidak ditemukan. Silakan masuk kembali.'); return; }
-    const payload = {
-      name: name,
-      phone: document.getElementById('pntsComplaintPhone').value.trim(),
-      category: document.getElementById('pntsComplaintCategory').value,
-      priority: document.getElementById('pntsComplaintPriority').value,
-      message: document.getElementById('pntsComplaintMessage').value.trim(),
-      clientId: currentDeviceId()
-    };
-    btn.disabled = true; btn.textContent = 'Mengirim...';
-    callServerSafe('simpanPengaduanWebsite',[payload],function(res){
-      btn.disabled = false; btn.textContent = 'Kirim Pengaduan';
-      if (res && res.success) {
-        alert('Pengaduan berhasil dikirim.\nNomor tiket: ' + res.ticket +
-          '\n' + (res.emailSent ? 'Notifikasi email Admin berhasil dikirim.' : 'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));
-        document.getElementById('pntsComplaintForm').reset();
-        document.getElementById('pntsComplaintOverlay').classList.remove('open');
-      } else {
-        alert((res && res.message) || 'Pengaduan belum berhasil dikirim.');
-      }
-    },function(){
-      btn.disabled = false; btn.textContent = 'Kirim Pengaduan';
-      alert('Koneksi ke Spreadsheet gagal. Silakan coba lagi.');
-    });
+  window.pntsCloseComplaint=function(){document.getElementById('pntsComplaintOverlay').classList.remove('open');};
+  window.pntsSubmitComplaint=function(event){
+    event.preventDefault();const name=currentVisitorName(),btn=document.getElementById('pntsComplaintSubmit');if(!name){alert('Nama pengunjung tidak ditemukan. Silakan masuk kembali.');return;}
+    const payload={name:name,phone:document.getElementById('pntsComplaintPhone').value.trim(),category:document.getElementById('pntsComplaintCategory').value,priority:document.getElementById('pntsComplaintPriority').value,message:document.getElementById('pntsComplaintMessage').value.trim(),clientId:currentDeviceId()};
+    btn.disabled=true;btn.textContent='Mengirim...';
+    callServerSafe('simpanPengaduanWebsite',[payload],function(res){btn.disabled=false;btn.textContent='Kirim Pengaduan';if(res&&res.success){alert('Pengaduan berhasil dikirim.\nNomor tiket: '+res.ticket+'\n'+(res.emailSent?'Notifikasi email Admin berhasil dikirim.':'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));document.getElementById('pntsComplaintForm').reset();document.getElementById('pntsComplaintOverlay').classList.remove('open');}else alert((res&&res.message)||'Pengaduan belum berhasil dikirim.');},function(){btn.disabled=false;btn.textContent='Kirim Pengaduan';alert('Koneksi ke Spreadsheet gagal. Silakan coba lagi.');});
   };
 })();
 </script>
