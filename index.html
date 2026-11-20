@@ -2268,6 +2268,7 @@
                 errorEl.classList.add('hidden');
                 inputEl.classList.remove('border-red-500', 'ring-2', 'ring-red-500/40');
                 appState.visitorName = nameInput;
+                try { sessionStorage.setItem('pnts_current_visitor_name', nameInput); } catch (e) {}
                 document.getElementById('welcomeVisitorName').textContent = appState.visitorName;
 
                 const visitData = {
@@ -2278,8 +2279,7 @@
 
                 document.getElementById('loginModal').classList.add('hidden');
                 switchRoleView('user');
-                // Rating ditawarkan 10 detik setelah pengunjung berhasil masuk.
-                if (window.pntsScheduleRatingPrompt) window.pntsScheduleRatingPrompt();
+                if (typeof window.pntsScheduleRatingPrompt === 'function') window.pntsScheduleRatingPrompt();
 
                 if (appState.music && appState.music.autoPlay) {
                     syncSoundCloudPlayer(true);
@@ -3683,159 +3683,219 @@
         window.addEventListener('load', initWebApp);
     </script>
 <!-- ================================================================
-     RATING PENGUNJUNG + TOMBOL PENGADUAN PNTS SE-DURI
+     TOMBOL PENGADUAN PNTS DURI + POPUP RATING PENGUNJUNG
      ================================================================ -->
 <style>
-#pntsRatingOverlay{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,6,23,.78);backdrop-filter:blur(5px)}
-#pntsRatingCard{width:min(420px,100%);background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:22px;padding:24px;box-shadow:0 24px 80px #000b;text-align:center;font-family:Arial,sans-serif}
-.pnts-rating-star{border:0;background:transparent;color:#64748b;font-size:38px;line-height:1;padding:4px;cursor:pointer;transition:transform .15s,color .15s}
-.pnts-rating-star:hover{transform:scale(1.12)}
-#pntsRatingSubmit{width:100%;background:#f59e0b;color:#111827;border:0;border-radius:12px;padding:12px;font-weight:900;cursor:pointer}
-#pntsRatingSubmit:disabled{opacity:.55;cursor:wait}
 #pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:999px;padding:13px 18px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;gap:10px;cursor:pointer}
-#pntsComplaintPanel{position:fixed;right:20px;bottom:84px;width:min(390px,calc(100vw - 28px));max-height:min(680px,calc(100dvh - 115px));z-index:9999;background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:20px;box-shadow:0 20px 70px #000b;display:none;overflow:auto;font-family:Arial,sans-serif;padding:16px}
-#pntsComplaintPanel.pnts-open{display:block}
-.pnts-complaint-input{width:100%;background:#020617;border:1px solid #475569;border-radius:10px;padding:10px;color:white;font-size:13px;outline:none}
-.pnts-complaint-input:focus{border-color:#f59e0b}
-.pnts-complaint-label{display:block;font-size:12px;color:#cbd5e1;font-weight:700;margin:11px 0 6px}
-#pntsComplaintSubmit{width:100%;margin-top:14px;background:#f59e0b;color:#111827;border:0;border-radius:10px;padding:11px;font-weight:900;cursor:pointer}
-#pntsComplaintSubmit:disabled{opacity:.5;cursor:wait}
-@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;padding:12px 15px}#pntsComplaintPanel{right:8px;bottom:72px;width:calc(100vw - 16px);max-height:calc(100dvh - 90px)}}
+.pnts-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
+.pnts-overlay.open{display:flex}
+.pnts-modal{width:min(440px,100%);max-height:90vh;overflow:auto;background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:20px;box-shadow:0 20px 70px #000b;padding:20px}
+.pnts-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.pnts-close{border:0;background:#ffffff20;color:white;border-radius:9px;padding:7px 11px;cursor:pointer}
+.pnts-field{width:100%;background:#020617;border:1px solid #475569;border-radius:10px;padding:11px;color:white;font-size:13px;outline:none}
+.pnts-field:focus{border-color:#f59e0b}
+.pnts-label{display:block;font-size:12px;color:#fcd34d;font-weight:700;margin:10px 0 5px}
+.pnts-submit{width:100%;background:#f59e0b;color:#111827;border:0;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;margin-top:14px}
+.pnts-submit:disabled{opacity:.55;cursor:wait}
+.pnts-stars{display:flex;justify-content:center;gap:8px;margin:18px 0}
+.pnts-star{border:0;background:transparent;color:#64748b;font-size:38px;line-height:1;cursor:pointer;padding:3px}
+.pnts-star.selected{color:#fbbf24}
+.pnts-muted{font-size:11px;line-height:1.5;color:#94a3b8}
+@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;padding:12px 15px}.pnts-modal{padding:16px}}
 </style>
 
-<!-- Jendela rating bintang -->
-<div id="pntsRatingOverlay" role="dialog" aria-modal="true" aria-labelledby="pntsRatingTitle">
-  <div id="pntsRatingCard">
-    <div style="font-size:34px;margin-bottom:8px">⭐</div>
-    <h2 id="pntsRatingTitle" style="font-size:22px;font-weight:900;color:#fbbf24;margin:0 0 8px">Berikan Penilaian</h2>
-    <p style="font-size:14px;color:#cbd5e1;margin:0 0 8px">Horas, <strong id="pntsRatingVisitorName" style="color:#fff"></strong>!</p>
-    <p style="font-size:13px;color:#cbd5e1;margin:0 0 18px">Bagaimana pengalaman Anda menggunakan website PNTS Se-Duri?</p>
-    <div id="pntsRatingStars" style="display:flex;justify-content:center;gap:5px;margin-bottom:10px">
-      <button type="button" class="pnts-rating-star" data-pnts-star="1" aria-label="1 bintang">★</button>
-      <button type="button" class="pnts-rating-star" data-pnts-star="2" aria-label="2 bintang">★</button>
-      <button type="button" class="pnts-rating-star" data-pnts-star="3" aria-label="3 bintang">★</button>
-      <button type="button" class="pnts-rating-star" data-pnts-star="4" aria-label="4 bintang">★</button>
-      <button type="button" class="pnts-rating-star" data-pnts-star="5" aria-label="5 bintang">★</button>
+<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsOpenComplaint()">
+  <span style="font-size:18px">📝</span><span>PENGADUAN</span>
+</button>
+
+<div id="pntsRatingOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsRatingTitle">
+  <section class="pnts-modal">
+    <div class="pnts-modal-head">
+      <h2 id="pntsRatingTitle" style="font-weight:900;color:#fbbf24;font-size:18px">Beri Rating Website PNTS Duri</h2>
+      <button type="button" class="pnts-close" onclick="pntsCloseRating()" aria-label="Tutup">✕</button>
     </div>
-    <p id="pntsRatingHint" style="font-size:12px;color:#fcd34d;min-height:18px;margin:0 0 16px">Pilih 1 sampai 5 bintang</p>
-    <button id="pntsRatingSubmit" type="button">Kirim Penilaian</button>
-    <button id="pntsRatingClose" type="button" style="margin-top:12px;background:transparent;border:0;color:#94a3b8;font-size:12px;cursor:pointer">Nanti saja</button>
-    <p id="pntsRatingMessage" style="font-size:12px;color:#fca5a5;margin:12px 0 0;min-height:16px"></p>
-  </div>
+    <p style="font-size:13px;color:#cbd5e1">Horas! Bagaimana pengalaman Anda mengunjungi website kami?</p>
+    <div style="margin-top:12px;background:#1e293b;border:1px solid #475569;border-radius:10px;padding:10px">
+      <div class="pnts-muted">Rating dari pengunjung:</div>
+      <div id="pntsRatingVisitorName" style="font-weight:800;color:#fff;margin-top:3px">Pengunjung</div>
+    </div>
+    <div class="pnts-stars" role="group" aria-label="Pilih jumlah bintang">
+      <button class="pnts-star" type="button" data-rating="1" onclick="pntsSelectRating(1)" aria-label="1 bintang">★</button>
+      <button class="pnts-star" type="button" data-rating="2" onclick="pntsSelectRating(2)" aria-label="2 bintang">★</button>
+      <button class="pnts-star" type="button" data-rating="3" onclick="pntsSelectRating(3)" aria-label="3 bintang">★</button>
+      <button class="pnts-star" type="button" data-rating="4" onclick="pntsSelectRating(4)" aria-label="4 bintang">★</button>
+      <button class="pnts-star" type="button" data-rating="5" onclick="pntsSelectRating(5)" aria-label="5 bintang">★</button>
+    </div>
+    <div id="pntsRatingHint" class="pnts-muted" style="text-align:center">Pilih bintang 1 sampai 5</div>
+    <label class="pnts-label" for="pntsRatingComment">Komentar (opsional)</label>
+    <textarea id="pntsRatingComment" class="pnts-field" rows="3" maxlength="500" placeholder="Tulis saran atau komentar Anda..."></textarea>
+    <button id="pntsRatingSubmit" type="button" class="pnts-submit" onclick="pntsSubmitRating()">Kirim Rating</button>
+    <p class="pnts-muted" style="margin-top:9px;text-align:center">Terima kasih sudah membantu kami meningkatkan website PNTS Duri.</p>
+  </section>
 </div>
 
-<!-- Tombol dan formulir pengaduan (pengganti HORAS AI) -->
-<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsToggleComplaint()">
-  <span style="font-size:19px">📝</span><span>PENGADUAN</span>
-</button>
-<section id="pntsComplaintPanel" aria-label="Formulir Pengaduan PNTS Se-Duri">
-  <header style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(110deg,#7f1d1d,#991b1b);padding:13px;border-radius:12px;border-bottom:2px solid #f59e0b">
-    <div><div style="font-weight:900;font-size:15px;color:#fbbf24">📝 PENGADUAN PNTS</div><div style="font-size:11px;color:#fee2e2;margin-top:3px">Sampaikan pengaduan, saran, atau kritik</div></div>
-    <button type="button" onclick="pntsToggleComplaint(false)" style="background:#ffffff20;color:white;border:0;border-radius:8px;padding:7px 10px;cursor:pointer">✕</button>
-  </header>
-  <form id="pntsComplaintForm" onsubmit="pntsSubmitComplaint(event)">
-    <label class="pnts-complaint-label" for="pntsReportName">Nama dan marga</label>
-    <input id="pntsReportName" class="pnts-complaint-input" required minlength="2" maxlength="100" readonly placeholder="Nama pengunjung akan terisi otomatis">
-    <label class="pnts-complaint-label" for="pntsReportPhone">Nomor WhatsApp (opsional)</label>
-    <input id="pntsReportPhone" class="pnts-complaint-input" maxlength="30" placeholder="08xxxxxxxxxx">
-    <label class="pnts-complaint-label" for="pntsReportCategory">Kategori pengaduan</label>
-    <select id="pntsReportCategory" class="pnts-complaint-input"><option>Umum</option><option>Kegiatan / Agenda</option><option>Keanggotaan</option><option>Pelayanan Pengurus</option><option>Saran dan Kritik</option><option>Lainnya</option></select>
-    <label class="pnts-complaint-label" for="pntsReportPriority">Prioritas</label>
-    <select id="pntsReportPriority" class="pnts-complaint-input"><option>Normal</option><option>Penting</option><option>Mendesak</option></select>
-    <label class="pnts-complaint-label" for="pntsReportMessage">Isi pengaduan</label>
-    <textarea id="pntsReportMessage" class="pnts-complaint-input" required minlength="10" maxlength="3000" rows="4" placeholder="Jelaskan pengaduan atau saran Anda..."></textarea>
-    <label style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#cbd5e1;margin-top:12px"><input id="pntsReportConsent" type="checkbox" required style="margin-top:2px"> Saya menyetujui nama dan isi pengaduan dikirim kepada Admin BPH untuk ditindaklanjuti.</label>
-    <button id="pntsComplaintSubmit" type="submit">Kirim Pengaduan</button>
-    <p style="font-size:11px;line-height:1.45;color:#94a3b8;margin-top:10px">Pengaduan disimpan di Spreadsheet PNTS. Jangan masukkan kata sandi atau data sangat rahasia.</p>
-  </form>
-</section>
+<div id="pntsComplaintOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsComplaintTitle">
+  <section class="pnts-modal">
+    <div class="pnts-modal-head">
+      <h2 id="pntsComplaintTitle" style="font-weight:900;color:#fbbf24;font-size:18px">Pengaduan PNTS Duri</h2>
+      <button type="button" class="pnts-close" onclick="pntsCloseComplaint()" aria-label="Tutup">✕</button>
+    </div>
+    <p style="font-size:13px;color:#cbd5e1">Silakan sampaikan kritik, saran, atau pengaduan Anda kepada pengurus.</p>
+    <div style="margin-top:12px;background:#1e293b;border:1px solid #475569;border-radius:10px;padding:10px">
+      <div class="pnts-muted">Nama pengadu (diambil dari nama saat masuk website)</div>
+      <div id="pntsComplaintVisitorName" style="font-weight:800;color:#fff;margin-top:3px">Pengunjung</div>
+    </div>
+    <form id="pntsComplaintForm" onsubmit="pntsSubmitComplaint(event)">
+      <label class="pnts-label" for="pntsComplaintPhone">Nomor WhatsApp (opsional)</label>
+      <input id="pntsComplaintPhone" class="pnts-field" maxlength="30" placeholder="08xxxxxxxxxx">
+      <label class="pnts-label" for="pntsComplaintCategory">Kategori pengaduan</label>
+      <select id="pntsComplaintCategory" class="pnts-field">
+        <option>Umum</option><option>Kegiatan / Agenda</option><option>Keanggotaan</option>
+        <option>Pelayanan Pengurus</option><option>Saran dan Kritik</option><option>Lainnya</option>
+      </select>
+      <label class="pnts-label" for="pntsComplaintPriority">Prioritas</label>
+      <select id="pntsComplaintPriority" class="pnts-field">
+        <option>Normal</option><option>Penting</option><option>Mendesak</option>
+      </select>
+      <label class="pnts-label" for="pntsComplaintMessage">Isi pengaduan *</label>
+      <textarea id="pntsComplaintMessage" class="pnts-field" required minlength="10" maxlength="3000" rows="4" placeholder="Jelaskan pengaduan atau saran Anda..."></textarea>
+      <label style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:#cbd5e1;margin-top:10px">
+        <input id="pntsComplaintConsent" type="checkbox" required style="margin-top:2px">
+        Saya menyetujui nama dan isi pengaduan dikirim kepada Admin BPH.
+      </label>
+      <button id="pntsComplaintSubmit" class="pnts-submit" type="submit">Kirim Pengaduan</button>
+    </form>
+    <p class="pnts-muted" style="margin-top:9px">Pengaduan disimpan pada sheet PENGADUAN. Jangan masukkan kata sandi atau data rahasia.</p>
+  </section>
+</div>
 
 <script>
 (function(){
-  const endpoint = 'https://script.google.com/macros/s/AKfycbxifQVl5hzBhrvtC9nuo6irY63KA0I0tvGBqlh4rm8fF475B2TLcbJLMwjfpXeCzu9JmA/exec';
-  const RATING_DONE_KEY = 'pntss_rating_prompt_done_v1';
   let selectedRating = 0;
-  let promptTimerStarted = false;
+  let ratingPromptTimer = null;
+  const RATING_SEEN_KEY = 'pnts_rating_prompt_seen_v1';
+  const RATING_SUBMITTED_KEY = 'pnts_rating_submitted_v1';
 
-  function getVisitorName(){
-    return String((typeof appState !== 'undefined' && appState.visitorName) || document.getElementById('visitorNameInput')?.value || '').trim();
+  function currentVisitorName(){
+    let name = '';
+    try { name = String(appState.visitorName || '').trim(); } catch(e) {}
+    if (!name || name === 'Pengunjung') {
+      try { name = String(sessionStorage.getItem('pnts_current_visitor_name') || '').trim(); } catch(e) {}
+    }
+    return name;
   }
-  function alreadyPrompted(){try{return localStorage.getItem(RATING_DONE_KEY)==='1'}catch(e){return false}}
-  function markPrompted(){try{localStorage.setItem(RATING_DONE_KEY,'1')}catch(e){}}
-  function paintStars(value){
-    document.querySelectorAll('[data-pnts-star]').forEach(function(btn){
-      const n=Number(btn.getAttribute('data-pnts-star'));
-      btn.style.color=n<=value?'#fbbf24':'#64748b';
-      btn.setAttribute('aria-pressed',n===value?'true':'false');
-    });
-    const hint=document.getElementById('pntsRatingHint');
-    if(hint) hint.textContent=value ? value+' dari 5 bintang dipilih' : 'Pilih 1 sampai 5 bintang';
+
+  function currentDeviceId(){
+    if (typeof getPntssDeviceId === 'function') return getPntssDeviceId();
+    const key = 'pntss_visitor_device_id_v1';
+    try {
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('pnts-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        localStorage.setItem(key,id);
+      }
+      return id;
+    } catch(e) { return 'pnts_guest'; }
   }
-  function closeRating(){
-    markPrompted();
-    const overlay=document.getElementById('pntsRatingOverlay');
-    if(overlay) overlay.style.display='none';
-  }
-  window.pntsScheduleRatingPrompt=function(){
-    if(promptTimerStarted || alreadyPrompted()) return;
-    promptTimerStarted=true;
-    window.setTimeout(function(){
-      if(alreadyPrompted()) return;
-      const name=getVisitorName();
-      if(!name || (window.appState && appState.currentRole!=='user')) return;
-      const nameEl=document.getElementById('pntsRatingVisitorName');
-      if(nameEl) nameEl.textContent=name;
-      selectedRating=0; paintStars(0);
-      const msg=document.getElementById('pntsRatingMessage'); if(msg) msg.textContent='';
-      const overlay=document.getElementById('pntsRatingOverlay');
-      if(overlay){markPrompted();overlay.style.display='flex';}
+
+  window.pntsScheduleRatingPrompt = function(){
+    if (ratingPromptTimer) clearTimeout(ratingPromptTimer);
+    let alreadySeen = false, alreadySubmitted = false;
+    try {
+      alreadySeen = localStorage.getItem(RATING_SEEN_KEY) === '1';
+      alreadySubmitted = localStorage.getItem(RATING_SUBMITTED_KEY) === '1';
+    } catch(e) {}
+    if (alreadySeen || alreadySubmitted || !currentVisitorName()) return;
+    ratingPromptTimer = setTimeout(function(){
+      const name = currentVisitorName();
+      if (!name) return;
+      document.getElementById('pntsRatingVisitorName').textContent = name;
+      document.getElementById('pntsRatingOverlay').classList.add('open');
+      try { localStorage.setItem(RATING_SEEN_KEY,'1'); } catch(e) {}
     },10000);
   };
-  document.querySelectorAll('[data-pnts-star]').forEach(function(btn){
-    btn.addEventListener('click',function(){selectedRating=Number(btn.getAttribute('data-pnts-star'));paintStars(selectedRating);});
-  });
-  document.getElementById('pntsRatingClose')?.addEventListener('click',closeRating);
-  document.getElementById('pntsRatingSubmit')?.addEventListener('click',async function(){
-    const button=this; const msg=document.getElementById('pntsRatingMessage');
-    if(!selectedRating){if(msg)msg.textContent='Silakan pilih bintang terlebih dahulu.';return;}
-    const name=getVisitorName();
-    if(!name){if(msg)msg.textContent='Nama pengunjung tidak ditemukan. Silakan masuk kembali.';return;}
-    button.disabled=true;button.textContent='Menyimpan...';if(msg)msg.textContent='';
-    try{
-      const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:'simpanRatingPengunjung',args:[{namaPengunjung:name,rating:selectedRating,deviceId:typeof getPntssDeviceId==='function'?getPntssDeviceId():''}]})});
-      const result=await response.json();
-      if(!response.ok || result.success===false){throw new Error(result.message||result.error||'Rating belum berhasil disimpan.');}
-      if(msg)msg.style.color='#86efac';
-      if(msg)msg.textContent='Terima kasih! Rating Anda berhasil disimpan.';
-      button.textContent='Berhasil';
-      window.setTimeout(closeRating,1200);
-    }catch(err){if(msg){msg.style.color='#fca5a5';msg.textContent=err.message||'Terjadi kesalahan saat menyimpan rating.';}button.disabled=false;button.textContent='Coba Kirim Lagi';}
-  });
 
-  window.pntsToggleComplaint=function(force){
-    const panel=document.getElementById('pntsComplaintPanel');if(!panel)return;
-    const open=typeof force==='boolean'?force:!panel.classList.contains('pnts-open');
-    panel.classList.toggle('pnts-open',open);
-    if(open){const name=document.getElementById('pntsReportName');if(name)name.value=getVisitorName();}
+  window.pntsCloseRating = function(){
+    document.getElementById('pntsRatingOverlay').classList.remove('open');
   };
-  async function postComplaint(payload){
-    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fnName:'simpanPengaduanHorasAi',args:[payload]})});
-    const data=await response.json();if(!response.ok||data.success===false)throw new Error(data.message||data.error||'Permintaan gagal.');return data;
-  }
-  window.pntsSubmitComplaint=async function(event){
+
+  window.pntsSelectRating = function(value){
+    selectedRating = Number(value) || 0;
+    document.querySelectorAll('.pnts-star').forEach(function(btn){
+      btn.classList.toggle('selected', Number(btn.dataset.rating) <= selectedRating);
+    });
+    document.getElementById('pntsRatingHint').textContent = selectedRating + ' dari 5 bintang';
+  };
+
+  window.pntsSubmitRating = function(){
+    const name = currentVisitorName();
+    const btn = document.getElementById('pntsRatingSubmit');
+    if (!name) { alert('Nama pengunjung tidak ditemukan. Silakan masuk kembali.'); return; }
+    if (selectedRating < 1 || selectedRating > 5) { alert('Silakan pilih bintang terlebih dahulu.'); return; }
+    const payload = {
+      deviceId: currentDeviceId(),
+      name: name,
+      rating: selectedRating,
+      comment: document.getElementById('pntsRatingComment').value.trim()
+    };
+    btn.disabled = true; btn.textContent = 'Menyimpan...';
+    callServerSafe('simpanRatingPengunjung',[payload],function(res){
+      btn.disabled = false; btn.textContent = 'Kirim Rating';
+      if (res && res.success) {
+        try { localStorage.setItem(RATING_SUBMITTED_KEY,'1'); } catch(e) {}
+        document.getElementById('pntsRatingOverlay').classList.remove('open');
+        alert('Terima kasih! Rating Anda berhasil disimpan.');
+      } else {
+        alert((res && res.message) || 'Rating belum berhasil disimpan. Silakan coba lagi.');
+      }
+    },function(){
+      btn.disabled = false; btn.textContent = 'Kirim Rating';
+      alert('Koneksi ke Spreadsheet gagal. Silakan coba lagi.');
+    });
+  };
+
+  window.pntsOpenComplaint = function(){
+    const name = currentVisitorName();
+    if (!name) {
+      alert('Silakan isi nama dan marga pada halaman masuk terlebih dahulu.');
+      if (typeof openLoginModal === 'function') openLoginModal('user');
+      return;
+    }
+    document.getElementById('pntsComplaintVisitorName').textContent = name;
+    document.getElementById('pntsComplaintOverlay').classList.add('open');
+  };
+  window.pntsCloseComplaint = function(){
+    document.getElementById('pntsComplaintOverlay').classList.remove('open');
+  };
+
+  window.pntsSubmitComplaint = function(event){
     event.preventDefault();
-    const btn=document.getElementById('pntsComplaintSubmit');
-    const payload={name:getVisitorName(),phone:document.getElementById('pntsReportPhone').value,category:document.getElementById('pntsReportCategory').value,priority:document.getElementById('pntsReportPriority').value,message:document.getElementById('pntsReportMessage').value,clientId:typeof getPntssDeviceId==='function'?getPntssDeviceId():'pnts_guest'};
-    if(!payload.name){alert('Nama pengunjung tidak ditemukan. Silakan masuk sebagai pengunjung terlebih dahulu.');return;}
-    btn.disabled=true;btn.textContent='Mengirim...';
-    try{
-      const result=await postComplaint(payload);
-      alert('Pengaduan berhasil dikirim.\nNomor tiket: '+result.ticket+'\n'+(result.emailSent?'Notifikasi email Admin berhasil dikirim.':'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));
-      document.getElementById('pntsComplaintForm').reset();
-      document.getElementById('pntsReportName').value=getVisitorName();
-      window.pntsToggleComplaint(false);
-    }catch(err){alert('Pengaduan belum berhasil dikirim: '+err.message);}
-    finally{btn.disabled=false;btn.textContent='Kirim Pengaduan';}
+    const name = currentVisitorName();
+    const btn = document.getElementById('pntsComplaintSubmit');
+    if (!name) { alert('Nama pengunjung tidak ditemukan. Silakan masuk kembali.'); return; }
+    const payload = {
+      name: name,
+      phone: document.getElementById('pntsComplaintPhone').value.trim(),
+      category: document.getElementById('pntsComplaintCategory').value,
+      priority: document.getElementById('pntsComplaintPriority').value,
+      message: document.getElementById('pntsComplaintMessage').value.trim(),
+      clientId: currentDeviceId()
+    };
+    btn.disabled = true; btn.textContent = 'Mengirim...';
+    callServerSafe('simpanPengaduanWebsite',[payload],function(res){
+      btn.disabled = false; btn.textContent = 'Kirim Pengaduan';
+      if (res && res.success) {
+        alert('Pengaduan berhasil dikirim.\nNomor tiket: ' + res.ticket +
+          '\n' + (res.emailSent ? 'Notifikasi email Admin berhasil dikirim.' : 'Pengaduan tersimpan, tetapi email Admin belum berhasil dikirim.'));
+        document.getElementById('pntsComplaintForm').reset();
+        document.getElementById('pntsComplaintOverlay').classList.remove('open');
+      } else {
+        alert((res && res.message) || 'Pengaduan belum berhasil dikirim.');
+      }
+    },function(){
+      btn.disabled = false; btn.textContent = 'Kirim Pengaduan';
+      alert('Koneksi ke Spreadsheet gagal. Silakan coba lagi.');
+    });
   };
 })();
 </script>
