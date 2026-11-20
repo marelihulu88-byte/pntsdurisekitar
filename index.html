@@ -1919,7 +1919,7 @@
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
                 'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
-                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung'
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
             if (adminWriteFunctions.includes(fnName)) {
@@ -3954,10 +3954,20 @@
       list.innerHTML=rows.length?rows.map(item=>{
         const status=String(item.status||'MENUNGGU'),color=status==='DITERIMA'?'text-emerald-300':status==='DITOLAK'?'text-rose-300':'text-amber-300';
         const actions=status==='MENUNGGU'?`<div class="flex gap-2 mt-4"><button type="button" onclick="pntsModerateRating(${Number(item.rowNumber)},'DITERIMA')" class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold">Terima</button><button type="button" onclick="pntsModerateRating(${Number(item.rowNumber)},'DITOLAK')" class="px-4 py-2 rounded-lg bg-rose-800 hover:bg-rose-700 text-white text-xs font-bold">Tolak</button></div>`:'';
-        return `<article class="rounded-2xl bg-slate-950 border border-slate-700 p-4"><div class="flex flex-wrap justify-between gap-2"><div class="font-bold text-white">${safeText(item.name||'Pengunjung')}</div><span class="text-xs font-extrabold ${color}">${safeText(status)}</span></div><div class="text-amber-400 mt-2">${'★'.repeat(Number(item.rating)||0)}<span class="text-slate-600">${'☆'.repeat(5-(Number(item.rating)||0))}</span></div><p class="text-xs text-slate-500 mt-1">${safeText(item.date||'')}</p><p class="text-sm text-slate-300 mt-3 whitespace-pre-wrap">${safeText(item.comment||'Tanpa komentar')}</p>${actions}</article>`;
+        const deleteAction=`<div class="mt-4"><button type="button" onclick="pntsDeleteRating('${String(item.reviewId||'').replace(/[^a-zA-Z0-9-]/g,'')}')" class="px-4 py-2 rounded-lg bg-rose-950 hover:bg-rose-800 border border-rose-500/50 text-rose-200 text-xs font-bold"><i class="fa-solid fa-trash mr-1"></i> Hapus ulasan</button></div>`;
+        return `<article class="rounded-2xl bg-slate-950 border border-slate-700 p-4"><div class="flex flex-wrap justify-between gap-2"><div class="font-bold text-white">${safeText(item.name||'Pengunjung')}</div><span class="text-xs font-extrabold ${color}">${safeText(status)}</span></div><div class="text-amber-400 mt-2">${'★'.repeat(Number(item.rating)||0)}<span class="text-slate-600">${'☆'.repeat(5-(Number(item.rating)||0))}</span></div><p class="text-xs text-slate-500 mt-1">${safeText(item.date||'')}</p><p class="text-sm text-slate-300 mt-3 whitespace-pre-wrap">${safeText(item.comment||'Tanpa komentar')}</p>${actions}${deleteAction}</article>`;
       }).join(''):'<p class="text-sm text-slate-400">Belum ada rating atau ulasan.</p>';
     },function(){list.innerHTML='<p class="text-sm text-rose-300">Server tidak dapat dihubungi.</p>';});
   };
+  window.pntsDeleteRating=function(reviewId){
+    if(!reviewId)return;
+    if(!confirm('Yakin ingin MENGHAPUS ulasan ini secara permanen? Data akan dihapus dari Spreadsheet dan menu ULASAN pengunjung.'))return;
+    callServerSafe('hapusUlasanPengunjung',[reviewId],function(res){
+      if(res&&res.success){showToast(res.message||'Ulasan berhasil dihapus.','success');pntsLoadAdminRatings();pntsLoadRatingSummary();}
+      else showToast((res&&res.message)||'Ulasan gagal dihapus.','danger');
+    },function(){showToast('Server tidak dapat dihubungi. Penghapusan belum dipastikan.','danger');});
+  };
+
   window.pntsModerateRating=function(rowNumber,status){
     if(!confirm('Yakin ingin '+(status==='DITERIMA'?'MENERIMA':'MENOLAK')+' ulasan ini?'))return;
     callServerSafe('moderasiRatingPengunjung',[rowNumber,status],function(res){
