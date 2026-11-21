@@ -2675,7 +2675,7 @@
             const read=pntsGetReadNotificationIds();if(!read.includes(id)){read.push(id);pntsSaveReadNotificationIds(read);}
             pntsRenderPublicNotifications();
             const panel=document.getElementById('notifDropdownPanel');if(panel)panel.classList.add('hidden');
-            const target=String(item.target||'dashboard');
+            const target=String(item.type||'').toUpperCase().trim()==='MEMBER'?'ulasan':String(item.target||'dashboard');
             if(target==='pengurus')switchUserMenu('pengurus');
             else if(target==='ulasan')switchUserMenu('ulasan');
             else if(target==='pendaftaran')switchUserMenu('pendaftaran');
