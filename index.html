@@ -427,9 +427,9 @@
                                 <div class="bg-gradient-to-r from-red-900 via-red-800 to-slate-900 px-4 py-3 border-b border-amber-500/40 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <i class="fa-solid fa-bell text-amber-400"></i>
-                                        <span class="font-bold text-xs sm:text-sm text-white">Anggota yang Sudah Mendaftar</span>
+                                        <span class="font-bold text-xs sm:text-sm text-white">Notifikasi Terbaru PNTS</span>
                                     </div>
-                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Nama Pendaftar</span>
+                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Pembaruan Website</span>
                                 </div>
                                 <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2">
                                 </div>
@@ -509,7 +509,7 @@
                 </button>
                 <button type="button" onclick="switchUserMenu('ulasan')" id="userTabUlasan" class="flex-1 min-w-[140px] py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700">
                     <i class="fa-solid fa-star text-amber-400"></i>
-                    <span>ULASAN</span>
+                    <span>ULASAN &amp; MEMBER</span>
                 </button>
             </div>
         </nav>
@@ -981,10 +981,14 @@
           </div>
           <div class="rounded-3xl bg-slate-950/90 border border-white/10 p-5 sm:p-7 shadow-xl">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
-              <div><h3 class="text-xl font-extrabold text-white">Ulasan pengunjung</h3><p class="text-xs text-slate-400 mt-1">Komentar terbaru dari pengunjung website</p></div>
+              <div><h3 class="text-xl font-extrabold text-white">ULASAN &amp; MEMBER - Ulasan Pengunjung</h3><p class="text-xs text-slate-400 mt-1">Komentar terbaru dari pengunjung website</p></div>
               <button type="button" onclick="pntsLoadRatingSummary()" class="text-xs font-bold text-amber-300 hover:text-amber-200"><i class="fa-solid fa-rotate mr-1"></i>Perbarui</button>
             </div>
             <div id="pntsRatingReviews" class="grid grid-cols-1 md:grid-cols-2 gap-3"><p class="text-sm text-slate-400">Memuat ulasan...</p></div>
+          </div>
+          <div class="rounded-3xl bg-slate-950/90 border border-amber-500/30 p-5 sm:p-7 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4"><div><h3 class="text-xl font-extrabold text-white">Daftar Nama Member Punguan</h3><p class="text-xs text-slate-400 mt-1">Nama anggota yang sudah diterima oleh Admin BPH</p></div><span id="pntsPublicMemberTotal" class="px-3 py-1 rounded-full bg-emerald-900/60 border border-emerald-500/40 text-emerald-200 text-xs font-bold">0 Member</span></div>
+            <div id="pntsPublicMemberNames" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2"><p class="text-sm text-slate-400">Memuat daftar member...</p></div>
           </div>
         </section>
 
@@ -1174,7 +1178,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="switchAdminMenu('newmember')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5">
-                                <i class="fa-solid fa-print"></i> Kelola &amp; Hapus Pendaftar
+                                <i class="fa-solid fa-print"></i> Kelola Member &amp; Pendaftar
                             </button>
                             <button type="button" onclick="refreshStateFromServerSilent()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 text-xs font-bold">
                                 <i class="fa-solid fa-rotate mr-1"></i> Perbarui Statistik
@@ -1195,9 +1199,9 @@
                             <div class="text-[11px] text-slate-400 mt-1">Tercatat otomatis saat Login</div>
                         </div>
                         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-700">
-                            <div class="text-xs text-slate-400 font-bold uppercase">Total Pendaftar Anggota Baru</div>
+                            <div class="text-xs text-slate-400 font-bold uppercase">Total Anggota Diterima</div>
                             <div class="text-3xl font-black text-sky-400 mt-2" id="admStatMembers">4</div>
-                            <div class="text-[11px] text-slate-400 mt-1">Klik Menu 8 untuk WA, Print &amp; Hapus</div>
+                            <div class="text-[11px] text-slate-400 mt-1">Jumlah mengikuti anggota yang diterima Admin</div>
                         </div>
                     </div>
 
@@ -1207,18 +1211,22 @@
                             <label class="text-xs text-slate-300">Mode jumlah anggota
                                 <select id="admMemberCountMode" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white">
                                     <option value="AUTO">Otomatis dari anggota DITERIMA</option>
-                                    <option value="MANUAL">Manual (diisi admin)</option>
                                 </select>
                             </label>
-                            <label class="text-xs text-slate-300">Jumlah anggota manual
-                                <input id="admMemberCountManual" type="number" min="0" step="1" value="0" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white">
+                            <label class="text-xs text-slate-300">Jumlah anggota manual (tidak digunakan)
+                                <input id="admMemberCountManual" type="number" min="0" step="1" value="0" disabled class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white">
                             </label>
                         </div>
-                        <div class="text-[11px] text-slate-400">Mode otomatis menghitung anggota dengan status DITERIMA. Mode manual menggunakan angka yang dimasukkan admin. Tanggal, bulan, tahun, dan jam selalu otomatis mengikuti WIB.</div>
+                        <div class="text-[11px] text-slate-400">Mode otomatis menghitung anggota dengan status DITERIMA. Jumlah anggota selalu dihitung otomatis dari data member berstatus DITERIMA; menambah atau menghapus member akan memperbarui angka ini. Tanggal, bulan, tahun, dan jam selalu otomatis mengikuti WIB.</div>
                         <div class="flex flex-wrap items-center gap-2">
                             <button type="button" onclick="saveDashboardSettings()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Pengaturan</button>
                             <span id="admDashboardSettingStatus" class="text-[11px] text-slate-400"></span>
                         </div>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-900/90 border border-red-500/40 p-4 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2"><div><h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-300"><i class="fa-solid fa-bell mr-1"></i> Kontrol Notifikasi Pengunjung</h3><p class="text-[11px] text-slate-400 mt-1">Kelola dan hapus notifikasi yang tampil pada lonceng seluruh pengunjung.</p></div><div class="flex gap-2"><button type="button" onclick="loadAdminNotifications()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-amber-200 text-xs font-bold">Perbarui</button><button type="button" onclick="pntsAdminClearNotifications()" class="px-3 py-1.5 rounded-lg bg-red-700 hover:bg-red-600 text-white text-xs font-bold">Hapus Semua</button></div></div>
+                        <div id="admNotificationList" class="space-y-2 max-h-72 overflow-y-auto"><p class="text-xs text-slate-400">Memuat notifikasi...</p></div>
                     </div>
 
                     <div class="rounded-2xl bg-slate-900/90 border border-slate-800 p-4 space-y-3">
@@ -1488,6 +1496,12 @@
                         </div>
                         <input type="text" id="admMemberSearchInput" oninput="renderAdminMemberList()" placeholder="Cari nama pendaftar..." 
                                class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div class="rounded-2xl bg-slate-950 border border-emerald-500/30 p-4 space-y-3">
+                        <h3 class="font-extrabold text-emerald-300 text-sm"><i class="fa-solid fa-user-plus mr-1"></i> Tambahkan Member Punguan Secara Manual</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="text-xs text-slate-300">Nama lengkap member<input id="admManualMemberName" type="text" maxlength="120" placeholder="Masukkan nama lengkap" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"></label><label class="text-xs text-slate-300">Nomor WhatsApp (opsional)<input id="admManualMemberWA" type="text" maxlength="30" placeholder="08xxxxxxxxxx" class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white"></label></div>
+                        <button type="button" onclick="addManualPntsMember()" class="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold"><i class="fa-solid fa-plus mr-1"></i> Tambahkan Member</button>
+                        <p class="text-[11px] text-slate-400">Member yang ditambahkan langsung berstatus DITERIMA dan jumlah anggota dashboard otomatis bertambah. Data tersimpan di Spreadsheet.</p>
                     </div>
                     <div id="admMemberList" class="space-y-4"></div>
                 </div>
@@ -1825,7 +1839,7 @@
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
                 'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
-                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung'
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','tambahAnggotaManual','hapusNotifikasiPNTS','hapusSemuaNotifikasiPNTS'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
             if (adminWriteFunctions.includes(fnName)) {
@@ -2624,39 +2638,56 @@
             }, () => { if (msg) msg.textContent = 'Server tidak dapat dihubungi.'; });
         }
 
-        // ==================== NOTIFIKASI PUBLIK: HANYA NAMA PENDAFTAR ====================
-        function renderHeaderNotifications(names) {
-            const redDot = document.getElementById('notifRedDot');
-            const listContainer = document.getElementById('notifListContainer');
-            const safeNames = Array.isArray(names) ? names : [];
-            if (redDot) {
-                redDot.textContent = safeNames.length;
-                redDot.classList.toggle('hidden', safeNames.length === 0);
-            }
-            if (!listContainer) return;
-            if (!safeNames.length) {
-                listContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Belum ada nama pendaftar.</div>`;
-                return;
-            }
-            listContainer.innerHTML = safeNames.map((item, index) => `
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/90">
-                    <span class="w-8 h-8 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-300 flex items-center justify-center text-xs font-black">${index + 1}</span>
-                    <div class="font-bold text-sm text-white">${escapeHtml(item.namaLengkap || 'Nama tidak tersedia')}</div>
-                </div>`).join('');
+        // ==================== NOTIFIKASI PUBLIK PNTS ====================
+        let pntsPublicNotifications = [];
+        function pntsNotifReadKey(){
+            let visitor='';
+            try{visitor=typeof currentVisitorName==='function'?String(currentVisitorName()||'').trim().toLowerCase():'';}catch(e){}
+            const identity=(visitor||'pengunjung-umum').replace(/[^a-z0-9_-]/g,'_').slice(0,80);
+            return 'pnts_notif_read_v1_'+identity;
         }
-
-        function loadPublicMemberNames() {
-            const list = document.getElementById('notifListContainer');
-            if (list) list.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Memuat nama pendaftar...</div>`;
-            callServerSafe('getPublicMemberNames', [], (res) => {
-                renderHeaderNotifications(res && res.names);
-            }, () => renderHeaderNotifications([]));
+        function pntsGetReadNotificationIds(){try{return JSON.parse(localStorage.getItem(pntsNotifReadKey())||'[]')}catch(e){return []}}
+        function pntsSaveReadNotificationIds(ids){try{localStorage.setItem(pntsNotifReadKey(),JSON.stringify(ids.slice(-500)))}catch(e){}}
+        function pntsNotificationUnreadCount(){const read=pntsGetReadNotificationIds();return pntsPublicNotifications.filter(n=>!read.includes(n.id)).length;}
+        function pntsRenderPublicNotifications(){
+            const dot=document.getElementById('notifRedDot'),list=document.getElementById('notifListContainer');
+            const unread=pntsNotificationUnreadCount();
+            if(dot){dot.textContent=unread>99?'99+':String(unread);dot.classList.toggle('hidden',unread===0);}
+            if(!list)return;
+            if(!pntsPublicNotifications.length){list.innerHTML='<div class="p-4 text-center text-xs text-slate-400">Belum ada pembaruan terbaru.</div>';return;}
+            const read=pntsGetReadNotificationIds();
+            list.innerHTML=pntsPublicNotifications.map(n=>{
+                const isRead=read.includes(n.id);
+                return `<button type="button" onclick="pntsOpenNotification('${String(n.id).replace(/[^A-Za-z0-9-]/g,'')}')" class="w-full text-left p-3 rounded-xl ${isRead?'bg-slate-900/50 opacity-70':'bg-red-950/70 border border-amber-500/30'} hover:bg-slate-800 transition-all">
+                  <div class="flex items-start gap-2"><span class="mt-1 w-2.5 h-2.5 rounded-full ${isRead?'bg-slate-600':'bg-red-500'} shrink-0"></span><div class="min-w-0 flex-1"><div class="font-extrabold text-sm text-amber-300">${escapeHtml(n.title||'Pembaruan PNTS')}</div><p class="text-xs text-slate-200 mt-1">${escapeHtml(n.message||'Ada pembaruan terbaru.')}</p><div class="text-[10px] text-slate-500 mt-2">${escapeHtml(n.date||'')}</div></div></div>
+                </button>`;
+            }).join('');
         }
-
-        function toggleNotifDropdown() {
-            const panel = document.getElementById('notifDropdownPanel');
+        function loadPublicNotifications(){
+            callServerSafe('getPublicNotifications',[],res=>{if(res&&res.success){pntsPublicNotifications=Array.isArray(res.notifications)?res.notifications:[];pntsRenderPublicNotifications();}},()=>{} ,10000);
+        }
+        function startPntsNotificationPolling(){
+            loadPublicNotifications();
+            if(!window.pntsNotificationPollingStarted){window.pntsNotificationPollingStarted=true;setInterval(loadPublicNotifications,30000);}
+        }
+        function pntsOpenNotification(id){
+            const item=pntsPublicNotifications.find(n=>n.id===id);if(!item)return;
+            const read=pntsGetReadNotificationIds();if(!read.includes(id)){read.push(id);pntsSaveReadNotificationIds(read);}
+            pntsRenderPublicNotifications();
+            const panel=document.getElementById('notifDropdownPanel');if(panel)panel.classList.add('hidden');
+            const target=String(item.target||'dashboard');
+            if(target==='pengurus')switchUserMenu('pengurus');
+            else if(target==='ulasan')switchUserMenu('ulasan');
+            else if(target==='pendaftaran')switchUserMenu('pendaftaran');
+            else switchUserMenu('dashboard');
+            const targetMap={agenda:'userAgendaGrid',visimisi:'userVisiText',album:'userAlbumGrid',pengurus:'userSectionPengurus',ulasan:'userSectionUlasan',pendaftaran:'userSectionPendaftaran',dashboard:'userSectionDashboard'};
+            const el=document.getElementById(targetMap[target]||'userSectionDashboard');
+            if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),120);
+        }
+        function toggleNotifDropdown(){
+            const panel=document.getElementById('notifDropdownPanel');if(!panel)return;
             panel.classList.toggle('hidden');
-            if (!panel.classList.contains('hidden')) loadPublicMemberNames();
+            if(!panel.classList.contains('hidden'))loadPublicNotifications();
         }
 
         // ==================== FORM PENDAFTARAN ANGGOTA BARU ====================
@@ -2777,10 +2808,47 @@
                 }
             });
             if (menuKey === 'ulasan' && typeof pntsLoadAdminRatings === 'function') pntsLoadAdminRatings();
+            if (menuKey === 'dashboard') loadAdminNotifications();
         }
 
         function getAdminVisitorCredentials() {
             return { username: appState.adminAuth.username, password: appState.adminAuth.password };
+        }
+
+        function loadAdminNotifications(){
+            if(appState.currentRole!=='admin')return;
+            const box=document.getElementById('admNotificationList');if(!box)return;
+            box.innerHTML='<p class="text-xs text-slate-400">Memuat notifikasi...</p>';
+            callServerSafe('getAdminNotifications',[getAdminVisitorCredentials()],res=>{
+                const rows=res&&Array.isArray(res.notifications)?res.notifications:[];
+                box.innerHTML=rows.length?rows.map(n=>`<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-slate-950 border border-slate-700 p-3"><div class="min-w-0 flex-1"><div class="text-xs font-bold text-amber-300">${escapeHtml(n.title||'Notifikasi')}</div><div class="text-xs text-slate-200 mt-1">${escapeHtml(n.message||'')}</div><div class="text-[10px] text-slate-500 mt-1">${escapeHtml(n.date||'')} • ${escapeHtml(n.type||'')}</div></div><button type="button" onclick="pntsAdminDeleteNotification('${String(n.id).replace(/[^A-Za-z0-9-]/g,'')}')" class="px-3 py-2 rounded-lg bg-red-900 hover:bg-red-700 text-red-100 text-xs font-bold"><i class="fa-solid fa-trash mr-1"></i>Hapus</button></div>`).join(''):'<p class="text-xs text-slate-400">Belum ada notifikasi tersimpan.</p>';
+            },()=>{box.innerHTML='<p class="text-xs text-rose-300">Notifikasi gagal dimuat.</p>';});
+        }
+        function pntsAdminDeleteNotification(id){
+            if(!id||!confirm('Hapus notifikasi ini dari lonceng semua pengunjung?'))return;
+            callServerSafe('hapusNotifikasiPNTS',[id],res=>{if(res&&res.success){loadAdminNotifications();loadPublicNotifications();showToast(res.message||'Notifikasi dihapus.','success');}else showToast((res&&res.message)||'Gagal menghapus notifikasi.','danger');},()=>showToast('Server tidak dapat dihubungi.','danger'));
+        }
+        function pntsAdminClearNotifications(){
+            if(!confirm('Hapus SEMUA notifikasi dari lonceng seluruh pengunjung?'))return;
+            callServerSafe('hapusSemuaNotifikasiPNTS',[],res=>{if(res&&res.success){loadAdminNotifications();loadPublicNotifications();showToast(res.message||'Semua notifikasi dihapus.','success');}else showToast((res&&res.message)||'Gagal menghapus notifikasi.','danger');},()=>showToast('Server tidak dapat dihubungi.','danger'));
+        }
+        function addManualPntsMember(){
+            if(appState.currentRole!=='admin')return showToast('Hanya Admin yang dapat menambahkan member.','danger');
+            const nameEl=document.getElementById('admManualMemberName'),waEl=document.getElementById('admManualMemberWA');
+            const name=nameEl?nameEl.value.trim():'';const wa=waEl?waEl.value.trim():'';
+            if(name.length<3)return showToast('Masukkan nama lengkap minimal 3 karakter.','danger');
+            callServerSafe('tambahAnggotaManual',[{namaLengkap:name,noWA:wa}],res=>{
+                if(res&&res.success){if(res.member)appState.members.unshift(res.member);if(nameEl)nameEl.value='';if(waEl)waEl.value='';renderAdminAll();refreshStateFromServerSilent();loadAdminNotifications();showToast('Member berhasil ditambahkan.','success');}
+                else showToast((res&&res.message)||'Member gagal ditambahkan.','danger');
+            },()=>showToast('Server tidak dapat dihubungi. Member belum ditambahkan.','danger'));
+        }
+        function loadPublicAcceptedMembers(){
+            const box=document.getElementById('pntsPublicMemberNames');if(box)box.innerHTML='<p class="text-sm text-slate-400">Memuat daftar member...</p>';
+            callServerSafe('getPublicMemberNames',[],res=>{
+                const names=res&&Array.isArray(res.names)?res.names:[];
+                const total=document.getElementById('pntsPublicMemberTotal');if(total)total.textContent=names.length.toLocaleString('id-ID')+' Member';
+                if(box)box.innerHTML=names.length?names.map((m,i)=>`<div class="rounded-xl bg-slate-900 border border-white/10 px-3 py-2 text-xs text-slate-100 flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-emerald-900 text-emerald-200 flex items-center justify-center font-bold">${i+1}</span><span class="font-semibold">${escapeHtml(m.namaLengkap||'Member')}</span></div>`).join(''):'<p class="text-sm text-slate-400">Belum ada member yang diterima Admin.</p>';
+            },()=>{if(box)box.innerHTML='<p class="text-sm text-rose-300">Daftar member belum dapat dimuat.</p>';});
         }
 
         function loadAdminMembers() {
@@ -2995,14 +3063,9 @@
                             <button type="button" onclick="verifyMemberStatus('${m.id}', 'DITOLAK')" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-user-xmark"></i> Tolak &amp; WA
                             </button>
-                            <button type="button" onclick="kirimNotifWAKeAnggota('${m.id}')" class="px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5">
-                                <i class="fa-brands fa-whatsapp"></i> Kirim Ulang WA
-                            </button>
-                            <button type="button" onclick="cetakFormulirAnggota('${m.id}')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-lg flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-print"></i> Cetak Formulir
-                            </button>
+                            ${m.source === 'ADMIN_MANUAL' ? '' : `<button type="button" onclick="kirimNotifWAKeAnggota('${m.id}')" class="px-4 py-2 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold text-xs shadow flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp"></i> Kirim Ulang WA</button><button type="button" onclick="cetakFormulirAnggota('${m.id}')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-lg flex items-center justify-center gap-1.5"><i class="fa-solid fa-print"></i> Cetak Formulir</button>`}
                             <button type="button" onclick="hapusRiwayatAnggota('${m.id}')" class="col-span-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-red-700 border border-red-500/40 text-red-300 hover:text-white font-bold text-xs transition-all flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-trash"></i> Hapus Riwayat (Admin)
+                                <i class="fa-solid fa-trash"></i> Hapus Member / Riwayat (Admin)
                             </button>
                         </div>
                     </div>
@@ -3018,8 +3081,12 @@
 
             document.getElementById('admStatTotal').textContent = appState.stats.totalVisits.toLocaleString('id-ID');
             document.getElementById('admStatToday').textContent = appState.stats.todayVisits;
-            document.getElementById('admStatMembers').textContent = appState.members.length;
+            document.getElementById('admStatMembers').textContent = (appState.members || []).filter(m => String(m.verificationStatus || m.decision || '').toUpperCase() === 'DITERIMA').length;
             renderAdminVisitorLogs();
+            if (appState.currentRole === 'admin' && !window.pntsAdminNotificationsInitialLoaded) {
+                window.pntsAdminNotificationsInitialLoaded = true;
+                loadAdminNotifications();
+            }
             renderPublicDashboard();
             const dashInfo = appState.dashboardInfo || {};
             const modeEl = document.getElementById('admMemberCountMode');
@@ -3509,6 +3576,10 @@
                     if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, '', waWindow);
                 }
                 loadAdminMembers();
+                refreshStateFromServerSilent();
+                loadPublicAcceptedMembers();
+                loadPublicNotifications();
+                loadAdminNotifications();
             }, (error) => {
                 target.verificationStatus = previousStatus;
                 if (waWindow && !waWindow.closed) waWindow.close();
@@ -3541,7 +3612,17 @@
             renderQuickPrintModalList();
 
             showToast(`Riwayat pendaftaran "${target.namaLengkap}" berhasil dihapus oleh Admin!`, 'info');
-            callServerSafe('hapusRiwayatAnggota', [memberId]);
+            callServerSafe('hapusRiwayatAnggota', [memberId], (res) => {
+                if (res && res.success !== false) {
+                    refreshStateFromServerSilent();
+                    loadPublicAcceptedMembers();
+                    loadAdminNotifications();
+                    showToast('Data anggota berhasil dihapus dari Spreadsheet.', 'success');
+                } else {
+                    showToast((res && res.message) || 'Data anggota gagal dihapus dari server.', 'danger');
+                    loadAdminMembers();
+                }
+            }, () => { showToast('Server tidak dapat dihubungi. Penghapusan belum dikonfirmasi.', 'danger'); loadAdminMembers(); });
         }
 
         // ==================== FUNGSI PREVIEW & CETAK (PRINT) FORMULIR PENDAFTARAN ====================
@@ -3800,8 +3881,10 @@
                     renderAllUserViews();
                     renderAdminAll();
                     renderPublicDashboard();
+                    startPntsNotificationPolling();
                 },
                 () => {
+                    startPntsNotificationPolling();
                     if (syncBadge) {
                         syncBadge.innerHTML = '<i class="fa-solid fa-bolt text-amber-400"></i> Mode Cepat Aktif';
                     }
@@ -3898,6 +3981,7 @@
     document.getElementById('pntsRatingHint').textContent=selectedRating+' dari 5 bintang';
   };
   window.pntsLoadRatingSummary=function(){
+    if(typeof loadPublicAcceptedMembers==='function') loadPublicAcceptedMembers();
     const list=document.getElementById('pntsRatingReviews');
     if(list) list.innerHTML='<p class="text-sm text-slate-400">Memuat ulasan...</p>';
     callServerSafe('getRatingPublikPNTS',[],function(res){
@@ -3994,7 +4078,7 @@
   window.pntsModerateRating=function(rowNumber,status){
     if(!confirm('Yakin ingin '+(status==='DITERIMA'?'MENERIMA':'MENOLAK')+' ulasan ini?'))return;
     callServerSafe('moderasiRatingPengunjung',[rowNumber,status],function(res){
-      if(res&&res.success){showToast(res.message||'Status ulasan diperbarui.','success');pntsLoadAdminRatings();pntsLoadRatingSummary();}
+      if(res&&res.success){showToast(res.message||'Status ulasan diperbarui.','success');pntsLoadAdminRatings();pntsLoadRatingSummary();loadAdminNotifications();loadPublicNotifications();}
       else showToast((res&&res.message)||'Moderasi gagal.','danger');
     },function(){showToast('Server tidak dapat dihubungi. Status belum dipastikan.','danger');});
   };
