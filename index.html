@@ -3557,12 +3557,16 @@
                     if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, '', waWindow);
                 }
                 loadAdminMembers();
-            }, () => {
+            }, (error) => {
                 target.verificationStatus = previousStatus;
                 if (waWindow && !waWindow.closed) waWindow.close();
                 renderAdminAll();
-                showToast('Server tidak dapat dihubungi. Status belum dipastikan berubah.', 'danger');
-            });
+                if (error === 'timeout') {
+                    showToast('Server terlalu lama merespons. Muat ulang daftar pendaftar sebelum mencoba lagi.', 'danger');
+                } else {
+                    showToast('Server tidak dapat dihubungi. Periksa koneksi dan deployment Apps Script.', 'danger');
+                }
+            }, 20000);
         }
 
         // ==================== FUNGSI HAPUS RIWAYAT PENDAFTARAN (DIKUNCI KHUSUS ADMIN BPH) ====================
