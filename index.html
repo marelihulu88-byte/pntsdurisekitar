@@ -236,7 +236,7 @@
                     </div>
                     <div>
                         <h3 class="font-batak text-sm sm:text-base font-bold text-amber-300">CETAK FORMULIR PENDAFTARAN ANGGOTA</h3>
-                        <p class="text-[11px] text-slate-300">Pilih nama anggota di bawah ini untuk melihat preview &amp; mencetak formulir</p>
+                        <p class="text-[11px] text-slate-300">Admin memilih data anggota; pendaftar memasukkan kode akses pribadi untuk mencetak</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeQuickPrintModal()" class="w-8 h-8 rounded-lg bg-slate-900 text-slate-300 hover:text-white flex items-center justify-center">
@@ -249,7 +249,7 @@
             </div>
             <div id="quickPrintListContainer" class="max-h-96 overflow-y-auto p-4 space-y-2.5"></div>
             <div class="bg-slate-950 px-5 py-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                <span class="text-slate-400">Anggota yang berstatus <strong class="text-emerald-400">DITERIMA</strong> siap dicetak</span>
+                <span class="text-slate-400">Pendaftar wajib menggunakan kode akses pribadi</span>
                 <button type="button" onclick="closeQuickPrintModal()" class="px-4 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold">Tutup</button>
             </div>
         </div>
@@ -729,26 +729,18 @@
             <!-- ==================== 3. MENU FORM PENDAFTARAN KEANGGOTAAN BARU & CETAK FORMULIR ==================== -->
             <section id="userSectionPendaftaran" class="space-y-8 hidden">
 
-                <!-- KOTAK 1: DAFTAR ANGGOTA BARU YANG DITERIMA (USER HANYA BISA CETAK FORMULIR) -->
+                <!-- KOTAK 1: CETAK PRIBADI DENGAN KODE AKSES -->
                 <div class="gorga-card rounded-3xl overflow-hidden max-w-4xl mx-auto border-2 border-amber-400">
-                    <div class="bg-gradient-to-r from-amber-600 via-red-800 to-slate-900 px-6 py-4 border-b border-amber-400 flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-slate-950 text-amber-400 border border-amber-400 flex items-center justify-center text-lg shrink-0">
-                                <i class="fa-solid fa-print"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-batak text-base sm:text-lg font-black text-white">
-                                    CETAK FORMULIR ANGGOTA BARU YANG DITERIMA
-                                </h3>
-                                <p class="text-xs text-amber-100">
-                                    Bagi anggota baru yang sudah diterima BPH, silakan klik tombol <strong>Cetak Formulir</strong> di samping nama Anda:
-                                </p>
-                            </div>
-                        </div>
-                        <input type="text" id="userAcceptedSearchInput" oninput="renderUserAcceptedPrintList()" placeholder="Cari nama Anda di sini..."
-                               class="px-3.5 py-2 rounded-xl bg-slate-950 border border-amber-300 text-xs text-white focus:outline-none">
+                    <div class="bg-gradient-to-r from-amber-600 via-red-800 to-slate-900 px-6 py-4 border-b border-amber-400">
+                        <h3 class="font-batak text-base sm:text-lg font-black text-white"><i class="fa-solid fa-lock mr-2"></i>CETAK FORMULIR PRIBADI</h3>
+                        <p class="text-xs text-amber-100 mt-1">Hanya pendaftar yang sudah DITERIMA BPH dan memiliki kode akses pribadi yang dapat membuka formulir.</p>
                     </div>
-                    <div id="userAcceptedPrintList" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-3 max-h-80 overflow-y-auto bg-slate-950/60">
+                    <div class="p-5 bg-slate-950/70 space-y-3">
+                        <label for="memberPrintAccessCode" class="block text-xs font-bold text-amber-200">Masukkan Kode Akses dari WhatsApp BPH</label>
+                        <input id="memberPrintAccessCode" type="text" maxlength="16" autocomplete="one-time-code" placeholder="CONTOH: A1B2C3D4E5F6A7B8" class="w-full sm:max-w-md px-4 py-3 rounded-xl bg-slate-900 border border-amber-400/60 text-white text-center tracking-widest font-black uppercase">
+                        <button type="button" onclick="verifyAndPrintMemberAccessCode()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm"><i class="fa-solid fa-print mr-2"></i>VERIFIKASI & CETAK FORMULIR</button>
+                        <p class="text-[11px] text-slate-400">Kode berlaku 30 hari. Jangan bagikan kode ini kepada orang lain. Jika kode hilang atau kedaluwarsa, hubungi Admin BPH.</p>
+                        <div id="memberPrintAccessMessage" class="text-xs" aria-live="polite"></div>
                     </div>
                 </div>
 
@@ -1815,76 +1807,7 @@
             },
 
             // 8. Data Pendaftaran Anggota Baru (Dilengkapi Nomor WA)
-            members: [
-                {
-                    id: 1001,
-                    namaLengkap: 'Christian Bonardo Sianturi',
-                    namaPanggilan: 'Tian',
-                    noWA: '081268001122',
-                    ttl: 'Duri, 18 Agustus 2002',
-                    asal: 'Balige, Toba',
-                    domisili: 'Jl. Jenderal Sudirman, Duri',
-                    tubuniBoru: 'Tubu ni Boru Sitorus',
-                    pekerjaan: 'Bekerja',
-                    status: 'Lajang (Naposo - Anak/Marga Simatupang)',
-                    gender: 'Laki-laki (Baoa)',
-                    alasan: 'Ingin mengenal saudara semarga Toga Simatupang di Duri dan aktif dalam pelayanan.',
-                    pasFoto: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80',
-                    verificationStatus: 'DITERIMA',
-                    timestamp: '12 Nov 2026'
-                },
-                {
-                    id: 1002,
-                    namaLengkap: 'Clara Theresia Boru Togatorop',
-                    namaPanggilan: 'Clara',
-                    noWA: '081372003344',
-                    ttl: 'Pekanbaru, 04 Februari 2004',
-                    asal: 'Siborongborong, Tapanuli Utara',
-                    domisili: 'Jl. Mawar, Babussalam - Duri',
-                    tubuniBoru: 'Tubu ni Boru Nababan',
-                    pekerjaan: 'Kuliah (Mahasiswa)',
-                    status: 'Lajang (Naposo - Boru Simatupang)',
-                    gender: 'Perempuan (Boru)',
-                    alasan: 'Rindu berkumpul dan latihan koor bersama teman-teman Naposo Toga Simatupang Se-Duri.',
-                    pasFoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-                    verificationStatus: 'DITERIMA',
-                    timestamp: '13 Nov 2026'
-                },
-                {
-                    id: 1003,
-                    namaLengkap: 'Benni Saputra (Data Belum Lengkap)',
-                    namaPanggilan: 'Benni',
-                    noWA: '082170005566',
-                    ttl: 'Medan, 10 Mei 2001',
-                    asal: 'Medan',
-                    domisili: 'Simpang Padang, Duri',
-                    tubuniBoru: '-',
-                    pekerjaan: 'Bekerja',
-                    status: 'Lajang',
-                    gender: 'Laki-laki (Baoa)',
-                    alasan: 'Belum melampirkan silsilah marga/bere yang jelas.',
-                    pasFoto: 'https://placehold.co/150x180/475569/ffffff?text=FOTO',
-                    verificationStatus: 'DITOLAK',
-                    timestamp: '13 Nov 2026'
-                },
-                {
-                    id: 1004,
-                    namaLengkap: 'Samuel Hasudungan Siburian',
-                    namaPanggilan: 'Sam',
-                    noWA: '081268009988',
-                    ttl: 'Duri, 22 Juli 2003',
-                    asal: 'Lintong Nihuta, Humbang Hasundutan',
-                    domisili: 'Jl. Nusantara 2, Duri',
-                    tubuniBoru: 'Tubu ni Boru Siahaan',
-                    pekerjaan: 'Kuliah (Mahasiswa)',
-                    status: 'Lajang (Naposo - Anak/Marga Simatupang)',
-                    gender: 'Laki-laki (Baoa)',
-                    alasan: 'Ingin bergabung di seksi olahraga dan mengikuti kegiatan partangiangan.',
-                    pasFoto: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80',
-                    verificationStatus: 'PENDING',
-                    timestamp: 'Baru saja'
-                }
-            ],
+            members: [],
 
             // 10. Data Musik Latar SoundCloud
             music: {
@@ -2023,7 +1946,7 @@
             return clean;
         }
 
-        function kirimNotifWAKeAnggota(memberId, statusOverride) {
+        function kirimNotifWAKeAnggota(memberId, statusOverride, accessCode, preOpenedWindow) {
             const m = appState.members.find(item => String(item.id) === String(memberId));
             if (!m) return;
 
@@ -2044,7 +1967,9 @@
                         `🏷️ *Tubu ni Boru:* ${m.tubuniBoru}\n` +
                         `📍 *Domisili:* ${m.domisili}\n` +
                         `✅ *Status:* *RESMI DITERIMA*\n\n` +
-                        `Silakan cetak Formulir Pendaftaran Anda di website resmi kami, dan bergabung ke Grup WhatsApp Punguan melalui link berikut:\n` +
+                        `Untuk mencetak formulir pribadi, masukkan kode akses berikut pada menu Cetak Formulir:\n` +
+                        `🔐 *KODE AKSES: ${accessCode || '-'}* (berlaku 30 hari)\n\n` +
+                        `Jangan bagikan kode ini kepada orang lain. Bergabung ke Grup WhatsApp Punguan melalui link berikut:\n` +
                         `${appState.contacts.whatsappUrl}\n\n` +
                         `_Mauliate, Tuhan Memberkati!_`;
             } else if (statusAkhir === 'DITOLAK') {
@@ -2059,7 +1984,8 @@
             }
 
             const waUrl = `https://wa.me/${nomorAnggota}?text=${encodeURIComponent(pesan)}`;
-            window.open(waUrl, '_blank');
+            if (preOpenedWindow && !preOpenedWindow.closed) preOpenedWindow.location.href = waUrl;
+            else window.open(waUrl, '_blank');
         }
 
         function kirimNotifWAKeAdminSaatDaftar(newMember) {
@@ -2431,7 +2357,9 @@
                 btnAdmin.className = 'px-3 py-1.5 rounded-lg font-bold transition-all bg-amber-500 text-slate-950 border border-amber-300 shadow';
                 btnUser.className = 'px-3 py-1.5 rounded-lg font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-600';
                 renderAdminAll();
+                loadAdminMembers();
             } else {
+                appState.members = [];
                 adminView.classList.add('hidden');
                 userView.classList.remove('hidden');
                 badge.innerHTML = '<i class="fa-solid fa-user-check"></i> Mode: USER / PENGUNJUNG';
@@ -2592,46 +2520,26 @@
 
         // ==================== DAFTAR CETAK DI MENU 3 (USER HANYA BISA CETAK, TIDAK BISA HAPUS) ====================
         function renderUserAcceptedPrintList() {
+            // Data anggota tidak lagi ditampilkan kepada pengunjung umum.
             const container = document.getElementById('userAcceptedPrintList');
-            if (!container) return;
-            const searchEl = document.getElementById('userAcceptedSearchInput');
-            const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+            if (container) container.innerHTML = '';
+        }
 
-            const acceptedMembers = appState.members.filter(m =>
-                String(m.verificationStatus || '').toUpperCase().trim() === 'DITERIMA'
-            );
-
-            const filtered = q
-                ? acceptedMembers.filter(m =>
-                    String(m.namaLengkap || '').toLowerCase().includes(q) ||
-                    String(m.namaPanggilan || '').toLowerCase().includes(q) ||
-                    String(m.tubuniBoru || '').toLowerCase().includes(q)
-                  )
-                : acceptedMembers;
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-2 p-4 text-center text-xs text-slate-400">Belum ada riwayat anggota diterima yang cocok dengan pencarian.</div>`;
+        function verifyAndPrintMemberAccessCode() {
+            const input = document.getElementById('memberPrintAccessCode');
+            const message = document.getElementById('memberPrintAccessMessage');
+            const code = input ? input.value.trim().toUpperCase() : '';
+            if (!/^[A-Z0-9]{16}$/.test(code)) {
+                if (message) message.textContent = 'Masukkan kode akses 16 karakter yang dikirim Admin BPH.';
                 return;
             }
-
-            container.innerHTML = filtered.map(m => `
-                <div class="p-3 rounded-2xl bg-slate-900 border border-amber-500/40 flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
-                             onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
-                             class="w-12 h-14 rounded-xl object-cover border border-amber-400 shrink-0">
-                        <div class="min-w-0">
-                            <div class="font-bold text-xs sm:text-sm text-white truncate">${m.namaLengkap}</div>
-                            <div class="text-[11px] text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> DITERIMA BPH</div>
-                            <div class="text-[10px] text-slate-400 truncate">${m.tubuniBoru} • ${m.domisili}</div>
-                        </div>
-                    </div>
-                    <button type="button" onclick="cetakFormulirAnggota('${m.id}')"
-                            class="shrink-0 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow-lg flex items-center gap-1.5">
-                        <i class="fa-solid fa-print"></i> Cetak Formulir
-                    </button>
-                </div>
-            `).join('');
+            if (message) message.textContent = 'Memeriksa kode akses...';
+            callServerSafe('getMemberFormByAccessCode', [code], (res) => {
+                if (res && res.success && res.member) {
+                    if (message) message.textContent = 'Kode benar. Formulir pribadi berhasil dibuka.';
+                    openPrintPreviewWithMember(res.member);
+                } else if (message) message.textContent = (res && res.message) || 'Kode akses tidak dapat diverifikasi.';
+            }, () => { if (message) message.textContent = 'Server tidak dapat dihubungi. Coba kembali.'; });
         }
 
         // ==================== MODAL CETAK CEPAT (TOMBOL HAPUS HANYA MUNCUL JIKA ADMIN) ====================
@@ -2657,9 +2565,12 @@
             const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
 
             const isAdmin = appState.currentRole === 'admin';
-            const sourceList = isAdmin
-                ? appState.members
-                : appState.members.filter(m => String(m.verificationStatus || '').toUpperCase().trim() === 'DITERIMA');
+            if (searchEl && searchEl.parentElement) searchEl.parentElement.style.display = isAdmin ? '' : 'none';
+            if (!isAdmin) {
+                container.innerHTML = `<div class="p-4 space-y-3"><p class="text-xs text-slate-300">Masukkan kode akses pribadi yang dikirim Admin BPH melalui WhatsApp.</p><input id="quickPrintAccessCode" maxlength="16" placeholder="KODE AKSES 16 KARAKTER" class="w-full px-3 py-3 rounded-xl bg-slate-950 border border-amber-400 text-white text-center tracking-widest font-bold uppercase"><button type="button" onclick="verifyQuickPrintAccessCode()" class="w-full px-4 py-3 rounded-xl bg-amber-500 text-slate-950 font-extrabold">VERIFIKASI & CETAK</button><div id="quickPrintAccessMessage" class="text-xs text-slate-300"></div></div>`;
+                return;
+            }
+            const sourceList = appState.members;
 
             const filtered = q
                 ? sourceList.filter(m =>
@@ -2714,6 +2625,18 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function verifyQuickPrintAccessCode() {
+            const input = document.getElementById('quickPrintAccessCode');
+            const msg = document.getElementById('quickPrintAccessMessage');
+            const code = input ? input.value.trim().toUpperCase() : '';
+            if (!/^[A-Z0-9]{16}$/.test(code)) { if (msg) msg.textContent = 'Kode harus 16 karakter.'; return; }
+            if (msg) msg.textContent = 'Memeriksa kode...';
+            callServerSafe('getMemberFormByAccessCode', [code], (res) => {
+                if (res && res.success && res.member) { closeQuickPrintModal(); openPrintPreviewWithMember(res.member); }
+                else if (msg) msg.textContent = (res && res.message) || 'Kode tidak valid.';
+            }, () => { if (msg) msg.textContent = 'Server tidak dapat dihubungi.'; });
         }
 
         // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER (TANPA TOMBOL HAPUS UNTUK USER) ====================
@@ -2906,6 +2829,16 @@
 
         function getAdminVisitorCredentials() {
             return { username: appState.adminAuth.username, password: appState.adminAuth.password };
+        }
+
+        function loadAdminMembers() {
+            if (appState.currentRole !== 'admin') return;
+            callServerSafe('getAdminMembers', [getAdminVisitorCredentials()], (res) => {
+                if (res && res.success && Array.isArray(res.members)) {
+                    appState.members = res.members;
+                    renderAdminAll();
+                } else showToast((res && res.message) || 'Data pendaftar admin gagal dimuat.', 'danger');
+            }, () => showToast('Data pendaftar tidak dapat dimuat. Periksa koneksi server.', 'danger'));
         }
 
         function resetTotalKunjunganBulanan() {
@@ -3544,24 +3477,34 @@
         }
 
         function verifyMemberStatus(memberId, statusDecision) {
-            const target = appState.members.find(m => String(m.id) === String(memberId));
+            const target = appState.members.find(item => String(item.id) === String(memberId));
             if (!target) return;
+            const previousStatus = target.verificationStatus;
+            const waWindow = target.noWA ? window.open('about:blank', '_blank') : null;
             target.verificationStatus = statusDecision;
-
-            renderAllUserViews();
             renderAdminAll();
-
-            if (statusDecision === 'DITERIMA') {
-                showToast(`Anggota "${target.namaLengkap}" DITERIMA! Membuka WhatsApp notifikasi ke anggota...`, 'success');
-            } else {
-                showToast(`Anggota "${target.namaLengkap}" DITOLAK! Membuka WhatsApp notifikasi ke anggota...`, 'danger');
-            }
-
-            callServerSafe('updateStatusAnggota', [target.id, statusDecision]);
-
-            if (target.noWA) {
-                kirimNotifWAKeAnggota(target.id, statusDecision);
-            }
+            callServerSafe('updateStatusAnggota', [target.id, statusDecision], (res) => {
+                if (!res || !res.success) {
+                    target.verificationStatus = previousStatus;
+                    if (waWindow && !waWindow.closed) waWindow.close();
+                    renderAdminAll();
+                    showToast((res && res.message) || 'Status anggota gagal diperbarui.', 'danger');
+                    return;
+                }
+                if (statusDecision === 'DITERIMA') {
+                    showToast(`Anggota "${target.namaLengkap}" diterima. Kode akses pribadi dibuat.`, 'success');
+                    if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, res.accessCode || '', waWindow);
+                } else {
+                    showToast(`Anggota "${target.namaLengkap}" ditolak.`, 'danger');
+                    if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, '', waWindow);
+                }
+                loadAdminMembers();
+            }, () => {
+                target.verificationStatus = previousStatus;
+                if (waWindow && !waWindow.closed) waWindow.close();
+                renderAdminAll();
+                showToast('Server tidak dapat dihubungi. Status belum dipastikan berubah.', 'danger');
+            });
         }
 
         // ==================== FUNGSI HAPUS RIWAYAT PENDAFTARAN (DIKUNCI KHUSUS ADMIN BPH) ====================
@@ -3695,11 +3638,12 @@
         }
 
         function cetakFormulirAnggota(memberId) {
-            const m = appState.members.find(item => String(item.id) === String(memberId));
-            if (!m) {
-                showToast('Data anggota tidak ditemukan!', 'danger');
+            if (appState.currentRole !== 'admin') {
+                showToast('Untuk menjaga privasi, cetak formulir harus menggunakan kode akses pribadi.', 'danger');
                 return;
             }
+            const m = appState.members.find(item => String(item.id) === String(memberId));
+            if (!m) { showToast('Data anggota tidak ditemukan!', 'danger'); return; }
             openPrintPreviewWithMember(m);
         }
 
