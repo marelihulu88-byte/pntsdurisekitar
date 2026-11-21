@@ -193,18 +193,6 @@
         .pnts-popup-star:focus-visible{outline:2px solid #fbbf24;outline-offset:4px;border-radius:6px;}
 
         /* Tema alternatif yang dapat dipilih Admin */
-        body.theme-biru { --batak-red:#1d4ed8; --batak-gold:#38bdf8; }
-        body.theme-hijau { --batak-red:#047857; --batak-gold:#34d399; }
-        body.theme-ungu { --batak-red:#6d28d9; --batak-gold:#c4b5fd; }
-        body.theme-biru .bg-red-700, body.theme-biru .bg-red-800, body.theme-biru .bg-red-900 { background-color:#1e40af !important; }
-        body.theme-hijau .bg-red-700, body.theme-hijau .bg-red-800, body.theme-hijau .bg-red-900 { background-color:#065f46 !important; }
-        body.theme-ungu .bg-red-700, body.theme-ungu .bg-red-800, body.theme-ungu .bg-red-900 { background-color:#5b21b6 !important; }
-        body.theme-biru .border-amber-400, body.theme-biru .border-amber-500 { border-color:#38bdf8 !important; }
-        body.theme-hijau .border-amber-400, body.theme-hijau .border-amber-500 { border-color:#34d399 !important; }
-        body.theme-ungu .border-amber-400, body.theme-ungu .border-amber-500 { border-color:#c4b5fd !important; }
-        body.theme-biru .text-amber-300, body.theme-biru .text-amber-400 { color:#7dd3fc !important; }
-        body.theme-hijau .text-amber-300, body.theme-hijau .text-amber-400 { color:#6ee7b7 !important; }
-        body.theme-ungu .text-amber-300, body.theme-ungu .text-amber-400 { color:#ddd6fe !important; }
     </style>
 </head>
 <body class="selection:bg-red-700 selection:text-amber-200">
@@ -1170,9 +1158,7 @@
                     <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
                         <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 11. Menu Musik SoundCloud
                     </button>
-                    <button type="button" onclick="switchAdminMenu('tema')" id="admNav_tema" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-cyan-500/30">
-                        <i class="fa-solid fa-palette w-5 text-center text-cyan-300"></i> 12. Tema Website
-                    </button>
+
                 </div>
             </aside>
 
@@ -1645,20 +1631,6 @@
                     </button>
                 </div>
 
-                <!-- 12. MENU TEMA WEBSITE -->
-                <div id="admSec_tema" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
-                    <div class="border-b border-slate-800 pb-4">
-                        <h2 class="font-batak text-xl font-bold text-amber-400">12. MENU TEMA WEBSITE</h2>
-                        <p class="text-xs text-slate-300 mt-1">Pilih warna tampilan website. Tema tersimpan di Spreadsheet dan berlaku untuk semua pengunjung.</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-amber-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="batak" class="accent-amber-500" checked><span><b class="block text-white text-sm">Batak Merah & Emas</b><small class="text-slate-400">Tema utama PNTS</small></span></label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-blue-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="biru" class="accent-blue-500"><span><b class="block text-white text-sm">Biru</b><small class="text-slate-400">Biru modern</small></span></label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-emerald-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="hijau" class="accent-emerald-500"><span><b class="block text-white text-sm">Hijau</b><small class="text-slate-400">Hijau segar</small></span></label>
-                        <label class="flex items-center gap-3 p-4 rounded-xl border border-purple-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="ungu" class="accent-purple-500"><span><b class="block text-white text-sm">Ungu</b><small class="text-slate-400">Ungu elegan</small></span></label>
-                    </div>
-                    <button type="button" onclick="saveWebsiteTheme()" class="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold text-sm"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan & Terapkan Tema</button>
-                </div>
 
             </div>
         </div>
@@ -1853,7 +1825,7 @@
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
                 'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
-                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','simpanTemaWebsite'
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
             if (adminWriteFunctions.includes(fnName)) {
@@ -1931,7 +1903,8 @@
             }
             Object.assign(appState.stats, serverData.stats || {});
             Object.assign(appState.header, serverData.header || {});
-            if (serverData.theme) { appState.theme = serverData.theme; applyWebsiteTheme(serverData.theme); }
+            appState.theme = 'batak';
+            document.body.classList.remove('theme-biru', 'theme-hijau', 'theme-ungu');
             if (serverData.runningText) appState.runningText = serverData.runningText;
             if (serverData.visi) appState.visi = serverData.visi;
             if (serverData.misi && serverData.misi.length) appState.misi = serverData.misi;
@@ -2785,31 +2758,9 @@
             setTimeout(() => bubble.classList.remove('scale-105'), 250);
         }
 
-        // ==================== TEMA WEBSITE YANG TERSIMPAN DI SERVER ====================
-        function applyWebsiteTheme(themeName) {
-            const allowed = ['batak', 'biru', 'hijau', 'ungu'];
-            const theme = allowed.includes(themeName) ? themeName : 'batak';
-            document.body.classList.remove('theme-biru', 'theme-hijau', 'theme-ungu');
-            if (theme !== 'batak') document.body.classList.add('theme-' + theme);
-            appState.theme = theme;
-            document.querySelectorAll('input[name="admWebsiteTheme"]').forEach(el => el.checked = el.value === theme);
-        }
-
-        function saveWebsiteTheme() {
-            if (appState.currentRole !== 'admin') return showToast('Hanya Admin yang dapat mengubah tema.', 'danger');
-            const selected = document.querySelector('input[name="admWebsiteTheme"]:checked');
-            if (!selected) return showToast('Pilih tema terlebih dahulu.', 'danger');
-            const previous = appState.theme || 'batak';
-            applyWebsiteTheme(selected.value);
-            callServerSafe('simpanTemaWebsite', [selected.value], (res) => {
-                if (res && res.success) showToast('Tema website berhasil disimpan dan diterapkan.', 'success');
-                else { applyWebsiteTheme(previous); showToast((res && res.message) || 'Tema gagal disimpan.', 'danger'); }
-            }, () => { applyWebsiteTheme(previous); showToast('Tema gagal disimpan ke Spreadsheet.', 'danger'); });
-        }
-
         // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik', 'tema'];
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik']; 
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
