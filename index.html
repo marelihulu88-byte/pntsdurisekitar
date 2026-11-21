@@ -1889,6 +1889,7 @@
             .then(serverData => {
                 if (!serverData) return;
                 applyServerDataToState(serverData);
+                savePntsPublicCache(serverData);
                 renderAllUserViews();
                 renderAdminAll();
             })
@@ -3702,12 +3703,75 @@
             }
         });
 
+        // Cache ringan untuk mempercepat tampilan awal website.
+        // HANYA data publik yang disimpan; data anggota dan kredensial Admin dikecualikan.
+        const PNTS_PUBLIC_CACHE_KEY = 'pnts_public_cache_v1';
+        const PNTS_PUBLIC_CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+        const PNTS_PUBLIC_CACHE_FIELDS = [
+            'stats', 'header', 'runningText', 'visi', 'misi',
+            'agendas', 'albums', 'pengurus', 'contacts', 'music',
+            'dashboardInfo', 'infoManual'
+        ];
+
+        function pntsMakeCacheSafe(value) {
+            if (typeof value === 'string') {
+                // Gambar base64 dapat membuat cache terlalu besar. Gambar akan dimuat ulang dari server.
+                return value.startsWith('data:image/') ? '' : value;
+            }
+            if (Array.isArray(value)) return value.map(pntsMakeCacheSafe);
+            if (value && typeof value === 'object') {
+                const clean = {};
+                Object.keys(value).forEach(key => {
+                    clean[key] = pntsMakeCacheSafe(value[key]);
+                });
+                return clean;
+            }
+            return value;
+        }
+
+        function savePntsPublicCache(serverData) {
+            try {
+                if (!serverData || typeof serverData !== 'object') return;
+                const publicData = {};
+                PNTS_PUBLIC_CACHE_FIELDS.forEach(key => {
+                    if (Object.prototype.hasOwnProperty.call(serverData, key)) {
+                        publicData[key] = pntsMakeCacheSafe(serverData[key]);
+                    }
+                });
+                const payload = JSON.stringify({ savedAt: Date.now(), data: publicData });
+                // Batasi ukuran agar tidak memenuhi penyimpanan browser.
+                if (payload.length <= 1500000) localStorage.setItem(PNTS_PUBLIC_CACHE_KEY, payload);
+            } catch (err) {
+                console.warn('Cache PNTS tidak dapat disimpan:', err);
+            }
+        }
+
+        function loadPntsPublicCache() {
+            try {
+                const raw = localStorage.getItem(PNTS_PUBLIC_CACHE_KEY);
+                if (!raw) return false;
+                const cached = JSON.parse(raw);
+                if (!cached || !cached.data || !cached.savedAt) return false;
+                if (Date.now() - cached.savedAt > PNTS_PUBLIC_CACHE_MAX_AGE) {
+                    localStorage.removeItem(PNTS_PUBLIC_CACHE_KEY);
+                    return false;
+                }
+                applyServerDataToState(cached.data);
+                return true;
+            } catch (err) {
+                console.warn('Cache PNTS tidak dapat dibaca:', err);
+                return false;
+            }
+        }
+
         let isAppInitialized = false;
         function initWebApp() {
             if (isAppInitialized) return;
             isAppInitialized = true;
 
             try {
+                // Tampilkan data publik terakhir dari browser terlebih dahulu agar tidak menunggu server.
+                const hasCachedContent = loadPntsPublicCache();
                 initScWidgetEvents();
                 renderAllUserViews();
                 renderAdminAll();
@@ -3728,6 +3792,7 @@
                 (serverData) => {
                     if (!serverData) return;
                     applyServerDataToState(serverData);
+                    savePntsPublicCache(serverData);
 
                     if (syncBadge) {
                         syncBadge.innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-400"></i> Tersinkron Drive & Sheet';
