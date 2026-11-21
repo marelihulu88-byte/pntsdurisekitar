@@ -729,7 +729,7 @@
                     </div>
                     <div class="p-5 bg-slate-950/70 space-y-3">
                         <label for="memberPrintAccessCode" class="block text-xs font-bold text-amber-200">Masukkan Kode Akses dari WhatsApp BPH</label>
-                        <input id="memberPrintAccessCode" type="text" maxlength="16" autocomplete="one-time-code" placeholder="CONTOH: A1B2C3D4E5F6A7B8" class="w-full sm:max-w-md px-4 py-3 rounded-xl bg-slate-900 border border-amber-400/60 text-white text-center tracking-widest font-black uppercase">
+                        <input id="memberPrintAccessCode" type="text" maxlength="6" autocomplete="one-time-code" placeholder="CONTOH: AB12CD" class="w-full sm:max-w-md px-4 py-3 rounded-xl bg-slate-900 border border-amber-400/60 text-white text-center tracking-widest font-black uppercase">
                         <button type="button" onclick="verifyAndPrintMemberAccessCode()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm"><i class="fa-solid fa-print mr-2"></i>VERIFIKASI & CETAK FORMULIR</button>
                         <p class="text-[11px] text-slate-400">Kode berlaku 30 hari. Jangan bagikan kode ini kepada orang lain. Jika kode hilang atau kedaluwarsa, hubungi Admin BPH.</p>
                         <div id="memberPrintAccessMessage" class="text-xs" aria-live="polite"></div>
@@ -2540,8 +2540,8 @@
             const input = document.getElementById('memberPrintAccessCode');
             const message = document.getElementById('memberPrintAccessMessage');
             const code = input ? input.value.trim().toUpperCase() : '';
-            if (!/^[A-Z0-9]{16}$/.test(code)) {
-                if (message) message.textContent = 'Masukkan kode akses 16 karakter yang dikirim Admin BPH.';
+            if (!/^[A-Z0-9]{6}$/.test(code)) {
+                if (message) message.textContent = 'Masukkan kode akses 6 karakter yang dikirim Admin BPH.';
                 return;
             }
             if (message) message.textContent = 'Memeriksa kode akses...';
@@ -2578,7 +2578,7 @@
             const isAdmin = appState.currentRole === 'admin';
             if (searchEl && searchEl.parentElement) searchEl.parentElement.style.display = isAdmin ? '' : 'none';
             if (!isAdmin) {
-                container.innerHTML = `<div class="p-4 space-y-3"><p class="text-xs text-slate-300">Masukkan kode akses pribadi yang dikirim Admin BPH melalui WhatsApp.</p><input id="quickPrintAccessCode" maxlength="16" placeholder="KODE AKSES 16 KARAKTER" class="w-full px-3 py-3 rounded-xl bg-slate-950 border border-amber-400 text-white text-center tracking-widest font-bold uppercase"><button type="button" onclick="verifyQuickPrintAccessCode()" class="w-full px-4 py-3 rounded-xl bg-amber-500 text-slate-950 font-extrabold">VERIFIKASI & CETAK</button><div id="quickPrintAccessMessage" class="text-xs text-slate-300"></div></div>`;
+                container.innerHTML = `<div class="p-4 space-y-3"><p class="text-xs text-slate-300">Masukkan kode akses pribadi yang dikirim Admin BPH melalui WhatsApp.</p><input id="quickPrintAccessCode" maxlength="6" placeholder="KODE AKSES 6 KARAKTER" class="w-full px-3 py-3 rounded-xl bg-slate-950 border border-amber-400 text-white text-center tracking-widest font-bold uppercase"><button type="button" onclick="verifyQuickPrintAccessCode()" class="w-full px-4 py-3 rounded-xl bg-amber-500 text-slate-950 font-extrabold">VERIFIKASI & CETAK</button><div id="quickPrintAccessMessage" class="text-xs text-slate-300"></div></div>`;
                 return;
             }
             const sourceList = appState.members;
@@ -2642,7 +2642,7 @@
             const input = document.getElementById('quickPrintAccessCode');
             const msg = document.getElementById('quickPrintAccessMessage');
             const code = input ? input.value.trim().toUpperCase() : '';
-            if (!/^[A-Z0-9]{16}$/.test(code)) { if (msg) msg.textContent = 'Kode harus 16 karakter.'; return; }
+            if (!/^[A-Z0-9]{6}$/.test(code)) { if (msg) msg.textContent = 'Kode harus 6 karakter.'; return; }
             if (msg) msg.textContent = 'Memeriksa kode...';
             callServerSafe('getMemberFormByAccessCode', [code], (res) => {
                 if (res && res.success && res.member) { closeQuickPrintModal(); openPrintPreviewWithMember(res.member); }
@@ -3543,7 +3543,7 @@
                 }
                 if (statusDecision === 'DITERIMA') {
                     const generatedAccessCode = String(res.accessCode || '').trim().toUpperCase();
-                    if (!/^[A-Z0-9]{16}$/.test(generatedAccessCode)) {
+                    if (!/^[A-Z0-9]{6}$/.test(generatedAccessCode)) {
                         if (waWindow && !waWindow.closed) waWindow.close();
                         showToast('Kode akses belum diterima dari server. Pesan WhatsApp tidak dikirim agar tidak berisi tanda strip. Periksa deployment Code.gs, lalu coba lagi.', 'danger');
                         loadAdminMembers();
