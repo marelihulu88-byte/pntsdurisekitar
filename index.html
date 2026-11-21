@@ -3480,7 +3480,57 @@
             const target = appState.members.find(item => String(item.id) === String(memberId));
             if (!target) return;
             const previousStatus = target.verificationStatus;
-            const waWindow = target.noWA ? window.open('about:blank', '_blank') : null;
+            // Buka tab lebih awal agar tidak diblokir Chrome, tetapi tampilkan halaman proses
+            // sehingga admin tidak melihat tab about:blank saat server menyiapkan kode akses.
+            const waWindow = target.noWA ? window.open('', '_blank') : null;
+            if (waWindow) {
+                try {
+                    waWindow.document.open();
+                    waWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html lang="id">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>PNTS - Menyiapkan WhatsApp</title>
+                            <style>
+                                * { box-sizing: border-box; }
+                                body {
+                                    margin: 0; min-height: 100vh; display: flex;
+                                    align-items: center; justify-content: center;
+                                    padding: 24px; background: #0f172a; color: #fff;
+                                    font-family: Arial, sans-serif; text-align: center;
+                                }
+                                .box {
+                                    width: 100%; max-width: 390px; padding: 32px 24px;
+                                    border: 1px solid #b8860b; border-radius: 18px;
+                                    background: #111827; box-shadow: 0 12px 35px #0006;
+                                }
+                                .loader {
+                                    width: 48px; height: 48px; margin: 0 auto 22px;
+                                    border: 5px solid #475569; border-top-color: #22c55e;
+                                    border-radius: 50%; animation: putar .9s linear infinite;
+                                }
+                                h2 { margin: 0 0 12px; color: #fbbf24; }
+                                p { color: #e2e8f0; line-height: 1.6; }
+                                @keyframes putar { to { transform: rotate(360deg); } }
+                            </style>
+                        </head>
+                        <body>
+                            <main class="box">
+                                <div class="loader"></div>
+                                <h2>HORAS! PNTS</h2>
+                                <p><strong>Sedang menyiapkan pesan WhatsApp...</strong></p>
+                                <p>Mohon tunggu sebentar. Halaman ini akan otomatis membuka WhatsApp setelah kode akses berhasil dibuat.</p>
+                            </main>
+                        </body>
+                        </html>
+                    `);
+                    waWindow.document.close();
+                } catch (e) {
+                    console.warn('Tidak dapat menampilkan halaman proses WhatsApp:', e);
+                }
+            }
             target.verificationStatus = statusDecision;
             renderAdminAll();
             callServerSafe('updateStatusAnggota', [target.id, statusDecision], (res) => {
