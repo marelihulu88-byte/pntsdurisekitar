@@ -1251,10 +1251,10 @@
                     <div class="rounded-2xl bg-slate-900/90 border border-slate-800 p-4 space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-amber-300">
-                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pengunjung Terakhir (Khusus Admin Dapat Menghapus)
+                                <i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Pengunjung (Penghapusan Permanen Khusus Admin)
                             </h3>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" onclick="resetRiwayatPengunjungHarian()" class="px-3 py-1.5 rounded-lg bg-red-700 hover:bg-red-600 text-white text-xs font-bold"><i class="fa-solid fa-trash-can mr-1"></i> Reset Riwayat Hari Ini</button>
+                                <button type="button" onclick="resetRiwayatPengunjungHarian()" class="px-3 py-1.5 rounded-lg bg-red-700 hover:bg-red-600 text-white text-xs font-bold"><i class="fa-solid fa-trash-can mr-1"></i> Hapus Semua Riwayat</button>
                                 <input type="text" id="admVisitorSearchInput" oninput="renderAdminVisitorLogs()" placeholder="Cari pengunjung..." class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
                                 <input type="date" id="admVisitorDateFilter" oninput="renderAdminVisitorLogs()" class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
                             </div>
@@ -2923,17 +2923,20 @@
         }
 
         function resetRiwayatPengunjungHarian() {
-            if (appState.currentRole !== 'admin') return showToast('Hanya Admin yang dapat mereset riwayat.', 'danger');
-            if (!confirm('Sembunyikan riwayat pengunjung yang tampil hari ini? Arsip di Spreadsheet TIDAK akan dihapus.')) return;
-            callServerSafe('hapusSemuaRiwayatKunjungan', [getAdminVisitorCredentials()], (res) => {
+            if (appState.currentRole !== 'admin') return showToast('Akses ditolak. Hanya Admin yang dapat menghapus riwayat.', 'danger');
+            const yakin = confirm('PERINGATAN: Semua riwayat pengunjung akan DIHAPUS PERMANEN dari Spreadsheet RIWAYAT_PENGUNJUNG. Tindakan ini tidak dapat dibatalkan. Lanjutkan?');
+            if (!yakin) return;
+            callServerSafe('hapusSemuaRiwayatKunjungan', [], (res) => {
                 if (res && res.success) {
                     if (res.stats) Object.assign(appState.stats, res.stats);
+                    renderPublicDashboard();
                     renderAdminAll();
-                    // Sinkronkan ulang dashboard publik dan admin dari server.
                     refreshStateFromServerSilent();
-                    showToast(res.message || 'Riwayat hari ini berhasil direset.', 'success');
-                } else showToast((res && res.message) || 'Reset riwayat gagal.', 'danger');
-            }, () => showToast('Server tidak dapat dihubungi. Reset belum dikonfirmasi.', 'danger'));
+                    showToast(res.message || 'Semua riwayat pengunjung berhasil dihapus dari Spreadsheet.', 'success');
+                } else {
+                    showToast((res && res.message) || 'Penghapusan riwayat gagal.', 'danger');
+                }
+            }, () => showToast('Server tidak dapat dihubungi. Penghapusan belum dapat dipastikan.', 'danger'));
         }
 
         function renderAdminVisitorLogs() {
