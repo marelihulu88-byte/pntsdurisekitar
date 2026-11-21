@@ -191,6 +191,20 @@
         .pnts-popup-star{font-size:2.35rem;line-height:1;color:#64748b;transition:transform .15s,color .15s;}
         .pnts-popup-star.selected{color:#fbbf24;transform:scale(1.12);}
         .pnts-popup-star:focus-visible{outline:2px solid #fbbf24;outline-offset:4px;border-radius:6px;}
+
+        /* Tema alternatif yang dapat dipilih Admin */
+        body.theme-biru { --batak-red:#1d4ed8; --batak-gold:#38bdf8; }
+        body.theme-hijau { --batak-red:#047857; --batak-gold:#34d399; }
+        body.theme-ungu { --batak-red:#6d28d9; --batak-gold:#c4b5fd; }
+        body.theme-biru .bg-red-700, body.theme-biru .bg-red-800, body.theme-biru .bg-red-900 { background-color:#1e40af !important; }
+        body.theme-hijau .bg-red-700, body.theme-hijau .bg-red-800, body.theme-hijau .bg-red-900 { background-color:#065f46 !important; }
+        body.theme-ungu .bg-red-700, body.theme-ungu .bg-red-800, body.theme-ungu .bg-red-900 { background-color:#5b21b6 !important; }
+        body.theme-biru .border-amber-400, body.theme-biru .border-amber-500 { border-color:#38bdf8 !important; }
+        body.theme-hijau .border-amber-400, body.theme-hijau .border-amber-500 { border-color:#34d399 !important; }
+        body.theme-ungu .border-amber-400, body.theme-ungu .border-amber-500 { border-color:#c4b5fd !important; }
+        body.theme-biru .text-amber-300, body.theme-biru .text-amber-400 { color:#7dd3fc !important; }
+        body.theme-hijau .text-amber-300, body.theme-hijau .text-amber-400 { color:#6ee7b7 !important; }
+        body.theme-ungu .text-amber-300, body.theme-ungu .text-amber-400 { color:#ddd6fe !important; }
     </style>
 </head>
 <body class="selection:bg-red-700 selection:text-amber-200">
@@ -198,10 +212,6 @@
     <!-- ==================== TOP BAR AKSES LOGIN & SWITCH ROLE ==================== -->
     <div class="sticky top-0 z-50 bg-slate-950/95 border-b border-amber-500/40 px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-900/80 border border-amber-400/50 text-amber-200 font-semibold">
-                <i class="fa-solid fa-mountain-sun text-amber-400"></i>
-                <span>Tema Batak Toba • Danau Toba</span>
-            </span>
             <span id="activeRoleBadge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-900/70 border border-emerald-400/40 text-emerald-200 font-medium">
                 <i class="fa-solid fa-user-check"></i> Mode: USER / PENGUNJUNG
             </span>
@@ -396,8 +406,8 @@
                                  alt="Logo Punguan" 
                                  onerror="this.src='https://placehold.co/180x180/991b1b/fbbf24?text=TS'"
                                  class="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-amber-400 shadow-xl bg-red-950">
-                            <span class="absolute -bottom-1 -right-1 bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">
-                                HORAS
+                            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow whitespace-nowrap">
+                                PNTS DURI
                             </span>
                         </div>
                         <div class="min-w-0">
@@ -413,14 +423,8 @@
                         </div>
                     </div>
 
-                    <!-- BAGIAN KANAN DI ATAS HEADER: ICON PRINT + ICON NOTIFIKASI -->
+                    <!-- BAGIAN KANAN DI ATAS HEADER: ICON NOTIFIKASI -->
                     <div class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-2.5">
-                        <!-- ICON PRINT LANGSUNG DI HEADER -->
-                        <button type="button" onclick="openQuickPrintModal()" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 hover:bg-amber-400 border-2 border-white text-slate-950 flex flex-col items-center justify-center shadow-xl transition-all group" title="Cetak Formulir Pendaftaran Anggota Baru">
-                            <i class="fa-solid fa-print text-lg sm:text-xl group-hover:scale-110 transition-transform"></i>
-                            <span class="text-[9px] font-black uppercase tracking-tighter leading-none mt-0.5">PRINT</span>
-                        </button>
-
                         <!-- ICON LONCENG NOTIFIKASI -->
                         <div class="relative">
                             <button type="button" onclick="toggleNotifDropdown()" id="notifBellBtn" class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-950/90 hover:bg-red-900 border-2 border-amber-400 text-amber-300 flex items-center justify-center shadow-xl transition-all group" title="Notifikasi Status Anggota Baru & Cetak Formulir">
@@ -435,23 +439,11 @@
                                 <div class="bg-gradient-to-r from-red-900 via-red-800 to-slate-900 px-4 py-3 border-b border-amber-500/40 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <i class="fa-solid fa-bell text-amber-400"></i>
-                                        <span class="font-bold text-xs sm:text-sm text-white">Status Anggota &amp; Print Formulir</span>
+                                        <span class="font-bold text-xs sm:text-sm text-white">Anggota yang Sudah Mendaftar</span>
                                     </div>
-                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Siap Cetak</span>
-                                </div>
-                                <div class="p-2 bg-slate-950/80 border-b border-slate-800">
-                                    <input type="text" id="notifSearchInput" oninput="renderHeaderNotifications()" placeholder="Cari nama anggota baru..." 
-                                           class="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-amber-400">
+                                    <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Nama Pendaftar</span>
                                 </div>
                                 <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2">
-                                </div>
-                                <div class="bg-slate-950/90 px-4 py-2.5 text-center border-t border-slate-800 flex items-center justify-between">
-                                    <button type="button" onclick="openQuickPrintModal(); toggleNotifDropdown();" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold">
-                                        <i class="fa-solid fa-print mr-1"></i> Lihat Semua Cetak
-                                    </button>
-                                    <button type="button" onclick="switchUserMenu('pendaftaran'); toggleNotifDropdown();" class="text-xs text-amber-400 hover:text-amber-300 font-bold">
-                                        <i class="fa-solid fa-user-plus mr-1"></i> Form Daftar Baru
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1178,6 +1170,9 @@
                     <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
                         <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 11. Menu Musik SoundCloud
                     </button>
+                    <button type="button" onclick="switchAdminMenu('tema')" id="admNav_tema" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-cyan-500/30">
+                        <i class="fa-solid fa-palette w-5 text-center text-cyan-300"></i> 12. Tema Website
+                    </button>
                 </div>
             </aside>
 
@@ -1650,6 +1645,21 @@
                     </button>
                 </div>
 
+                <!-- 12. MENU TEMA WEBSITE -->
+                <div id="admSec_tema" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
+                    <div class="border-b border-slate-800 pb-4">
+                        <h2 class="font-batak text-xl font-bold text-amber-400">12. MENU TEMA WEBSITE</h2>
+                        <p class="text-xs text-slate-300 mt-1">Pilih warna tampilan website. Tema tersimpan di Spreadsheet dan berlaku untuk semua pengunjung.</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-amber-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="batak" class="accent-amber-500" checked><span><b class="block text-white text-sm">Batak Merah & Emas</b><small class="text-slate-400">Tema utama PNTS</small></span></label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-blue-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="biru" class="accent-blue-500"><span><b class="block text-white text-sm">Biru</b><small class="text-slate-400">Biru modern</small></span></label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-emerald-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="hijau" class="accent-emerald-500"><span><b class="block text-white text-sm">Hijau</b><small class="text-slate-400">Hijau segar</small></span></label>
+                        <label class="flex items-center gap-3 p-4 rounded-xl border border-purple-500/40 bg-slate-900 cursor-pointer"><input type="radio" name="admWebsiteTheme" value="ungu" class="accent-purple-500"><span><b class="block text-white text-sm">Ungu</b><small class="text-slate-400">Ungu elegan</small></span></label>
+                    </div>
+                    <button type="button" onclick="saveWebsiteTheme()" class="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold text-sm"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan & Terapkan Tema</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -1660,6 +1670,7 @@
         const appState = {
             currentRole: 'user',
             visitorName: 'Pengunjung',
+            theme: 'batak',
 
             // Kredensial Profil Akun Admin
             adminAuth: {
@@ -1842,7 +1853,7 @@
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
                 'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
-                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung'
+                'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','simpanTemaWebsite'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
             if (adminWriteFunctions.includes(fnName)) {
@@ -1920,6 +1931,7 @@
             }
             Object.assign(appState.stats, serverData.stats || {});
             Object.assign(appState.header, serverData.header || {});
+            if (serverData.theme) { appState.theme = serverData.theme; applyWebsiteTheme(serverData.theme); }
             if (serverData.runningText) appState.runningText = serverData.runningText;
             if (serverData.visi) appState.visi = serverData.visi;
             if (serverData.misi && serverData.misi.length) appState.misi = serverData.misi;
@@ -2513,7 +2525,6 @@
             document.getElementById('userPhone3Number').textContent = appState.contacts.phone3Num;
             document.getElementById('userBtnPhone3').href = 'tel:' + appState.contacts.phone3Num.replace(/[^0-9+]/g, '');
 
-            renderHeaderNotifications();
             renderUserAcceptedPrintList();
             syncSoundCloudPlayer(false);
         }
@@ -2639,72 +2650,39 @@
             }, () => { if (msg) msg.textContent = 'Server tidak dapat dihubungi.'; });
         }
 
-        // ==================== ICON NOTIFIKASI DI KANAN ATAS HEADER (TANPA TOMBOL HAPUS UNTUK USER) ====================
-        function renderHeaderNotifications() {
-            const allVerified = appState.members.filter(m => {
-                const st = String(m.verificationStatus || '').toUpperCase().trim();
-                return st === 'DITERIMA' || st === 'DITOLAK';
-            });
+        // ==================== NOTIFIKASI PUBLIK: HANYA NAMA PENDAFTAR ====================
+        function renderHeaderNotifications(names) {
             const redDot = document.getElementById('notifRedDot');
             const listContainer = document.getElementById('notifListContainer');
-            const searchInput = document.getElementById('notifSearchInput');
-            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-
-            if (allVerified.length > 0) {
-                redDot.textContent = allVerified.length;
-                redDot.classList.remove('hidden');
-            } else {
-                redDot.classList.add('hidden');
+            const safeNames = Array.isArray(names) ? names : [];
+            if (redDot) {
+                redDot.textContent = safeNames.length;
+                redDot.classList.toggle('hidden', safeNames.length === 0);
             }
-
-            const filtered = query
-                ? allVerified.filter(m => String(m.namaLengkap || '').toLowerCase().includes(query) || String(m.tubuniBoru || '').toLowerCase().includes(query))
-                : allVerified;
-
-            if (filtered.length === 0) {
-                listContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Tidak ada riwayat notifikasi anggota.</div>`;
+            if (!listContainer) return;
+            if (!safeNames.length) {
+                listContainer.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Belum ada nama pendaftar.</div>`;
                 return;
             }
+            listContainer.innerHTML = safeNames.map((item, index) => `
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/90">
+                    <span class="w-8 h-8 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-300 flex items-center justify-center text-xs font-black">${index + 1}</span>
+                    <div class="font-bold text-sm text-white">${escapeHtml(item.namaLengkap || 'Nama tidak tersedia')}</div>
+                </div>`).join('');
+        }
 
-            listContainer.innerHTML = filtered.map(m => {
-                const st = String(m.verificationStatus || '').toUpperCase().trim();
-                const isAccepted = st === 'DITERIMA';
-                const badgeClass = isAccepted
-                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
-                    : 'bg-red-500/20 border-red-400 text-red-300';
-                const iconClass = isAccepted ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-red-400';
-
-                // User hanya bisa mencetak formulir, TIDAK BISA menghapus riwayat
-                const printButtonHtml = isAccepted ? `
-                    <button type="button" onclick="cetakFormulirAnggota('${m.id}')" 
-                            class="mt-2 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs shadow flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-print"></i> Cetak Formulir Pendaftaran
-                    </button>
-                ` : '';
-
-                return `
-                    <div class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 flex flex-col gap-1">
-                        <div class="flex items-center gap-3">
-                            <img src="${m.pasFoto}" alt="${m.namaLengkap}" referrerpolicy="no-referrer"
-                                 onerror="this.src='https://placehold.co/100x100/7f1d1d/ffffff?text=FOTO'"
-                                 class="w-11 h-11 rounded-xl object-cover border border-amber-400/50 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <div class="font-bold text-xs text-white truncate">${m.namaLengkap}</div>
-                                <div class="text-[11px] text-slate-400 truncate">${m.tubuniBoru} • ${m.domisili}</div>
-                                <div class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-extrabold ${badgeClass}">
-                                    <i class="fa-solid ${iconClass}"></i> ${st} OLEH PENGURUS
-                                </div>
-                            </div>
-                        </div>
-                        ${printButtonHtml}
-                    </div>
-                `;
-            }).join('');
+        function loadPublicMemberNames() {
+            const list = document.getElementById('notifListContainer');
+            if (list) list.innerHTML = `<div class="p-4 text-center text-xs text-slate-400">Memuat nama pendaftar...</div>`;
+            callServerSafe('getPublicMemberNames', [], (res) => {
+                renderHeaderNotifications(res && res.names);
+            }, () => renderHeaderNotifications([]));
         }
 
         function toggleNotifDropdown() {
             const panel = document.getElementById('notifDropdownPanel');
             panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) loadPublicMemberNames();
         }
 
         // ==================== FORM PENDAFTARAN ANGGOTA BARU ====================
@@ -2807,9 +2785,31 @@
             setTimeout(() => bubble.classList.remove('scale-105'), 250);
         }
 
+        // ==================== TEMA WEBSITE YANG TERSIMPAN DI SERVER ====================
+        function applyWebsiteTheme(themeName) {
+            const allowed = ['batak', 'biru', 'hijau', 'ungu'];
+            const theme = allowed.includes(themeName) ? themeName : 'batak';
+            document.body.classList.remove('theme-biru', 'theme-hijau', 'theme-ungu');
+            if (theme !== 'batak') document.body.classList.add('theme-' + theme);
+            appState.theme = theme;
+            document.querySelectorAll('input[name="admWebsiteTheme"]').forEach(el => el.checked = el.value === theme);
+        }
+
+        function saveWebsiteTheme() {
+            if (appState.currentRole !== 'admin') return showToast('Hanya Admin yang dapat mengubah tema.', 'danger');
+            const selected = document.querySelector('input[name="admWebsiteTheme"]:checked');
+            if (!selected) return showToast('Pilih tema terlebih dahulu.', 'danger');
+            const previous = appState.theme || 'batak';
+            applyWebsiteTheme(selected.value);
+            callServerSafe('simpanTemaWebsite', [selected.value], (res) => {
+                if (res && res.success) showToast('Tema website berhasil disimpan dan diterapkan.', 'success');
+                else { applyWebsiteTheme(previous); showToast((res && res.message) || 'Tema gagal disimpan.', 'danger'); }
+            }, () => { applyWebsiteTheme(previous); showToast('Tema gagal disimpan ke Spreadsheet.', 'danger'); });
+        }
+
         // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik'];
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik', 'tema'];
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
@@ -3549,7 +3549,7 @@
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <img src="${appState.header.logoUrl}" alt="Logo" referrerpolicy="no-referrer"
                              onerror="this.src='https://placehold.co/150x150/991b1b/fbbf24?text=PNTS'"
-                             style="width: 74px; height: 74px; object-fit: cover; border-radius: 12px; border: 2px solid #991b1b;">
+                             style="width: 74px; height: 74px; object-fit: cover; border-radius: 12px; border: 0;">
                         <div style="flex: 1; text-align: center;">
                             <div style="font-size: 17px; font-weight: 900; color: #991b1b;">PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</div>
                             <div style="font-size: 11.5px; font-weight: 800; color: #0f172a; margin-top: 2px;">(TOGATOROP • SIANTURI • SIBURIAN • BORU • DOHOT BERE)</div>
@@ -3558,11 +3558,9 @@
                         </div>
                     </div>
 
-                    <div style="height: 9px; margin: 12px 0 16px 0; background: repeating-linear-gradient(45deg, #991b1b 0px, #991b1b 10px, #ffffff 10px, #ffffff 15px, #0f172a 15px, #0f172a 25px, #f59e0b 25px, #f59e0b 30px); border-top: 2px solid #f59e0b; border-bottom: 2px solid #f59e0b;"></div>
-
                     <div style="text-align: center; margin-bottom: 16px;">
                         <div style="font-size: 15px; font-weight: 900; text-decoration: underline; text-transform: uppercase;">FORMULIR PENDAFTARAN KEANGGOTAAN BARU</div>
-                        <div style="font-size: 11px; color: #475569; margin-top: 3px; font-weight: 600;">Nomor Registrasi: PNTS-DURI/${m.id} • Tanggal: ${m.timestamp || tanggalCetak}</div>
+                        <div style="font-size: 11px; color: #475569; margin-top: 3px; font-weight: 600;">Nomor Registrasi: PNTS-DURI/${m.id} • Tanggal Cetak: ${tanggalCetak}</div>
                         <div style="display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 999px; font-size: 10.5px; font-weight: 800; color: #ffffff; background: ${statusColor};">
                             ${statusLabel}
                         </div>
