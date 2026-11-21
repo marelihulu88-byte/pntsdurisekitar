@@ -3492,8 +3492,16 @@
                     return;
                 }
                 if (statusDecision === 'DITERIMA') {
-                    showToast(`Anggota "${target.namaLengkap}" diterima. Kode akses pribadi dibuat.`, 'success');
-                    if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, res.accessCode || '', waWindow);
+                    const generatedAccessCode = String(res.accessCode || '').trim().toUpperCase();
+                    if (!/^[A-Z0-9]{16}$/.test(generatedAccessCode)) {
+                        if (waWindow && !waWindow.closed) waWindow.close();
+                        showToast('Kode akses belum diterima dari server. Pesan WhatsApp tidak dikirim agar tidak berisi tanda strip. Periksa deployment Code.gs, lalu coba lagi.', 'danger');
+                        loadAdminMembers();
+                        return;
+                    }
+                    showToast(`Anggota "${target.namaLengkap}" diterima. Kode akses pribadi berhasil dibuat.`, 'success');
+                    if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, generatedAccessCode, waWindow);
+                    else if (waWindow && !waWindow.closed) waWindow.close();
                 } else {
                     showToast(`Anggota "${target.namaLengkap}" ditolak.`, 'danger');
                     if (target.noWA) kirimNotifWAKeAnggota(target.id, statusDecision, '', waWindow);
