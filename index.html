@@ -83,6 +83,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* PNTS: daftar notifikasi dapat digulir vertikal dengan mouse maupun sentuhan */
+        #notifDropdownPanel { max-height: 75vh; }
+        #notifListContainer {
+            max-height: min(65vh, 480px) !important;
+            overflow-y: scroll !important;
+            overflow-x: hidden !important;
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            scrollbar-width: thin;
+            scrollbar-color: #d6a329 #251313;
+            padding-bottom: 12px;
+        }
+        #notifListContainer::-webkit-scrollbar { width: 8px; }
+        #notifListContainer::-webkit-scrollbar-track { background: #251313; border-radius: 8px; }
+        #notifListContainer::-webkit-scrollbar-thumb { background: #d6a329; border-radius: 8px; border: 2px solid #251313; }
+        #notifListContainer::-webkit-scrollbar-thumb:hover { background: #f2c94c; }
+
         :root {
             --batak-red: #991b1b;
             --batak-dark: #0f172a;
@@ -429,7 +447,7 @@
                                     </div>
                                     <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Pembaruan Website</span>
                                 </div>
-                                <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2">
+                                <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2" style="max-height:min(65vh,480px);overflow-y:scroll;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
                                 </div>
                             </div>
                         </div>
