@@ -1113,8 +1113,15 @@
             </div>
         </div>
 
+        <style>
+          /* Animasi tortor ditempatkan tepat di atas kontrol musik, pada PC dan HP */
+          #batakTortorWidget { left: 22px !important; right: auto !important; bottom: 88px !important; }
+          @media (max-width: 640px) {
+            #batakTortorWidget { left: 12px !important; right: auto !important; bottom: 76px !important; transform: scale(.78) !important; transform-origin: bottom left !important; }
+          }
+        </style>
         <!-- ==================== ANIMASI TORTOR TEPAT DI ATAS TOMBOL CUSTOMER SERVICE ==================== -->
-        <div id="batakTortorWidget" class="fixed z-[9997] flex flex-col items-center pointer-events-none" style="right:26px;bottom:100px">
+        <div id="batakTortorWidget" class="fixed z-[9997] flex flex-col items-center pointer-events-none" style="left:22px;right:auto;bottom:88px;transform:scale(.92);transform-origin:bottom left">
           <div class="tortor-greeting-group flex flex-col items-center pointer-events-none">
             <div id="batakSpeechBubble" class="mb-0 px-1 py-0.5 text-[10px] sm:text-[11px] font-extrabold text-amber-300 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] whitespace-nowrap">
                 Horas Dongan! ✋✨
