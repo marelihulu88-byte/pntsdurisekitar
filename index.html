@@ -1938,7 +1938,7 @@
             const adminWriteFunctions = [
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
-                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
+                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet','simpanSandiCetakKTA',
                 'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','tambahAnggotaManual','hapusNotifikasiPNTS','hapusSemuaNotifikasiPNTS'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
@@ -3680,11 +3680,10 @@
                 showToast('Silakan login sebagai Admin untuk menyimpan sandi KTA.', 'danger');
                 return;
             }
-            syncPengurusInputsToState();
             const pengurus = (appState.pengurus || [])[idx];
             const passEl = document.getElementById(`admPengSandi_${idx}`);
             const password = String(passEl && passEl.value || '').trim();
-            if (!pengurus) {
+            if (!pengurus || !pengurus.id) {
                 showToast('Data pengurus tidak ditemukan. Muat ulang menu Profil Pengurus.', 'danger');
                 return;
             }
@@ -3693,21 +3692,19 @@
                 if (passEl) passEl.focus();
                 return;
             }
-            pengurus.printPassword = password;
             if (passEl) passEl.disabled = true;
-            callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus], (res) => {
-                (appState.pengurus || []).forEach(p => { delete p.printPassword; });
-                if (passEl) { passEl.value = ''; passEl.disabled = false; }
-                if (res && res.success === false) {
-                    showToast(res.message || 'Sandi cetak KTA gagal disimpan.', 'danger');
+            callServerSafe('simpanSandiCetakKTA', [String(pengurus.id), password], (res) => {
+                if (passEl) { passEl.disabled = false; passEl.value = ''; }
+                if (!res || res.success !== true) {
+                    showToast((res && res.message) || 'Sandi cetak KTA gagal disimpan.', 'danger');
                     return;
                 }
-                showToast(`Sandi cetak KTA untuk ${pengurus.nama || 'pengurus'} berhasil disimpan.`, 'success');
+                showToast(res.message || `Sandi cetak KTA untuk ${pengurus.nama || 'pengurus'} berhasil disimpan.`, 'success');
                 refreshStateFromServerSilent();
-            }, () => {
-                (appState.pengurus || []).forEach(p => { delete p.printPassword; });
+            }, (err) => {
                 if (passEl) passEl.disabled = false;
-                showToast('Sandi KTA gagal disimpan. Periksa koneksi Google Apps Script lalu coba kembali.', 'danger');
+                console.error('Simpan sandi KTA gagal:', err);
+                showToast('Sandi KTA belum tersimpan. Periksa koneksi atau deployment Google Apps Script, lalu coba kembali.', 'danger');
             });
         }
 
