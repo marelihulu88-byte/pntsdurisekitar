@@ -28,13 +28,13 @@
     <meta property="og:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta property="og:description" content="Horas! Selamat datang di Portal Resmi Muda-Mudi Batak Toba Toga Simatupang (Sianturi • Siburian • Togatorop • Boru • Bere & Ibebere) Se-Duri, Bengkalis - Riau.">
     <meta property="og:url" content="https://pntsduri.my.id/">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80">
 
     <!-- ==================== 4. TWITTER CARD ==================== -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta name="twitter:description" content="Wadah Persekutuan Muda-Mudi Batak Toba Toga Simatupang (Sianturi, Siburian, Togatorop) di Kota Duri, Riau.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80">
 
     <!-- ==================== 5. SCHEMA.ORG JSON-LD (KUNCI PENGUBAH NAMA SITUS DI GOOGLE) ==================== -->
     <script type="application/ld+json">
@@ -184,13 +184,72 @@
             50% { transform: translateY(-4px) scaleY(1.06); }
         }
 
-        .tortor-couple {
+        /* Seluruh sapaan bergerak serempak: tulisan dan animasi tortor */
+        .tortor-greeting-group {
             animation: tortorDance 2.6s ease-in-out infinite;
+            transform-origin: center bottom;
         }
+        .tortor-couple { animation: none; }
 
         .tortor-hands {
             animation: tortorHands 1.3s ease-in-out infinite;
             transform-origin: center;
+        }
+
+        /* Tampilan ringkas pada perangkat HP */
+        @media (max-width: 640px) {
+            .tortor-couple { width: 3.35rem !important; height: 3.35rem !important; }
+            #batakTortorWidget { right: 13px !important; bottom: 76px !important; }
+            #btnPlayPauseMusic { width: 2.75rem !important; height: 2.75rem !important; }
+            #btnPlayPauseMusic + div, #btnPlayPauseMusic ~ button { display: none !important; }
+            #btnPlayPauseMusic { flex: 0 0 auto; }
+            #btnPlayPauseMusic { margin: 0 !important; }
+            #btnPlayPauseMusic { box-shadow: 0 3px 12px #0008; }
+            #btnPlayPauseMusic { border-radius: 999px !important; }
+            #btnPlayPauseMusic { padding: 0 !important; }
+            #btnPlayPauseMusic { min-width: 44px; }
+            #btnPlayPauseMusic { min-height: 44px; }
+            #btnPlayPauseMusic { font-size: 14px; }
+            #btnPlayPauseMusic { transform: none !important; }
+            #btnPlayPauseMusic { outline-offset: 3px; }
+            #btnPlayPauseMusic { -webkit-tap-highlight-color: transparent; }
+            #btnPlayPauseMusic { touch-action: manipulation; }
+            #btnPlayPauseMusic { position: relative; z-index: 1; }
+            #btnPlayPauseMusic { color: #fff; }
+            #btnPlayPauseMusic { background: linear-gradient(135deg,#991b1b,#d97706); }
+            #btnPlayPauseMusic { border: 1px solid #fbbf24; }
+            #btnPlayPauseMusic { display: flex !important; }
+            #btnPlayPauseMusic { align-items: center; justify-content: center; }
+            #btnPlayPauseMusic { gap: 0 !important; }
+            #btnPlayPauseMusic { line-height: 1; }
+            #btnPlayPauseMusic { cursor: pointer; }
+            #btnPlayPauseMusic { -webkit-appearance: none; appearance: none; }
+            #btnPlayPauseMusic { box-sizing: border-box; }
+            #btnPlayPauseMusic { transition: background .2s ease; }
+            #btnPlayPauseMusic { opacity: 1; }
+            #btnPlayPauseMusic { visibility: visible; }
+            #btnPlayPauseMusic { overflow: hidden; }
+            #btnPlayPauseMusic { text-align: center; }
+            #btnPlayPauseMusic { vertical-align: middle; }
+            #btnPlayPauseMusic { user-select: none; }
+            #btnPlayPauseMusic { -webkit-user-select: none; }
+            #btnPlayPauseMusic { -moz-user-select: none; }
+            #btnPlayPauseMusic { -ms-user-select: none; }
+            #btnPlayPauseMusic { -webkit-touch-callout: none; }
+            #btnPlayPauseMusic { -webkit-tap-highlight-color: transparent; }
+            #btnPlayPauseMusic { box-shadow: 0 6px 18px #0009; }
+            #btnPlayPauseMusic { border-radius: 50% !important; }
+            #btnPlayPauseMusic { padding: 0 !important; }
+            #btnPlayPauseMusic { width: 46px !important; height: 46px !important; }
+            #btnPlayPauseMusic { min-width: 46px !important; min-height: 46px !important; }
+            #btnPlayPauseMusic { flex-shrink: 0; }
+            #btnPlayPauseMusic { margin: 0; }
+            #btnPlayPauseMusic { font-size: 0; }
+            #btnPlayPauseMusic i { font-size: 15px !important; }
+            #scPlayerBox { width: min(18rem, calc(100vw - 24px)); }
+            body > div.fixed.bottom-3.left-3 { padding: 0 !important; }
+            body > div.fixed.bottom-3.left-3 > .gorga-card { padding: 5px !important; border-width: 1px !important; border-radius: 999px !important; }
+            body > div.fixed.bottom-3.right-3 { transform: scale(.72); transform-origin: bottom right; }
         }
 
         /* Custom Scrollbar */
@@ -1054,13 +1113,14 @@
             </div>
         </div>
 
-        <!-- ==================== POJOK KANAN BAWAH: ANIMASI COWO CEWEK BATAK ==================== -->
-        <div class="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-40 flex flex-col items-end pointer-events-none">
-            <div id="batakSpeechBubble" class="mb-1.5 px-3 py-1.5 rounded-2xl rounded-br-none bg-red-900/95 border border-amber-400 text-[11px] font-bold text-amber-200 shadow-lg pointer-events-auto">
+        <!-- ==================== ANIMASI TORTOR TEPAT DI ATAS TOMBOL CUSTOMER SERVICE ==================== -->
+        <div id="batakTortorWidget" class="fixed z-[9997] flex flex-col items-center pointer-events-none" style="right:26px;bottom:100px">
+          <div class="tortor-greeting-group flex flex-col items-center pointer-events-none">
+            <div id="batakSpeechBubble" class="mb-0 px-1 py-0.5 text-[10px] sm:text-[11px] font-extrabold text-amber-300 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] whitespace-nowrap">
                 Horas Dongan! ✋✨
             </div>
-            <button type="button" onclick="triggerTortorGreeting()" class="pointer-events-auto group relative bg-slate-950/90 hover:bg-slate-900 p-2 rounded-2xl border-2 border-amber-400 shadow-2xl transition-all" title="Klik Animasi Cowo Cewek Batak (Manortor)">
-                <div class="tortor-couple w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+            <button type="button" onclick="triggerTortorGreeting()" class="pointer-events-auto group relative bg-transparent border-0 shadow-none p-0 m-0 rounded-none transition-transform hover:scale-105 focus:outline-none" title="Klik Animasi Cowo Cewek Batak (Manortor)">
+                <div class="tortor-couple w-[4.5rem] h-[4.5rem] flex items-center justify-center">
                     <svg viewBox="0 0 160 140" class="w-full h-full overflow-visible">
                         <ellipse cx="80" cy="130" rx="58" ry="7" fill="rgba(245, 158, 11, 0.28)" />
                         <g transform="translate(18, 12)">
@@ -1098,10 +1158,11 @@
                         </g>
                     </svg>
                 </div>
-                <div class="text-[10px] font-extrabold text-center text-amber-300 bg-red-950/90 rounded-lg py-0.5 px-2 border border-amber-500/40">
-                    Naposo Batak Toba
-                </div>
             </button>
+            <div class="mt-0 text-[9px] sm:text-[10px] font-extrabold text-amber-300 whitespace-nowrap drop-shadow-[0_2px_3px_rgba(0,0,0,0.95)] pointer-events-none">
+                Naposo Batak Toba
+            </div>
+          </div>
         </div>
     </div>
 
@@ -2474,20 +2535,68 @@
                 albumGrid.innerHTML = `<div class="col-span-3 text-center py-8 text-slate-400 text-sm">Belum ada foto dalam album kegiatan.</div>`;
             } else {
                 albumGrid.innerHTML = appState.albums.map(alb => `
-                    <div class="group rounded-2xl overflow-hidden bg-slate-900 border border-amber-500/30 shadow-xl flex flex-col">
+                    <div id="pnts-album-photo-${alb.id}" class="group rounded-2xl overflow-hidden bg-slate-900 border border-amber-500/30 shadow-xl flex flex-col">
                         <div class="relative h-52 overflow-hidden bg-slate-950">
-                            <img src="${alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer"
+                            <img id="album-slide-img-${String(alb.id)}" src="${(alb.slides && alb.slides[0]) || alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer"
                                  onerror="this.src='https://placehold.co/600x400/7f1d1d/fbbf24?text=Foto+Kegiatan'"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-amber-400/40 text-amber-300 text-[11px] font-bold">
-                                ${alb.date}
-                            </span>
+                                 class="w-full h-full object-cover transition-transform duration-500">
+                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-amber-400/40 text-amber-300 text-[11px] font-bold">${alb.date}</span>
+                            ${(alb.slides && alb.slides.length > 1) ? `
+                              <button type="button" onclick="changeAlbumSlide('${String(alb.id)}',-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/75 text-white border border-amber-400/60">‹</button>
+                              <button type="button" onclick="changeAlbumSlide('${String(alb.id)}',1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/75 text-white border border-amber-400/60">›</button>
+                              <span id="album-slide-count-${String(alb.id)}" class="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-slate-950/75 text-white text-[10px]">1/${alb.slides.length}</span>` : ''}
                         </div>
-                        <div class="p-4 flex-1 flex items-center">
+                        <div class="p-4 flex-1 flex flex-col gap-3">
                             <p class="text-xs sm:text-sm font-bold text-slate-100 leading-snug">${alb.caption}</p>
+                            <div class="mt-auto flex justify-end">
+                                <div class="relative">
+                                    <button type="button" aria-label="Pilihan berbagi foto"
+                                        aria-haspopup="true" aria-expanded="false"
+                                        onclick="toggleAlbumShareMenu(event, '${String(alb.id)}')"
+                                        class="w-10 h-10 rounded-full bg-slate-800 hover:bg-amber-500 text-white hover:text-slate-950 border border-amber-400/50 flex items-center justify-center transition-all shadow-lg">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <div id="album-share-menu-${String(alb.id)}"
+                                        class="hidden absolute right-0 bottom-12 z-50 w-48 rounded-xl overflow-hidden bg-slate-900 border border-amber-400/40 shadow-2xl">
+                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','native'); closeAlbumShareMenu('${String(alb.id)}')"
+                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
+                                            <i class="fa-solid fa-share-nodes w-4 text-amber-400"></i> Bagikan ke...
+                                        </button>
+                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','whatsapp'); closeAlbumShareMenu('${String(alb.id)}')"
+                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
+                                            <i class="fa-brands fa-whatsapp w-4 text-green-400"></i> WhatsApp
+                                        </button>
+                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','facebook'); closeAlbumShareMenu('${String(alb.id)}')"
+                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
+                                            <i class="fa-brands fa-facebook w-4 text-blue-400"></i> Facebook
+                                        </button>
+                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','telegram'); closeAlbumShareMenu('${String(alb.id)}')"
+                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
+                                            <i class="fa-brands fa-telegram w-4 text-sky-400"></i> Telegram
+                                        </button>
+                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','copy'); closeAlbumShareMenu('${String(alb.id)}')"
+                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
+                                            <i class="fa-solid fa-link w-4 text-amber-400"></i> Salin link
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `).join('');
+
+                // Jika tautan khusus foto dibuka, arahkan pengunjung ke foto yang dimaksud.
+                const sharedPhotoId = new URLSearchParams(window.location.search).get('foto');
+                if (sharedPhotoId) {
+                    setTimeout(() => {
+                        const targetPhoto = document.getElementById(`pnts-album-photo-${sharedPhotoId}`);
+                        if (targetPhoto) {
+                            targetPhoto.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            targetPhoto.classList.add('ring-4', 'ring-amber-400');
+                            setTimeout(() => targetPhoto.classList.remove('ring-4', 'ring-amber-400'), 5000);
+                        }
+                    }, 500);
+                }
             }
 
             const pengurusGrid = document.getElementById('userPengurusGrid');
@@ -3142,8 +3251,16 @@
                             <div class="text-[10px] text-amber-400 font-bold">${alb.date}</div>
                             <div class="text-xs font-bold text-white line-clamp-2">${alb.caption}</div>
                         </div>
+                        <div class="text-[10px] text-slate-300">Slide: ${(alb.slides || []).length || 1} foto</div>
+                        <input type="file" accept="image/*" id="admAlbumSlideFile-${alb.id}" class="hidden" onchange="addAlbumSlideFromFile(event,'${String(alb.id)}')">
+                        <button type="button" onclick="document.getElementById('admAlbumSlideFile-${alb.id}').click()" class="w-full py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500 text-amber-200 hover:text-slate-950 text-xs font-bold transition-all">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Slide Foto
+                        </button>
+                        <button type="button" onclick="removeAlbumSlide('${String(alb.id)}')" class="w-full py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold transition-all">
+                            <i class="fa-solid fa-minus mr-1"></i> Hapus Slide Terakhir
+                        </button>
                         <button type="button" onclick="deleteAdminAlbumPhoto(${alb.id})" class="w-full py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs font-bold transition-all">
-                            <i class="fa-solid fa-trash mr-1"></i> Hapus Foto
+                            <i class="fa-solid fa-trash mr-1"></i> Hapus Album
                         </button>
                     </div>
                 </div>
@@ -3387,7 +3504,8 @@
                 id: Date.now(),
                 caption,
                 date: date || '2026',
-                imageUrl
+                imageUrl,
+                slides: [imageUrl]
             };
             appState.albums.unshift(newPhoto);
 
@@ -3399,6 +3517,53 @@
             renderAdminAll();
             showToast('Foto baru sedang diunggah ke Google Drive & Album Kegiatan!', 'success');
             callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto]);
+        }
+
+        const albumSlideIndexes = {};
+        function getAlbumSlides(album) {
+            if (!Array.isArray(album.slides) || !album.slides.length) album.slides = [album.imageUrl].filter(Boolean);
+            return album.slides;
+        }
+        function changeAlbumSlide(albumId, direction) {
+            const album = appState.albums.find(a => String(a.id) === String(albumId));
+            if (!album) return;
+            const slides = getAlbumSlides(album);
+            const current = albumSlideIndexes[albumId] || 0;
+            const next = (current + direction + slides.length) % slides.length;
+            albumSlideIndexes[albumId] = next;
+            const img = document.getElementById(`album-slide-img-${albumId}`);
+            const count = document.getElementById(`album-slide-count-${albumId}`);
+            if (img) img.src = slides[next];
+            if (count) count.textContent = `${next + 1}/${slides.length}`;
+        }
+        function addAlbumSlideFromFile(event, albumId) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            compressImageFile(file, 1000, function(dataUrl) {
+                const album = appState.albums.find(a => String(a.id) === String(albumId));
+                if (!album) return;
+                const slides = getAlbumSlides(album);
+                slides.push(dataUrl);
+                album.slides = slides;
+                persistAlbumSlides(album);
+                renderAllUserViews(); renderAdminAll();
+                showToast('Slide foto berhasil ditambahkan.', 'success');
+            });
+        }
+        function removeAlbumSlide(albumId) {
+            const album = appState.albums.find(a => String(a.id) === String(albumId));
+            if (!album) return;
+            const slides = getAlbumSlides(album);
+            if (slides.length <= 1) { showToast('Album harus memiliki minimal satu foto.', 'danger'); return; }
+            slides.pop(); album.slides = slides;
+            albumSlideIndexes[albumId] = 0;
+            persistAlbumSlides(album);
+            renderAllUserViews(); renderAdminAll();
+            showToast('Slide foto terakhir berhasil dihapus.', 'success');
+        }
+        function persistAlbumSlides(album) {
+            // Endpoint backend ini perlu tersedia di Code.gs agar perubahan slide tersimpan permanen.
+            callServerSafe('updateFotoAlbumSlidesSpreadsheet', [album.id, album.slides]);
         }
 
         function deleteAdminAlbumPhoto(id) {
@@ -3909,6 +4074,100 @@
             );
         }
 
+        // ==================== BAGIKAN FOTO ALBUM PNTS ====================
+        function getAlbumShareData(photoId) {
+            const photo = (appState.albums || []).find(item => String(item.id) === String(photoId));
+            if (!photo) {
+                showToast('Foto album tidak ditemukan. Muat ulang halaman lalu coba lagi.', 'danger');
+                return null;
+            }
+            const photoUrl = new URL(window.location.origin + window.location.pathname);
+            photoUrl.searchParams.set('foto', String(photo.id));
+            photoUrl.hash = `pnts-album-photo-${photo.id}`;
+            const title = `${photo.caption || 'Foto Kegiatan'} - Album PNTS Se-Duri`;
+            const text = `Lihat foto kegiatan ${photo.caption || 'PNTS Se-Duri'} di website resmi Punguan Naposo Toga Simatupang Se-Duri.`;
+            return { photo, url: photoUrl.toString(), title, text };
+        }
+
+        function toggleAlbumShareMenu(event, photoId) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById(`album-share-menu-${photoId}`);
+            if (!menu) return;
+            const willOpen = menu.classList.contains('hidden');
+            document.querySelectorAll('[id^="album-share-menu-"]').forEach(item => item.classList.add('hidden'));
+            if (willOpen) menu.classList.remove('hidden');
+        }
+
+        function closeAlbumShareMenu(photoId) {
+            const menu = document.getElementById(`album-share-menu-${photoId}`);
+            if (menu) menu.classList.add('hidden');
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('[id^="album-share-menu-"]') &&
+                !event.target.closest('button[aria-label="Pilihan berbagi foto"]')) {
+                document.querySelectorAll('[id^="album-share-menu-"]').forEach(item => item.classList.add('hidden'));
+            }
+        });
+
+        async function shareAlbumPhoto(photoId, platform = 'native') {
+            const data = getAlbumShareData(photoId);
+            if (!data) return;
+            const encodedUrl = encodeURIComponent(data.url);
+            const message = `${data.text}\n${data.url}`;
+
+            if (platform === 'copy') {
+                try {
+                    await navigator.clipboard.writeText(data.url);
+                    showToast('Link foto berhasil disalin. Silakan tempel di aplikasi mana saja!', 'success');
+                } catch (err) {
+                    const temp = document.createElement('textarea');
+                    temp.value = data.url;
+                    temp.style.position = 'fixed';
+                    temp.style.opacity = '0';
+                    document.body.appendChild(temp);
+                    temp.select();
+                    const copied = document.execCommand('copy');
+                    temp.remove();
+                    showToast(copied ? 'Link foto berhasil disalin!' : 'Tidak dapat menyalin link. Silakan salin dari alamat browser.', copied ? 'success' : 'danger');
+                }
+                return;
+            }
+
+            if (platform === 'whatsapp') {
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (platform === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (platform === 'telegram') {
+                window.open(`https://t.me/share/url?url=${encodedUrl}&text=${encodeURIComponent(data.text)}`, '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: data.title, text: data.text, url: data.url });
+                } catch (err) {
+                    if (err && err.name !== 'AbortError') {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+                    }
+                }
+            } else {
+                // Fallback desktop/browser yang belum mendukung Web Share API.
+                const choice = prompt('Ketik pilihan berbagi: WA (WhatsApp), FB (Facebook), TG (Telegram), atau LINK (salin link).');
+                const normalized = String(choice || '').trim().toLowerCase();
+                if (normalized === 'wa' || normalized === 'whatsapp') shareAlbumPhoto(photoId, 'whatsapp');
+                else if (normalized === 'fb' || normalized === 'facebook') shareAlbumPhoto(photoId, 'facebook');
+                else if (normalized === 'tg' || normalized === 'telegram') shareAlbumPhoto(photoId, 'telegram');
+                else if (normalized === 'link') shareAlbumPhoto(photoId, 'copy');
+            }
+        }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initWebApp);
         } else {
@@ -3920,7 +4179,7 @@
      TOMBOL PENGADUAN PNTS DURI
      ================================================================ -->
 <style>
-#pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:999px;padding:13px 18px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;gap:10px;cursor:pointer}
+#pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:50%;width:62px;height:62px;padding:7px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .pnts-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
 .pnts-overlay.open{display:flex}
 .pnts-modal{width:min(440px,100%);max-height:90vh;overflow:auto;background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:20px;box-shadow:0 20px 70px #000b;padding:20px}
@@ -3937,9 +4196,9 @@
 .pnts-review-star.selected{color:#fbbf24}
 .pnts-review-bar{height:9px;flex:1;background:#334155;border-radius:99px;overflow:hidden}
 .pnts-review-bar>span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:99px}
-@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;padding:12px 15px}.pnts-modal{padding:16px}}
+@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;width:54px;height:54px;padding:5px}#pntsComplaintLauncher svg{width:38px;height:38px}.pnts-modal{padding:16px}}
 </style>
-<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsOpenComplaint()"><span style="font-size:18px">📝</span><span>PENGADUAN</span></button>
+<button id="pntsComplaintLauncher" type="button" aria-label="Customer Service PNTS Duri" title="Customer Service" onclick="pntsOpenComplaint()"><span class="pnts-ulos-emblem" aria-hidden="true"><svg viewBox="0 0 64 64" width="42" height="42"><circle cx="32" cy="32" r="29" fill="#7f1d1d" stroke="#fbbf24" stroke-width="2.5"/><path d="M10 18h44M10 46h44M14 13l8 5-8 5 8 5-8 5 8 5-8 5M50 13l-8 5 8 5-8 5 8 5-8 5 8 5" fill="none" stroke="#fbbf24" stroke-width="2"/><path d="M20 34v-5a12 12 0 0 1 24 0v5M18 32h5v10h-5zM41 32h5v10h-5zM24 45q8 7 16 0" fill="none" stroke="#fff1c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
 
 <div id="pntsComplaintOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsComplaintTitle">
   <section class="pnts-modal">
