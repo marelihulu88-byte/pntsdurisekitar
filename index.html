@@ -1262,6 +1262,9 @@
                     <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
                         <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 11. Menu Musik SoundCloud
                     </button>
+                    <button type="button" onclick="switchAdminMenu('kta')" id="admNav_kta" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-amber-500/30">
+                        <i class="fa-solid fa-id-card w-5 text-center text-amber-400"></i> 12. Pengaturan Desain KTA
+                    </button>
 
                 </div>
             </aside>
@@ -1746,6 +1749,58 @@
                 </div>
 
 
+                <!-- 12. PENGATURAN DESAIN DAN IDENTITAS KTA -->
+                <div id="admSec_kta" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
+                    <div class="border-b border-slate-800 pb-4">
+                        <h2 class="font-batak text-xl font-bold text-amber-400">12. PENGATURAN DESAIN KTA PENGURUS</h2>
+                        <p class="text-xs text-slate-300 mt-1">Atur foto header rumah adat, logo, identitas wilayah, masa berlaku, dan label informasi pada kartu anggota.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Foto Header KTA (URL gambar rumah adat Batak Toba)</label>
+                            <input id="admKtaHeaderImage" type="url" placeholder="https://..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                            <p class="text-[11px] text-slate-400 mt-1">Gunakan tautan gambar publik yang dapat dibuka tanpa login. Foto akan tampil di bagian atas KTA.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Logo Organisasi pada KTA (URL gambar)</label>
+                            <input id="admKtaLogo" type="url" placeholder="https://..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Nama Organisasi</label>
+                            <input id="admKtaOrgName" type="text" placeholder="PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Nama Wilayah KTA (default)</label>
+                            <input id="admKtaRegion" type="text" placeholder="DURI DAN SEKITARNYA" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Berlaku Hingga</label>
+                            <input id="admKtaValidUntil" type="text" placeholder="31 Desember 2028" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Label Jabatan</label>
+                            <input id="admKtaJabatanLabel" type="text" placeholder="JABATAN" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Label Wilayah</label>
+                            <input id="admKtaWilayahLabel" type="text" placeholder="WILAYAH" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-amber-500/30 bg-slate-950/70 p-4 text-xs text-slate-300 space-y-1">
+                        <p><strong class="text-amber-300">Pengaturan jabatan:</strong> Jabatan pada setiap KTA otomatis mengikuti kolom Nama Jabatan/Seksi di Menu Profil Pengurus.</p>
+                        <p><strong class="text-amber-300">Wilayah per pengurus:</strong> Jika kolom wilayah khusus pengurus kosong, KTA memakai Nama Wilayah KTA (default) di atas.</p>
+                        <p><strong class="text-amber-300">QR Code:</strong> QR pada setiap KTA diarahkan langsung ke https://pntsduri.my.id.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button type="button" onclick="saveKtaDesignSettings()" id="btnSaveKtaSettings" class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-red-700 text-white font-bold text-sm shadow-lg">
+                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA
+                        </button>
+                        <button type="button" onclick="previewKtaDesignSettings()" class="px-5 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white font-bold text-sm">
+                            <i class="fa-solid fa-eye mr-1.5"></i> Pratinjau Desain
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -1911,6 +1966,17 @@
                 title: 'Musik & Lagu Batak Punguan',
                 soundcloudUrl: 'https://soundcloud.com/forss/flickermood',
                 autoPlay: true
+            },
+
+            // Pengaturan desain dan identitas KTA yang dapat diubah Admin.
+            ktaSettings: {
+                headerImageUrl: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85',
+                logoUrl: '',
+                organizationName: 'PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI',
+                regionName: 'DURI DAN SEKITARNYA',
+                validUntil: '31 Desember 2028',
+                jabatanLabel: 'JABATAN',
+                wilayahLabel: 'WILAYAH'
             }
         };
 
@@ -1938,7 +2004,7 @@
             const adminWriteFunctions = [
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
-                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet','simpanSandiCetakKTA',
+                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet','simpanSandiCetakKTA','simpanPengaturanKTA',
                 'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','tambahAnggotaManual','hapusNotifikasiPNTS','hapusSemuaNotifikasiPNTS'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
@@ -2029,6 +2095,7 @@
             if (serverData.contacts) Object.assign(appState.contacts, serverData.contacts);
             if (Array.isArray(serverData.members)) appState.members = serverData.members;
             if (serverData.music) Object.assign(appState.music, serverData.music);
+            if (serverData.ktaSettings) Object.assign(appState.ktaSettings, serverData.ktaSettings);
             if (serverData.dashboardInfo || serverData.infoManual) {
                 appState.dashboardInfo = serverData.dashboardInfo || serverData.infoManual;
             }
@@ -2933,7 +3000,7 @@
 
         // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik']; 
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik', 'kta']; 
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
@@ -3235,6 +3302,20 @@
             if (modeEl) modeEl.value = dashInfo.modeAnggota || 'AUTO';
             if (manualEl && document.activeElement !== manualEl) manualEl.value = dashInfo.totalAnggotaManual != null ? dashInfo.totalAnggotaManual : 0;
 
+            const ktaFields = {
+                admKtaHeaderImage: appState.ktaSettings.headerImageUrl,
+                admKtaLogo: appState.ktaSettings.logoUrl,
+                admKtaOrgName: appState.ktaSettings.organizationName,
+                admKtaRegion: appState.ktaSettings.regionName,
+                admKtaValidUntil: appState.ktaSettings.validUntil,
+                admKtaJabatanLabel: appState.ktaSettings.jabatanLabel,
+                admKtaWilayahLabel: appState.ktaSettings.wilayahLabel
+            };
+            Object.keys(ktaFields).forEach(id => {
+                const el = document.getElementById(id);
+                if (el && document.activeElement !== el) el.value = ktaFields[id] || '';
+            });
+
             document.getElementById('admPreviewLogo').src = appState.header.logoUrl;
             document.getElementById('admInputLogoUrl').value = appState.header.logoUrl;
             document.getElementById('admPreviewBanner').src = appState.header.bannerUrl;
@@ -3322,6 +3403,10 @@
                     <div>
                         <label class="block text-[11px] text-slate-400 mb-1">Keterangan Marga / Boru</label>
                         <input type="text" id="admPengMarga_${idx}" value="${p.subMarga}" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-slate-400 mb-1">Wilayah khusus pada KTA (opsional)</label>
+                        <input type="text" id="admPengKtaWilayah_${idx}" value="${p.ktaWilayah || ''}" placeholder="Kosongkan untuk memakai wilayah default KTA" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
                     </div>
                     <div>
                         <label class="block text-[11px] text-slate-400 mb-1">Upload Foto Baru / URL Foto</label>
@@ -3604,11 +3689,13 @@
                 const namaEl = document.getElementById(`admPengNama_${idx}`);
                 const margaEl = document.getElementById(`admPengMarga_${idx}`);
                 const fotoEl = document.getElementById(`admPengFoto_${idx}`);
+                const wilayahEl = document.getElementById(`admPengKtaWilayah_${idx}`);
 
                 if (jabEl && jabEl.value.trim()) p.jabatan = jabEl.value.trim();
                 if (namaEl && namaEl.value.trim()) p.nama = namaEl.value.trim();
                 if (margaEl && margaEl.value.trim()) p.subMarga = margaEl.value.trim();
                 if (fotoEl && fotoEl.value.trim()) p.photoUrl = fotoEl.value.trim();
+                if (wilayahEl) p.ktaWilayah = wilayahEl.value.trim();
             });
         }
 
@@ -3802,11 +3889,7 @@
                 }
                 closeKtaPasswordModal();
                 const p = res.pengurus;
-                const win = window.open('', '_blank');
-                if (!win) { showToast('Izinkan pop-up browser untuk mencetak KTA.', 'danger'); return; }
-                const esc = v => String(v || '-').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
-                win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KTA PNTS - ${esc(p.nama)}</title><style>*{box-sizing:border-box}body{margin:0;padding:24px;background:#eee;font-family:Arial,sans-serif}.kta{width:860px;max-width:100%;min-height:500px;margin:auto;position:relative;overflow:hidden;border:7px double #f4c44e;border-radius:24px;padding:28px;color:#fff;background:radial-gradient(circle at 80% 10%,#b45309 0,transparent 28%),linear-gradient(135deg,#160d0d,#7f1d1d 55%,#111827)}.kta:before{content:'ᯤ ᯂ ᯤ ᯂ ᯤ';position:absolute;inset:12px;border:2px solid #fbbf24;opacity:.22;text-align:center;font-size:42px;letter-spacing:18px;padding-top:12px;pointer-events:none}.head{text-align:center;border-bottom:2px solid #fbbf24;padding-bottom:16px;position:relative}.head h1{margin:0;color:#fcd34d;font-size:25px}.head p{margin:5px 0 0;font-size:12px;letter-spacing:3px}.body{display:flex;gap:25px;align-items:center;padding:30px 10px;position:relative}.body img{width:170px;height:205px;object-fit:cover;border:5px solid #fbbf24;border-radius:14px;background:#fff}.details{flex:1}.details h2{font-size:27px;margin:0 0 18px}.line{padding:9px 0;border-bottom:1px solid #ffffff40;font-size:15px}.line b{display:inline-block;width:145px;color:#fcd34d}.foot{text-align:center;color:#fde68a;font-size:11px;letter-spacing:2px;position:relative}@media print{body{padding:0;background:#fff}.kta{width:100%;min-height:500px;print-color-adjust:exact;-webkit-print-color-adjust:exact}}@media(max-width:600px){.body{gap:12px}.body img{width:110px;height:145px}.details h2{font-size:18px}.line{font-size:12px}.line b{width:95px}}</style></head><body><main class="kta"><header class="head"><h1>KARTU TANDA ANGGOTA PENGURUS</h1><p>PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</p></header><section class="body"><img src="${esc(p.photoUrl)}" alt="Foto Pengurus"><div class="details"><h2>${esc(p.nama)}</h2><div class="line"><b>JABATAN</b> ${esc(p.jabatan)}</div><div class="line"><b>MARGA / BORU</b> ${esc(p.subMarga)}</div><div class="line"><b>NO. KTA</b> ${esc(p.ktaNumber)}</div><div class="line"><b>PERIODE</b> ${esc(p.periode || 'Kepengurusan PNTS Se-Duri')}</div></div></section><footer class="foot">HORAS • MARSIURUPAN • MARSADA</footer></main><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`);
-                win.document.close();
+                openKtaPrintWindow(p, res.ktaSettings || appState.ktaSettings);
             }, (err) => {
                 if (button) {
                     button.disabled = false;
@@ -3816,9 +3899,130 @@
             });
         }
 
+        function collectKtaSettingsFromForm() {
+            return {
+                headerImageUrl: String(document.getElementById('admKtaHeaderImage')?.value || '').trim(),
+                logoUrl: String(document.getElementById('admKtaLogo')?.value || '').trim(),
+                organizationName: String(document.getElementById('admKtaOrgName')?.value || '').trim(),
+                regionName: String(document.getElementById('admKtaRegion')?.value || '').trim(),
+                validUntil: String(document.getElementById('admKtaValidUntil')?.value || '').trim(),
+                jabatanLabel: String(document.getElementById('admKtaJabatanLabel')?.value || '').trim(),
+                wilayahLabel: String(document.getElementById('admKtaWilayahLabel')?.value || '').trim()
+            };
+        }
+
+        function saveKtaDesignSettings() {
+            if (appState.currentRole !== 'admin') {
+                showToast('Hanya Admin yang dapat mengubah desain KTA.', 'danger');
+                return;
+            }
+            const settings = collectKtaSettingsFromForm();
+            if (!settings.headerImageUrl || !/^https:\/\//i.test(settings.headerImageUrl)) {
+                showToast('Masukkan URL foto header KTA yang diawali https://.', 'danger');
+                return;
+            }
+            if (settings.logoUrl && !/^https:\/\//i.test(settings.logoUrl)) {
+                showToast('URL logo harus diawali https://.', 'danger');
+                return;
+            }
+            if (!settings.organizationName || !settings.regionName || !settings.validUntil) {
+                showToast('Nama organisasi, wilayah, dan masa berlaku wajib diisi.', 'danger');
+                return;
+            }
+            const btn = document.getElementById('btnSaveKtaSettings');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> MENYIMPAN...'; }
+            callServerSafe('simpanPengaturanKTA', [settings], (res) => {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA'; }
+                if (!res || res.success !== true) {
+                    showToast((res && res.message) || 'Pengaturan KTA gagal disimpan.', 'danger');
+                    return;
+                }
+                Object.assign(appState.ktaSettings, settings);
+                showToast('Pengaturan desain dan identitas KTA berhasil disimpan.', 'success');
+                refreshStateFromServerSilent();
+            }, () => {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA'; }
+                showToast('Server tidak dapat menyimpan pengaturan KTA. Periksa deployment Apps Script.', 'danger');
+            });
+        }
+
+        function previewKtaDesignSettings() {
+            const settings = Object.assign({}, appState.ktaSettings, collectKtaSettingsFromForm());
+            const sample = (appState.pengurus || [])[0] || {nama:'CONTOH PENGURUS',jabatan:'Ketua',subMarga:'Toga Simatupang',photoUrl:''};
+            openKtaPrintWindow(sample, settings, false);
+        }
+
         function printPengurusKTA(pengurusId) {
             openKtaPasswordModal(pengurusId);
         }
+
+        function openKtaPrintWindow(p, settings, autoPrint = true) {
+            const win = window.open('', '_blank');
+            if (!win) { showToast('Izinkan pop-up browser untuk mencetak KTA.', 'danger'); return; }
+            const esc = v => String(v == null || v === '' ? '-' : v).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+            const cfg = Object.assign({
+                headerImageUrl:'', logoUrl:'', organizationName:'PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI',
+                regionName:'DURI DAN SEKITARNYA', validUntil:'31 Desember 2028',
+                jabatanLabel:'JABATAN', wilayahLabel:'WILAYAH'
+            }, settings || {});
+            const qrUrl = 'https://quickchart.io/qr?size=220&margin=1&text=' + encodeURIComponent('https://pntsduri.my.id');
+            const header = cfg.headerImageUrl ? `<div class="photo-header" style="background-image:linear-gradient(180deg,rgba(20,8,5,.05),rgba(20,8,5,.82)),url('${esc(cfg.headerImageUrl)}')"></div>` : '<div class="photo-header"></div>';
+            const logo = cfg.logoUrl ? `<img class="logo" src="${esc(cfg.logoUrl)}" alt="Logo PNTS">` : '<div class="logo-placeholder">PNTS</div>';
+            win.document.open();
+            win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KTA PNTS - ${esc(p.nama)}</title>
+<style>
+*{box-sizing:border-box}
+@page{size:85mm 135mm;margin:0}
+html,body{margin:0;width:85mm;min-height:135mm;background:#eee;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{padding:0}
+.kta{width:85mm;height:135mm;position:relative;overflow:hidden;margin:12px auto;background:#260f10;color:#fff;border:1.2mm solid #c99b42;box-shadow:0 4px 20px #0004}
+.kta:before{content:"";position:absolute;inset:2mm;border:1px solid #e8bd60;pointer-events:none;z-index:5}
+.gorga{position:absolute;left:0;right:0;height:12mm;z-index:4;opacity:.98;background-color:#5c1721;background-image:repeating-linear-gradient(135deg,transparent 0 5px,#d7a64d 5px 7px,transparent 7px 12px),repeating-linear-gradient(45deg,transparent 0 8px,#a97832 8px 10px,transparent 10px 16px);border-top:1px solid #edc66e;border-bottom:1px solid #edc66e}
+.gorga.top{top:48mm}.gorga.bottom{bottom:0}
+.photo-header{height:49mm;background-size:cover;background-position:center;position:relative}
+.photo-header:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(25,8,5,.05),rgba(25,8,5,.82))}
+.headline{position:absolute;top:5mm;left:5mm;right:5mm;z-index:2;text-align:center;text-shadow:0 2px 4px #000}
+.logo{position:absolute;top:4mm;left:4mm;width:17mm;height:17mm;object-fit:contain;border-radius:50%;background:#fff;border:1mm solid #d6aa55;padding:1mm;z-index:3}
+.logo-placeholder{position:absolute;top:4mm;left:4mm;width:17mm;height:17mm;border-radius:50%;background:#6b1d25;border:1mm solid #d6aa55;color:#f8d77c;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;z-index:3}
+.title{margin:0 0 1.5mm;color:#f6d27b;font-size:17px;line-height:1.05;font-weight:900;letter-spacing:.4px}
+.org{font-size:7px;letter-spacing:1px;font-weight:bold;line-height:1.3}
+.content{position:relative;z-index:3;padding:13mm 5mm 15mm;background:linear-gradient(145deg,#401319,#260f12 55%,#17151b);height:74mm}
+.profile{display:flex;gap:4mm;align-items:flex-start}
+.person{width:28mm;height:38mm;object-fit:cover;border:1.2mm solid #d6aa55;padding:1mm;background:#180d0d;flex:none}
+.details{flex:1;min-width:0}
+.name{font-size:13px;line-height:1.12;font-weight:900;color:#fff;margin:0 0 3mm;text-transform:uppercase;overflow-wrap:anywhere}
+.rowdata{margin:0 0 2.1mm}
+.label{display:block;color:#e7bd68;font-size:7px;font-weight:800;letter-spacing:.5px;margin-bottom:.5mm}
+.value{font-size:8.5px;line-height:1.18;font-weight:700;color:#fff;overflow-wrap:anywhere}
+.meta{margin-top:4mm;border-top:1px solid #c69a4c;padding-top:2.5mm;display:grid;grid-template-columns:1fr 1fr;gap:2mm}
+.qrbox{position:absolute;right:5mm;bottom:14mm;width:22mm;text-align:center;z-index:6;background:#fff;padding:1mm;border:1mm solid #d6aa55}
+.qrbox img{display:block;width:20mm;height:20mm}
+.qrbox small{display:block;color:#301016;font-size:5px;font-weight:bold;margin-top:.5mm}
+.footer{position:absolute;left:5mm;right:30mm;bottom:15mm;color:#f4d58d;font-size:6px;letter-spacing:1px;z-index:6;line-height:1.5}
+@media screen{body{background:#d6d6d6;padding:14px}.kta{margin:0 auto;box-shadow:0 5px 24px #0005}}
+@media print{html,body{width:85mm;height:135mm;background:#fff}.kta{margin:0;box-shadow:none;page-break-after:avoid}}
+</style></head><body>
+<main class="kta">
+${header}
+${logo}
+<div class="headline"><h1 class="title">KARTU TANDA ANGGOTA</h1><div class="org">${esc(cfg.organizationName)}</div></div>
+<div class="gorga top"></div><section class="content">
+<div class="profile"><img class="person" src="${esc(p.photoUrl)}" alt="Foto Pengurus"><div class="details">
+<h2 class="name">${esc(p.nama)}</h2>
+<div class="rowdata"><span class="label">${esc(cfg.jabatanLabel || 'JABATAN')}</span><div class="value">${esc(p.jabatan)}</div></div>
+<div class="rowdata"><span class="label">MARGA / BORU</span><div class="value">${esc(p.subMarga)}</div></div>
+<div class="rowdata"><span class="label">${esc(cfg.wilayahLabel || 'WILAYAH')}</span><div class="value">${esc(p.ktaWilayah || cfg.regionName)}</div></div>
+</div></div>
+<div class="meta"><div><span class="label">NO. KTA</span><div class="value">${esc(p.ktaNumber)}</div></div><div><span class="label">BERLAKU HINGGA</span><div class="value">${esc(cfg.validUntil)}</div></div></div>
+</section><div class="gorga bottom"></div>
+<div class="footer">HORAS • MARSIURUPAN • MARSADA<br>SCAN QR UNTUK MEMBUKA WEBSITE PNTS</div>
+<div class="qrbox"><img src="${qrUrl}" alt="QR Code Website PNTS"><small>pntsduri.my.id</small></div>
+</main><script>
+Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload=r;im.onerror=r}))).then(()=>{if(${autoPrint ? 'true' : 'false'})setTimeout(()=>window.print(),500);});
+<\/script></body></html>`);
+            win.document.close();
+        }
+
 
         function saveAdminContacts() {
             appState.contacts.tiktokUrl = document.getElementById('admContactTiktok').value.trim();
