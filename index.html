@@ -28,13 +28,17 @@
     <meta property="og:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta property="og:description" content="Horas! Selamat datang di Portal Resmi Muda-Mudi Batak Toba Toga Simatupang (Sianturi • Siburian • Togatorop • Boru • Bere & Ibebere) Se-Duri, Bengkalis - Riau.">
     <meta property="og:url" content="https://pntsduri.my.id/">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85">
+    <meta property="og:image:alt" content="Foto kegiatan dalam Album PNTS Se-Duri">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- ==================== 4. TWITTER CARD ==================== -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta name="twitter:description" content="Wadah Persekutuan Muda-Mudi Batak Toba Toga Simatupang (Sianturi, Siburian, Togatorop) di Kota Duri, Riau.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85">
+    <meta name="twitter:image:alt" content="Foto kegiatan dalam Album PNTS Se-Duri">
 
     <!-- ==================== 5. SCHEMA.ORG JSON-LD (KUNCI PENGUBAH NAMA SITUS DI GOOGLE) ==================== -->
     <script type="application/ld+json">
@@ -467,7 +471,7 @@
             <div class="relative rounded-3xl overflow-hidden border-2 border-amber-500/60 shadow-2xl">
                 <div class="relative h-56 sm:h-72 md:h-80 w-full bg-slate-900">
                     <img id="userHeaderBanner" 
-                         src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80" 
+                         src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85" 
                          alt="Header Danau Toba" 
                          onerror="this.src='https://placehold.co/1600x500/7f1d1d/f59e0b?text=DANAU+TOBA+-+PUNGUAN+NAPOSO+TOGA+SIMATUPANG+SE-DURI'"
                          class="w-full h-full object-cover object-center">
@@ -1357,7 +1361,7 @@
 
                         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
                             <label class="block text-xs font-bold uppercase text-amber-300">Foto Banner Header Website</label>
-                            <img id="admPreviewBanner" src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80" alt="Preview Header" class="w-full h-24 rounded-2xl object-cover border-2 border-amber-400">
+                            <img id="admPreviewBanner" src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85" alt="Preview Header" class="w-full h-24 rounded-2xl object-cover border-2 border-amber-400">
                             <input type="file" accept="image/*" onchange="handleAdminFileUpload(event, 'admInputBannerUrl', 'admPreviewBanner')" class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-red-700 file:text-white file:font-bold">
                             <input type="text" id="admInputBannerUrl" placeholder="Atau masukkan URL foto Header..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white">
                         </div>
@@ -1770,7 +1774,7 @@
             // 2. Data Header & Logo
             header: {
                 logoUrl: 'https://placehold.co/180x180/991b1b/fbbf24?text=PNTS+DURI',
-                bannerUrl: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80'
+                bannerUrl: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85'
             },
 
             // 3. Data Tulisan Berjalan
@@ -2444,6 +2448,8 @@
             const badge = document.getElementById('activeRoleBadge');
             const btnUser = document.getElementById('btnSwitchUser');
             const btnAdmin = document.getElementById('btnSwitchAdmin');
+            document.body.classList.toggle('pnts-admin-mode', role === 'admin');
+            if (role === 'admin' && typeof closeKtaPasswordModal === 'function') closeKtaPasswordModal();
 
             if (role === 'admin') {
                 userView.classList.add('hidden');
@@ -3324,9 +3330,10 @@
                     </div>
                     <div class="rounded-xl border border-amber-500/30 bg-slate-950/80 p-3 space-y-2">
                         <label class="block text-[11px] text-amber-300 font-bold">Sandi pribadi cetak KTA (minimal 6 karakter)</label>
-                        <input type="password" id="admPengSandi_${idx}" autocomplete="new-password" placeholder="Isi untuk membuat/mengganti sandi" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
+                        <input type="password" id="admPengSandi_${idx}" autocomplete="new-password" placeholder="Isi sandi baru (minimal 6 karakter)" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
                         <p class="text-[10px] text-slate-400">Sandi disimpan sebagai hash di server dan tidak ditampilkan kepada publik.</p>
-                        <button type="button" onclick="printPengurusKTA('${String(p.id).replace(/'/g, '')}')" class="w-full px-3 py-2 rounded-lg bg-amber-500 text-slate-950 font-black text-xs"><i class="fa-solid fa-id-card mr-1"></i> Cetak / Pratinjau KTA</button>
+                        <button type="button" onclick="savePengurusKtaPassword(${idx})" class="w-full px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Sandi Cetak KTA</button>
+                        <button type="button" onclick="printPengurusKTA('${String(p.id).replace(/'/g, '')}')" class="w-full px-3 py-2 rounded-lg bg-amber-500 text-slate-950 font-black text-xs"><i class="fa-solid fa-id-card mr-1"></i> Cetak / Pratinjau KTA (Admin)</button>
                     </div>
                 </div>
             `).join('');
@@ -3668,6 +3675,42 @@
             callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus]);
         }
 
+        function savePengurusKtaPassword(idx) {
+            if (appState.currentRole !== 'admin') {
+                showToast('Silakan login sebagai Admin untuk menyimpan sandi KTA.', 'danger');
+                return;
+            }
+            syncPengurusInputsToState();
+            const pengurus = (appState.pengurus || [])[idx];
+            const passEl = document.getElementById(`admPengSandi_${idx}`);
+            const password = String(passEl && passEl.value || '').trim();
+            if (!pengurus) {
+                showToast('Data pengurus tidak ditemukan. Muat ulang menu Profil Pengurus.', 'danger');
+                return;
+            }
+            if (password.length < 6 || password.length > 100) {
+                showToast('Sandi cetak KTA wajib diisi minimal 6 dan maksimal 100 karakter.', 'danger');
+                if (passEl) passEl.focus();
+                return;
+            }
+            pengurus.printPassword = password;
+            if (passEl) passEl.disabled = true;
+            callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus], (res) => {
+                (appState.pengurus || []).forEach(p => { delete p.printPassword; });
+                if (passEl) { passEl.value = ''; passEl.disabled = false; }
+                if (res && res.success === false) {
+                    showToast(res.message || 'Sandi cetak KTA gagal disimpan.', 'danger');
+                    return;
+                }
+                showToast(`Sandi cetak KTA untuk ${pengurus.nama || 'pengurus'} berhasil disimpan.`, 'success');
+                refreshStateFromServerSilent();
+            }, () => {
+                (appState.pengurus || []).forEach(p => { delete p.printPassword; });
+                if (passEl) passEl.disabled = false;
+                showToast('Sandi KTA gagal disimpan. Periksa koneksi Google Apps Script lalu coba kembali.', 'danger');
+            });
+        }
+
         function saveAdminPengurus() {
             syncPengurusInputsToState();
             appState.pengurus.forEach((p, idx) => {
@@ -3685,19 +3728,99 @@
             });
         }
 
-        function printPengurusKTA(pengurusId) {
-            const pass = window.prompt('Masukkan sandi pribadi KTA yang diberikan Admin:');
-            if (pass === null) return;
-            if (pass.trim().length < 6) { showToast('Sandi KTA minimal 6 karakter.', 'danger'); return; }
-            callServerSafe('verifikasiCetakKTA', [pengurusId, pass.trim()], (res) => {
-                if (!res || !res.success || !res.pengurus) { showToast((res && res.message) || 'Sandi salah atau KTA tidak aktif.', 'danger'); return; }
+        let pntsPendingKtaPengurusId = '';
+
+        function openKtaPasswordModal(pengurusId) {
+            const target = (appState.pengurus || []).find(p => String(p.id) === String(pengurusId));
+            if (!target) {
+                showToast('Data pengurus tidak ditemukan. Silakan muat ulang halaman.', 'danger');
+                return;
+            }
+            pntsPendingKtaPengurusId = String(pengurusId);
+            const overlay = document.getElementById('pntsKtaPasswordOverlay');
+            const input = document.getElementById('pntsKtaPasswordInput');
+            const error = document.getElementById('pntsKtaPasswordError');
+            const title = document.getElementById('pntsKtaPasswordPengurus');
+            if (title) title.textContent = target.nama || 'Pengurus PNTS';
+            if (input) input.value = '';
+            if (error) { error.textContent = ''; error.classList.add('hidden'); }
+            if (overlay) {
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                window.setTimeout(() => input && input.focus(), 80);
+            }
+        }
+
+        function closeKtaPasswordModal() {
+            const overlay = document.getElementById('pntsKtaPasswordOverlay');
+            if (overlay) {
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden', 'true');
+            }
+            const input = document.getElementById('pntsKtaPasswordInput');
+            if (input) input.value = '';
+            pntsPendingKtaPengurusId = '';
+            document.body.style.overflow = '';
+        }
+
+        function setKtaPasswordError(message) {
+            const error = document.getElementById('pntsKtaPasswordError');
+            if (error) {
+                error.textContent = message || 'Sandi tidak sesuai atau KTA belum diaktifkan Admin.';
+                error.classList.remove('hidden');
+            }
+        }
+
+        function submitKtaPassword(event) {
+            if (event) event.preventDefault();
+            const input = document.getElementById('pntsKtaPasswordInput');
+            const button = document.getElementById('pntsKtaPasswordSubmit');
+            const pass = String(input && input.value || '').trim();
+            const pengurusId = pntsPendingKtaPengurusId;
+            if (!pengurusId) {
+                setKtaPasswordError('Data pengurus tidak ditemukan. Tutup lalu coba kembali.');
+                return;
+            }
+            if (pass.length < 6 || pass.length > 100) {
+                setKtaPasswordError('Sandi KTA harus terdiri dari 6 sampai 100 karakter.');
+                if (input) input.focus();
+                return;
+            }
+            const error = document.getElementById('pntsKtaPasswordError');
+            if (error) error.classList.add('hidden');
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMERIKSA SANDI...';
+            }
+            callServerSafe('verifikasiCetakKTA', [pengurusId, pass], (res) => {
+                if (button) {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA';
+                }
+                if (!res || !res.success || !res.pengurus) {
+                    setKtaPasswordError((res && res.message) || 'Sandi salah atau KTA belum diaktifkan Admin.');
+                    if (input) { input.value = ''; input.focus(); }
+                    return;
+                }
+                closeKtaPasswordModal();
                 const p = res.pengurus;
                 const win = window.open('', '_blank');
                 if (!win) { showToast('Izinkan pop-up browser untuk mencetak KTA.', 'danger'); return; }
-                const esc = v => String(v || '-').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[ch]));
+                const esc = v => String(v || '-').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
                 win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KTA PNTS - ${esc(p.nama)}</title><style>*{box-sizing:border-box}body{margin:0;padding:24px;background:#eee;font-family:Arial,sans-serif}.kta{width:860px;max-width:100%;min-height:500px;margin:auto;position:relative;overflow:hidden;border:7px double #f4c44e;border-radius:24px;padding:28px;color:#fff;background:radial-gradient(circle at 80% 10%,#b45309 0,transparent 28%),linear-gradient(135deg,#160d0d,#7f1d1d 55%,#111827)}.kta:before{content:'ᯤ ᯂ ᯤ ᯂ ᯤ';position:absolute;inset:12px;border:2px solid #fbbf24;opacity:.22;text-align:center;font-size:42px;letter-spacing:18px;padding-top:12px;pointer-events:none}.head{text-align:center;border-bottom:2px solid #fbbf24;padding-bottom:16px;position:relative}.head h1{margin:0;color:#fcd34d;font-size:25px}.head p{margin:5px 0 0;font-size:12px;letter-spacing:3px}.body{display:flex;gap:25px;align-items:center;padding:30px 10px;position:relative}.body img{width:170px;height:205px;object-fit:cover;border:5px solid #fbbf24;border-radius:14px;background:#fff}.details{flex:1}.details h2{font-size:27px;margin:0 0 18px}.line{padding:9px 0;border-bottom:1px solid #ffffff40;font-size:15px}.line b{display:inline-block;width:145px;color:#fcd34d}.foot{text-align:center;color:#fde68a;font-size:11px;letter-spacing:2px;position:relative}@media print{body{padding:0;background:#fff}.kta{width:100%;min-height:500px;print-color-adjust:exact;-webkit-print-color-adjust:exact}}@media(max-width:600px){.body{gap:12px}.body img{width:110px;height:145px}.details h2{font-size:18px}.line{font-size:12px}.line b{width:95px}}</style></head><body><main class="kta"><header class="head"><h1>KARTU TANDA ANGGOTA PENGURUS</h1><p>PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</p></header><section class="body"><img src="${esc(p.photoUrl)}" alt="Foto Pengurus"><div class="details"><h2>${esc(p.nama)}</h2><div class="line"><b>JABATAN</b> ${esc(p.jabatan)}</div><div class="line"><b>MARGA / BORU</b> ${esc(p.subMarga)}</div><div class="line"><b>NO. KTA</b> ${esc(p.ktaNumber)}</div><div class="line"><b>PERIODE</b> ${esc(p.periode || 'Kepengurusan PNTS Se-Duri')}</div></div></section><footer class="foot">HORAS • MARSIURUPAN • MARSADA</footer></main><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`);
                 win.document.close();
-            }, (err) => showToast('Server tidak dapat memverifikasi sandi KTA. Coba kembali.', 'danger'));
+            }, (err) => {
+                if (button) {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA';
+                }
+                setKtaPasswordError('Server tidak dapat memverifikasi sandi. Periksa koneksi lalu coba kembali.');
+            });
+        }
+
+        function printPengurusKTA(pengurusId) {
+            openKtaPasswordModal(pengurusId);
         }
 
         function saveAdminContacts() {
@@ -4411,5 +4534,71 @@
   };
 })();
 </script>
+
+<!-- MODAL VERIFIKASI SANDI KTA PENGURUS - GAYA FORM CETAK PNTS -->
+<style>
+#pntsKtaPasswordOverlay{position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.82);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
+#pntsKtaPasswordOverlay.open{display:flex}
+#pntsKtaPasswordOverlay .pnts-kta-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0f172a;color:#f8fafc;border:1px solid #d6a43b;border-radius:17px;box-shadow:0 24px 75px #000c}
+#pntsKtaPasswordOverlay .pnts-kta-head{display:flex;align-items:center;gap:12px;padding:15px 18px;background:linear-gradient(110deg,#7f1d1d,#35151b 68%,#111827);border-bottom:1px solid #d6a43b}
+#pntsKtaPasswordOverlay .pnts-kta-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:#f59e0b;color:#111827;display:flex;align-items:center;justify-content:center;font-size:17px}
+#pntsKtaPasswordOverlay .pnts-kta-head h2{font-family:Georgia,serif;font-weight:900;color:#fcd34d;font-size:16px;line-height:1.25}
+#pntsKtaPasswordOverlay .pnts-kta-head p{font-size:10px;color:#fde7b0;margin-top:3px}
+#pntsKtaPasswordOverlay .pnts-kta-close{margin-left:auto;background:#111827aa;color:#e2e8f0;border:1px solid #ffffff22;border-radius:8px;padding:7px 10px}
+#pntsKtaPasswordOverlay .pnts-kta-content{padding:20px 22px 22px}
+#pntsKtaPasswordOverlay .pnts-kta-input{width:100%;background:#020617;border:1px solid #d6a43b;border-radius:11px;padding:13px 15px;color:white;text-align:center;font-size:16px;letter-spacing:2px;outline:none}
+#pntsKtaPasswordOverlay .pnts-kta-input:focus{box-shadow:0 0 0 3px #f59e0b33;border-color:#fbbf24}
+#pntsKtaPasswordOverlay .pnts-kta-submit{width:100%;margin-top:13px;border:0;border-radius:11px;background:#f59e0b;color:#111827;padding:13px;font-weight:900;cursor:pointer}
+#pntsKtaPasswordOverlay .pnts-kta-submit:disabled{opacity:.65;cursor:wait}
+#pntsKtaPasswordOverlay .pnts-kta-footer{padding:12px 18px;background:#020617;border-top:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+#pntsKtaPasswordOverlay .pnts-kta-error{margin-top:10px;padding:9px 11px;border:1px solid #ef444466;border-radius:9px;background:#7f1d1d55;color:#fecaca;font-size:12px}
+#pntsKtaPasswordOverlay .pnts-kta-cancel{background:#334155;color:#e2e8f0;border-radius:9px;padding:8px 15px;font-size:12px;font-weight:800}
+body.pnts-admin-mode #batakTortorWidget,
+body.pnts-admin-mode #pntsComplaintLauncher,
+body.pnts-admin-mode #pntsComplaintOverlay,
+body.pnts-admin-mode #pntsKtaPasswordOverlay{display:none!important}
+@media(max-width:480px){#pntsKtaPasswordOverlay .pnts-kta-content{padding:16px}#pntsKtaPasswordOverlay .pnts-kta-head{padding:13px}#pntsKtaPasswordOverlay .pnts-kta-head h2{font-size:14px}}
+</style>
+<div id="pntsKtaPasswordOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="pntsKtaPasswordTitle">
+  <section class="pnts-kta-modal">
+    <header class="pnts-kta-head">
+      <div class="pnts-kta-icon"><i class="fa-solid fa-id-card"></i></div>
+      <div>
+        <h2 id="pntsKtaPasswordTitle">VERIFIKASI SANDI KTA PENGURUS</h2>
+        <p>Masukkan sandi pribadi KTA yang diberikan Admin</p>
+      </div>
+      <button type="button" class="pnts-kta-close" onclick="closeKtaPasswordModal()" aria-label="Tutup">✕</button>
+    </header>
+    <form class="pnts-kta-content" onsubmit="submitKtaPassword(event)">
+      <label for="pntsKtaPasswordInput" class="block text-xs font-semibold text-slate-200 mb-2">Sandi KTA untuk:</label>
+      <div id="pntsKtaPasswordPengurus" class="text-sm font-extrabold text-amber-300 mb-3">Pengurus PNTS</div>
+      <input id="pntsKtaPasswordInput" class="pnts-kta-input" type="password" minlength="6" maxlength="100" autocomplete="current-password" placeholder="MASUKKAN SANDI PRIBADI" required>
+      <div id="pntsKtaPasswordError" class="pnts-kta-error hidden" role="alert"></div>
+      <button id="pntsKtaPasswordSubmit" type="submit" class="pnts-kta-submit"><i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA</button>
+    </form>
+    <footer class="pnts-kta-footer">
+      <span class="text-[10px] text-slate-400">Sandi diverifikasi langsung oleh server PNTS</span>
+      <button type="button" class="pnts-kta-cancel" onclick="closeKtaPasswordModal()">Tutup</button>
+    </footer>
+  </section>
+</div>
+<script>
+(function(){
+  const overlay=document.getElementById('pntsKtaPasswordOverlay');
+  if(overlay){
+    overlay.addEventListener('click',function(e){if(e.target===overlay)closeKtaPasswordModal();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))closeKtaPasswordModal();});
+  }
+  // Sinkronkan visibilitas elemen khusus pengunjung dengan role aktif.
+  const admin=document.getElementById('adminAppView');
+  const observer=new MutationObserver(function(){
+    const isAdmin=admin&&!admin.classList.contains('hidden');
+    document.body.classList.toggle('pnts-admin-mode',!!isAdmin);
+  });
+  if(admin)observer.observe(admin,{attributes:true,attributeFilter:['class']});
+  document.body.classList.toggle('pnts-admin-mode',!!(admin&&!admin.classList.contains('hidden')));
+})();
+</script>
+
 </body>
 </html>
