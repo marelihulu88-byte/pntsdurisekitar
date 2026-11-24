@@ -370,7 +370,9 @@
         // =====================================================================
         // 1. CONSTANTS & REALISTIC SEED DATA (PUNGUAN TOGA NAPOSO SIMATUPANG)
         // =====================================================================
-        const STORAGE_KEY = 'punguan_toga_naposo_simatupang_v1';
+        const STORAGE_KEY = 'punguan_toga_naposo_simatupang_v2_github_drive';
+        // Tempel URL Web App Google Apps Script yang berakhiran /exec di sini.
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxJnL2X5AadYdUpBEMkEWxaYWAw01PHctsfT_zqjJ6fWvfMjGp2TJTEgrzOQhfvr_te4g/exec';
 
         const DEFAULT_DATA = {
             adminAuth: {
@@ -381,7 +383,7 @@
                 orgName: 'Punguan Naposo Toga Simatupang Se-Duri',
                 orgSubtitle: 'Anak - Boru - dohot Bere',
                 motto: 'Horas! Sada Roha, Sada Pikkiran, Marsiurupan',
-                heroDesc: 'Wadah persatuan dan kekeluargaan generasi muda (Naposo) keturunan Toga Simatupang Se-Duri — Togatorop, Sianturi, dan Siburian — beserta Anak - Boru - dohot Bere untuk saling menopang dalam adat, iman, dan karya.',
+                heroDesc: 'Wadah persatuan dan kekeluargaan generasi muda (Naposo) keturunan Toga Simatupang Se-Duri â€” Togatorop, Sianturi, dan Siburian â€” beserta Anak - Boru - dohot Bere untuk saling menopang dalam adat, iman, dan karya.',
                 tickerText: 'HORAS! Undangan Partangiangan Bulanan & Arisan Punguan Naposo Toga Simatupang Se-Duri pada Minggu, 14 Desember 2026 pukul 15.00 WIB di Sektor Pusat. Diharapkan kehadiran seluruh Anak - Boru - dohot Bere!',
                 maintenanceMessage: 'Horas! Situs resmi Punguan Naposo Toga Simatupang Se-Duri Anak - Boru - dohot Bere sedang dalam pemeliharaan berkala oleh pengurus. Silakan kembali beberapa saat lagi atau hubungi Sekretaris Punguan via WhatsApp.',
                 address: 'Sekretariat Punguan Naposo Toga Simatupang Se-Duri, Kota Duri, Kab. Bengkalis, Riau',
@@ -565,13 +567,110 @@
         let sessionVisitLogged = false;
         let gasSaveTimer = null;
         let isCloudSyncing = false;
+        let gasBridgeFrame = null;
+        let gasBridgeReady = false;
+        let gasCloudDataReady = false;
+        let gasBridgeReadyResolver = null;
+        let gasBridgeRequestId = 0;
+        const gasBridgePending = new Map();
 
-        /**
-         * Detects whether the app is currently running inside Google Apps Script Web App.
-         */
-        function isGasEnvironment() {
-            return typeof google !== 'undefined' && google.script && google.script.run;
+        function isGasConfigured() {
+            return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:$|[?#])/.test(String(GAS_WEB_APP_URL || '').trim());
         }
+
+        function showCloudStartup(message, failed = false) {
+            let cover = document.getElementById('pnts-cloud-startup-cover');
+            if (!cover) {
+                cover = document.createElement('div');
+                cover.id = 'pnts-cloud-startup-cover';
+                cover.style.cssText = 'position:fixed;inset:0;z-index:10000;background:#09090B;color:#F8FAFC;display:flex;align-items:center;justify-content:center;padding:24px;font-family:Inter,Arial,sans-serif;text-align:center;';
+                document.body.appendChild(cover);
+            }
+            cover.innerHTML = `<div style="max-width:440px"><div style="font-size:22px;font-weight:800;margin-bottom:12px">${failed ? 'Koneksi Database Belum Berhasil' : 'Menghubungkan Website...'}</div><p style="color:#cbd5e1;line-height:1.6">${message}</p>${failed ? '<button onclick="retryCloudConnection()" style="margin-top:18px;padding:12px 20px;border-radius:10px;background:#dc2626;color:white;font-weight:700">Coba Hubungkan Lagi</button>' : '<div style="margin:22px auto 0;width:28px;height:28px;border:3px solid #475569;border-top-color:#fbbf24;border-radius:50%;animation:pntsSpin 1s linear infinite"></div>'}</div>`;
+            if (!document.getElementById('pnts-cloud-spin-style')) {
+                const style = document.createElement('style'); style.id = 'pnts-cloud-spin-style'; style.textContent = '@keyframes pntsSpin{to{transform:rotate(360deg)}}'; document.head.appendChild(style);
+            }
+        }
+
+        function hideCloudStartup() {
+            const cover = document.getElementById('pnts-cloud-startup-cover');
+            if (cover) cover.remove();
+        }
+
+        function initGasBridge() {
+            if (!isGasConfigured()) return;
+            showCloudStartup('Mohon tunggu. Website sedang mengambil data dari database baru. Data lama tidak disentuh.');
+            try {
+                const bridgeUrl = new URL(GAS_WEB_APP_URL);
+                bridgeUrl.searchParams.set('bridge', '1');
+                gasBridgeFrame = document.createElement('iframe');
+                gasBridgeFrame.id = 'pnts-gas-bridge-frame';
+                gasBridgeFrame.title = 'Koneksi aman Google Apps Script';
+                gasBridgeFrame.src = bridgeUrl.toString();
+                gasBridgeFrame.setAttribute('aria-hidden', 'true');
+                gasBridgeFrame.style.cssText = 'position:absolute;width:1px;height:1px;left:-10000px;top:-10000px;border:0;';
+                document.body.appendChild(gasBridgeFrame);
+            } catch (err) {
+                showCloudStartup('URL Google Apps Script belum benar. Periksa pengaturan GAS_WEB_APP_URL di bagian atas file index.html.', true);
+            }
+        }
+
+        window.addEventListener('message', (event) => {
+            if (!gasBridgeFrame || event.source !== gasBridgeFrame.contentWindow) return;
+            const data = event.data || {};
+            if (data.type === 'PNTS_BRIDGE_READY') {
+                gasBridgeReady = true;
+                if (gasBridgeReadyResolver) { gasBridgeReadyResolver(); gasBridgeReadyResolver = null; }
+                return;
+            }
+            if (data.type === 'PNTS_BRIDGE_RESPONSE' && data.id && gasBridgePending.has(data.id)) {
+                const pending = gasBridgePending.get(data.id);
+                gasBridgePending.delete(data.id);
+                clearTimeout(pending.timer);
+                if (data.success) pending.resolve(data.result);
+                else pending.reject(new Error(data.error || 'Permintaan ke Google Apps Script gagal.'));
+            }
+        });
+
+        function waitForGasBridge(timeoutMs = 25000) {
+            if (gasBridgeReady) return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                const timer = setTimeout(() => { gasBridgeReadyResolver = null; reject(new Error('Penghubung Google Apps Script tidak merespons. Periksa URL deployment dan akses Web App.')); }, timeoutMs);
+                gasBridgeReadyResolver = () => { clearTimeout(timer); resolve(); };
+            });
+        }
+
+        async function gasBridgeRequest(action, payload = {}, timeoutMs = 60000) {
+            if (!isGasConfigured()) throw new Error('URL Google Apps Script belum dipasang di index.html.');
+            await waitForGasBridge();
+            const id = 'pnts_' + (++gasBridgeRequestId) + '_' + Date.now();
+            return new Promise((resolve, reject) => {
+                const timer = setTimeout(() => { gasBridgePending.delete(id); reject(new Error('Waktu tunggu Google Apps Script habis. Silakan coba lagi.')); }, timeoutMs);
+                gasBridgePending.set(id, { resolve, reject, timer });
+                gasBridgeFrame.contentWindow.postMessage({ type: 'PNTS_BRIDGE_REQUEST', id, action, payload }, '*');
+            });
+        }
+
+        async function uploadImageToCloud(dataUrl, category, originalName) {
+            if (!dataUrl || !String(dataUrl).startsWith('data:image/')) return dataUrl || '';
+            const result = await gasBridgeRequest('uploadImage', { dataUrl, category, originalName: originalName || 'foto.jpg' }, 90000);
+            if (!result || !result.success || !result.url) throw new Error((result && result.message) || 'Foto gagal disimpan ke Google Drive.');
+            return result.url;
+        }
+
+        async function retryCloudConnection() {
+            const cover = document.getElementById('pnts-cloud-startup-cover');
+            if (cover) cover.remove();
+            if (gasBridgeFrame) gasBridgeFrame.remove();
+            gasBridgeFrame = null; gasBridgeReady = false; gasCloudDataReady = false;
+            initGasBridge();
+            try { await syncFromGoogleSheets(true); }
+            catch (err) { showCloudStartup(err.message || 'Koneksi gagal.', true); }
+        }
+
+
+        /** GitHub Pages memakai iframe penghubung untuk berbicara dengan Apps Script. */
+        function isGasEnvironment() { return isGasConfigured(); }
 
         /**
          * Merges raw parsed data with DEFAULT_DATA and applies name migrations safely.
@@ -620,87 +719,59 @@
             }
         }
 
-        /**
-         * Saves current appData to localStorage and syncs automatically to Google Sheets when in GAS.
-         */
+        /** Simpan cache browser dan, bila sudah tersambung, kirim ke database Google Sheets baru. */
         function saveData(skipCloud = false) {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             } catch (err) {
-                console.error('Gagal menyimpan data ke localStorage:', err);
-                showToast('Gagal menyimpan data ke penyimpanan browser.', 'error');
+                console.error('Gagal menyimpan data ke penyimpanan browser:', err);
+                showToast('Gagal menyimpan cache browser. Periksa ruang penyimpanan.', 'error');
             }
-
-            if (!skipCloud && isGasEnvironment()) {
-                scheduleCloudSave();
-            }
+            if (!skipCloud && isGasConfigured() && gasCloudDataReady) scheduleCloudSave();
         }
 
-        /**
-         * Debounced cloud sync to Google Apps Script (Code.gs -> saveAppData).
-         */
         function scheduleCloudSave(immediate = false) {
-            if (!isGasEnvironment()) return;
+            if (!isGasConfigured() || !gasCloudDataReady) return;
             if (gasSaveTimer) clearTimeout(gasSaveTimer);
-
-            const runSync = () => {
+            const runSync = async () => {
                 isCloudSyncing = true;
                 try {
-                    google.script.run
-                        .withSuccessHandler((res) => {
-                            isCloudSyncing = false;
-                            if (res && res.success === false) {
-                                console.error('GAS saveAppData error:', res.message);
-                                showToast('Sinkronisasi Google Sheets gagal: ' + res.message, 'error');
-                            }
-                        })
-                        .withFailureHandler((err) => {
-                            isCloudSyncing = false;
-                            console.error('GAS saveAppData failure:', err);
-                            showToast('Gagal terhubung ke Google Sheets saat menyimpan data.', 'error');
-                        })
-                        .saveAppData(JSON.stringify(appData));
+                    const res = await gasBridgeRequest('saveData', { jsonString: JSON.stringify(appData) });
+                    if (res && res.success === false) throw new Error(res.message || 'Gagal menyimpan data.');
                 } catch (err) {
-                    isCloudSyncing = false;
-                    console.error('GAS run error:', err);
-                }
+                    console.error('Gagal sinkronisasi Google Sheets:', err);
+                    showToast('Gagal menyimpan ke Google Sheets: ' + err.message, 'error');
+                } finally { isCloudSyncing = false; }
             };
-
-            if (immediate) runSync();
-            else gasSaveTimer = setTimeout(runSync, 450);
+            if (immediate) runSync(); else gasSaveTimer = setTimeout(runSync, 500);
         }
 
-        /**
-         * Fetches latest database state from Google Sheets on startup (Code.gs -> getAppData).
-         */
-        function syncFromGoogleSheets(showNotif = false) {
-            if (!isGasEnvironment()) return;
+        async function syncFromGoogleSheets(showNotif = false) {
+            if (!isGasConfigured()) return;
             try {
-                google.script.run
-                    .withSuccessHandler((jsonStr) => {
-                        if (jsonStr && typeof jsonStr === 'string' && jsonStr.trim()) {
-                            try {
-                                const parsed = JSON.parse(jsonStr);
-                                appData = mergeWithDefaultData(parsed);
-                                saveData(true); // Update cache lokal tanpa loop kirim balik
-                                if (currentView === 'public') renderPublicPortal();
-                                else if (currentView === 'admin') renderAdminDashboard();
-                                if (showNotif) showToast('Data berhasil disinkronkan dari Google Sheets.', 'success');
-                            } catch (parseErr) {
-                                console.error('Gagal parsing JSON dari Google Sheets:', parseErr);
-                            }
-                        } else {
-                            // Database Google Sheets masih kosong -> unggah data awal otomatis
-                            scheduleCloudSave(true);
-                        }
-                    })
-                    .withFailureHandler((err) => {
-                        console.error('Gagal memuat data dari Google Sheets:', err);
-                        if (showNotif) showToast('Gagal memuat data dari Google Sheets.', 'error');
-                    })
-                    .getAppData();
+                const jsonStr = await gasBridgeRequest('getData', {}, 60000);
+                if (jsonStr && typeof jsonStr === 'string' && jsonStr.trim()) {
+                    const parsed = JSON.parse(jsonStr);
+                    appData = mergeWithDefaultData(parsed);
+                    saveData(true);
+                    if (currentView === 'public') renderPublicPortal();
+                    else if (currentView === 'admin') renderAdminDashboard();
+                    gasCloudDataReady = true;
+                    hideCloudStartup();
+                    if (showNotif) showToast('Data berhasil dimuat dari Google Sheets baru.', 'success');
+                } else {
+                    // Spreadsheet baru memang kosong: isi pertama kali dengan data awal aplikasi baru.
+                    const initialJson = JSON.stringify(appData);
+                    const saved = await gasBridgeRequest('saveData', { jsonString: initialJson }, 90000);
+                    if (!saved || saved.success === false) throw new Error((saved && saved.message) || 'Gagal membuat data awal.');
+                    gasCloudDataReady = true;
+                    hideCloudStartup();
+                    if (showNotif) showToast('Database baru berhasil disiapkan.', 'success');
+                }
             } catch (err) {
-                console.error('GAS getAppData error:', err);
+                console.error('Gagal menghubungkan database:', err);
+                showCloudStartup(err.message || 'Tidak dapat mengambil data dari database baru.', true);
+                throw err;
             }
         }
 
@@ -1336,7 +1407,7 @@
                                     <div class="min-w-0">
                                         <span class="inline-block px-2.5 py-0.5 rounded-md bg-gorga-600/20 text-red-300 text-[11px] font-bold uppercase tracking-wider mb-1">${escapeHtml(p.role)}</span>
                                         <h4 class="text-base font-bold text-white truncate">${escapeHtml(p.name)}</h4>
-                                        <p class="text-xs text-slate-400 mt-0.5">${escapeHtml(p.marga)} ${p.period ? '• ' + escapeHtml(p.period) : ''}</p>
+                                        <p class="text-xs text-slate-400 mt-0.5">${escapeHtml(p.marga)} ${p.period ? 'â€¢ ' + escapeHtml(p.period) : ''}</p>
                                     </div>
                                 </div>
                             `).join('')}
@@ -1569,7 +1640,7 @@
                                                 </div>
                                                 <div>
                                                     <h4 class="text-sm font-bold text-white">${escapeHtml(rev.name)}</h4>
-                                                    <p class="text-xs text-slate-400">${escapeHtml(rev.role || 'Pengunjung')} • ${formatDateIndo(rev.date)}</p>
+                                                    <p class="text-xs text-slate-400">${escapeHtml(rev.role || 'Pengunjung')} â€¢ ${formatDateIndo(rev.date)}</p>
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-0.5 shrink-0">
@@ -1775,8 +1846,8 @@
                         </div>
 
                         <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-                            <p>&copy; ${new Date().getFullYear()} ${escapeHtml(s.orgName)} — ${escapeHtml(s.orgSubtitle)}. Horas!</p>
-                            <p>Togatorop • Sianturi • Siburian • Boru • Bere</p>
+                            <p>&copy; ${new Date().getFullYear()} ${escapeHtml(s.orgName)} â€” ${escapeHtml(s.orgSubtitle)}. Horas!</p>
+                            <p>Togatorop â€¢ Sianturi â€¢ Siburian â€¢ Boru â€¢ Bere</p>
                         </div>
                     </div>
                 </footer>
@@ -1944,7 +2015,7 @@
             }
         }
 
-        function handlePublicRegistration(e) {
+        async function handlePublicRegistration(e) {
             e.preventDefault();
             const name = document.getElementById('reg-name').value.trim();
             const gender = document.getElementById('reg-gender').value;
@@ -1964,6 +2035,17 @@
                 return;
             }
 
+            let memberPhotoUrl = pendingRegPhotoData || '';
+            if (memberPhotoUrl.startsWith('data:image/')) {
+                try {
+                    showToast('Mengunggah pas foto ke Google Drive...', 'info');
+                    memberPhotoUrl = await uploadImageToCloud(memberPhotoUrl, 'Pendaftaran Anggota', 'pas-foto-' + Date.now() + '.jpg');
+                } catch (err) {
+                    showToast('Pendaftaran belum disimpan karena foto gagal diunggah: ' + err.message, 'error');
+                    return;
+                }
+            }
+
             const newMember = {
                 id: generateId('m'),
                 name,
@@ -1976,7 +2058,7 @@
                 whatsapp,
                 sector,
                 reason,
-                photo: pendingRegPhotoData || '',
+                photo: memberPhotoUrl,
                 verification: 'pending',
                 joinedAt: new Date().toISOString().split('T')[0]
             };
@@ -2000,17 +2082,17 @@
                 `*HORAS! PENDAFTARAN ANGGOTA BARU*`,
                 `_${appData.settings.orgName}_`,
                 ``,
-                `• *Nama Lengkap:* ${newMember.name}`,
-                `• *Jenis Kelamin:* ${newMember.gender}`,
-                `• *Status:* ${newMember.status}`,
-                `• *Marga / Sub-Marga:* ${newMember.marga}`,
-                `• *Tubuni Br.:* ${newMember.tubuniBr}`,
-                `• *Asal (Huta):* ${newMember.huta}`,
-                `• *Aktivitas:* ${newMember.activity}`,
-                `• *Sektor Domisili:* ${newMember.sector}`,
-                `• *No. WhatsApp:* ${newMember.whatsapp}`,
-                `• *Alasan Bergabung:* ${newMember.reason}`,
-                `• *Tanggal Daftar:* ${formatDateIndo(newMember.joinedAt)}`,
+                `â€¢ *Nama Lengkap:* ${newMember.name}`,
+                `â€¢ *Jenis Kelamin:* ${newMember.gender}`,
+                `â€¢ *Status:* ${newMember.status}`,
+                `â€¢ *Marga / Sub-Marga:* ${newMember.marga}`,
+                `â€¢ *Tubuni Br.:* ${newMember.tubuniBr}`,
+                `â€¢ *Asal (Huta):* ${newMember.huta}`,
+                `â€¢ *Aktivitas:* ${newMember.activity}`,
+                `â€¢ *Sektor Domisili:* ${newMember.sector}`,
+                `â€¢ *No. WhatsApp:* ${newMember.whatsapp}`,
+                `â€¢ *Alasan Bergabung:* ${newMember.reason}`,
+                `â€¢ *Tanggal Daftar:* ${formatDateIndo(newMember.joinedAt)}`,
                 ``,
                 `Mohon verifikasi di Portal Admin. Mauliate!`
             ].join('\n');
@@ -2053,7 +2135,7 @@
                             <div>
                                 <h1 style="margin: 0; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">${escapeHtml(s.orgName)}</h1>
                                 <p style="margin: 2px 0 0; font-size: 13px; font-weight: 700; color: #b91c1c;">${escapeHtml(s.orgSubtitle)}</p>
-                                <p style="margin: 2px 0 0; font-size: 11px; color: #4b5563;">${escapeHtml(s.address)} • WA: ${escapeHtml(s.whatsapp)}</p>
+                                <p style="margin: 2px 0 0; font-size: 11px; color: #4b5563;">${escapeHtml(s.address)} â€¢ WA: ${escapeHtml(s.whatsapp)}</p>
                             </div>
                         </div>
                         <div style="text-align: right; font-size: 11px; color: #4b5563;">
@@ -2140,7 +2222,7 @@
                         <p><strong class="text-slate-400">Marga/Status:</strong> ${escapeHtml(member.marga)} (${escapeHtml(member.status)})</p>
                         <p><strong class="text-slate-400">Tubuni Br.:</strong> ${escapeHtml(member.tubuniBr)}</p>
                         <p><strong class="text-slate-400">Asal (Huta):</strong> ${escapeHtml(member.huta)}</p>
-                        <p><strong class="text-slate-400">Aktivitas:</strong> ${escapeHtml(member.activity)} • ${escapeHtml(member.gender)}</p>
+                        <p><strong class="text-slate-400">Aktivitas:</strong> ${escapeHtml(member.activity)} â€¢ ${escapeHtml(member.gender)}</p>
                         <p><strong class="text-slate-400">Sektor:</strong> ${escapeHtml(member.sector)}</p>
                     </div>
                 </div>
@@ -2291,49 +2373,20 @@
 
             const mailtoUrl = `mailto:${encodeURIComponent(adminEmail)}?subject=${encodeURIComponent(fullSubject)}&body=${encodeURIComponent(fullBody)}`;
 
-            // Jika berjalan di Google Apps Script, kirim email langsung lewat server (Code.gs -> sendComplaintEmail)
+            // GitHub Pages mengirim pengaduan melalui iframe penghubung Apps Script.
             if (isGasEnvironment()) {
-                openModal(`
-                    <div class="text-center py-6">
-                        <div class="w-12 h-12 mx-auto rounded-full border-2 border-emas-400 border-t-transparent animate-spin mb-4"></div>
-                        <h3 class="text-base font-bold text-white">Mengirim Pengaduan ke Email Admin...</h3>
-                        <p class="text-xs text-slate-400 mt-1">Mohon tunggu sebentar.</p>
-                    </div>
-                `);
-
-                google.script.run
-                    .withSuccessHandler((res) => {
+                openModal(`<div class="text-center py-6"><div class="w-12 h-12 mx-auto rounded-full border-2 border-emas-400 border-t-transparent animate-spin mb-4"></div><h3 class="text-base font-bold text-white">Mengirim Pengaduan ke Email Admin...</h3><p class="text-xs text-slate-400 mt-1">Mohon tunggu sebentar.</p></div>`);
+                gasBridgeRequest('sendComplaint', { payload: { name, contact, subject, message } })
+                    .then((res) => {
                         if (res && res.success) {
-                            openModal(`
-                                <div class="text-center">
-                                    <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mb-3">
-                                        <i data-lucide="mail-check" class="w-7 h-7 text-emerald-400"></i>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-white">Pengaduan Terkirim!</h3>
-                                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                                        Pesan pengaduan Anda telah dikirim langsung ke email Admin (<strong class="text-emas-300">${escapeHtml(adminEmail)}</strong>). Terima kasih!
-                                    </p>
-                                    <div class="mt-5">
-                                        <button type="button" onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-gorga-600 hover:bg-gorga-500 text-xs text-white font-bold">
-                                            Selesai
-                                        </button>
-                                    </div>
-                                </div>
-                            `);
-                            showToast('Pengaduan berhasil dikirim langsung ke email Admin.', 'success');
+                            openModal(`<div class="text-center"><div class="text-lg font-bold text-white">Pengaduan Terkirim!</div><p class="text-xs text-slate-300 mt-2">Pesan berhasil dikirim ke email Admin.</p><button type="button" onclick="closeModal()" class="mt-5 w-full py-2.5 rounded-xl bg-gorga-600 text-xs text-white font-bold">Selesai</button></div>`);
+                            showToast('Pengaduan berhasil dikirim ke email Admin.', 'success');
                         } else {
-                            // Fallback ke mailto jika server MailApp gagal
-                            window.location.href = mailtoUrl;
-                            showToast((res && res.message) || 'Membuka aplikasi email Anda...', 'info');
+                            showToast((res && res.message) || 'Pengaduan gagal dikirim.', 'error');
                             closeModal();
                         }
                     })
-                    .withFailureHandler(() => {
-                        window.location.href = mailtoUrl;
-                        showToast('Membuka aplikasi email Anda untuk mengirim pengaduan.', 'info');
-                        closeModal();
-                    })
-                    .sendComplaintEmail({ name, contact, subject, message });
+                    .catch((err) => { showToast('Pengaduan gagal dikirim: ' + err.message, 'error'); closeModal(); });
                 return;
             }
 
@@ -2557,7 +2610,7 @@
                                     <div class="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between gap-3">
                                         <div class="min-w-0">
                                             <p class="text-sm font-bold text-white truncate">${escapeHtml(m.name)}</p>
-                                            <p class="text-xs text-slate-400">${escapeHtml(m.marga)} • ${escapeHtml(m.status)} • ${escapeHtml(m.sector)}</p>
+                                            <p class="text-xs text-slate-400">${escapeHtml(m.marga)} â€¢ ${escapeHtml(m.status)} â€¢ ${escapeHtml(m.sector)}</p>
                                         </div>
                                         <div class="flex items-center gap-1.5 shrink-0">
                                             <button onclick="approveMember('${m.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">Setujui</button>
@@ -2745,10 +2798,12 @@
             if (!file) return;
             try {
                 const compressed = await compressImageFile(file, 256, 256, 0.85);
-                appData.settings.customLogo = compressed;
+                showToast('Mengunggah logo ke Google Drive...', 'info');
+                const driveUrl = await uploadImageToCloud(compressed, 'Logo Website', 'logo-pntsduri-' + Date.now() + '.jpg');
+                appData.settings.customLogo = driveUrl;
                 saveData();
                 renderAdminDashboard();
-                showToast('Logo website berhasil diperbarui secara real-time!', 'success');
+                showToast('Logo berhasil disimpan di Google Drive dan diperbarui!', 'success');
             } catch (err) {
                 showToast(err.message || 'Gagal mengunggah logo.', 'error');
             }
@@ -2800,10 +2855,10 @@
                                                 <h4 class="text-sm font-bold text-white truncate">${escapeHtml(m.name)}</h4>
                                                 <span class="px-2 py-0.5 rounded-md border text-[10px] font-bold uppercase shrink-0 ${getStatusBadgeClass(m.status)}">${escapeHtml(m.status)}</span>
                                             </div>
-                                            <p class="text-xs text-slate-300 mt-1">Marga: ${escapeHtml(m.marga)} • ${escapeHtml(m.gender || '-')}</p>
-                                            <p class="text-xs text-slate-400 mt-0.5">Tubuni: ${escapeHtml(m.tubuniBr || '-')} • Huta: ${escapeHtml(m.huta || '-')}</p>
-                                            <p class="text-xs text-slate-400 mt-0.5">${escapeHtml(m.activity || '-')} • Sektor: ${escapeHtml(m.sector)}</p>
-                                            <p class="text-xs text-slate-400 mt-0.5">WA: ${escapeHtml(m.whatsapp)} • Daftar: ${formatDateIndo(m.joinedAt)}</p>
+                                            <p class="text-xs text-slate-300 mt-1">Marga: ${escapeHtml(m.marga)} â€¢ ${escapeHtml(m.gender || '-')}</p>
+                                            <p class="text-xs text-slate-400 mt-0.5">Tubuni: ${escapeHtml(m.tubuniBr || '-')} â€¢ Huta: ${escapeHtml(m.huta || '-')}</p>
+                                            <p class="text-xs text-slate-400 mt-0.5">${escapeHtml(m.activity || '-')} â€¢ Sektor: ${escapeHtml(m.sector)}</p>
+                                            <p class="text-xs text-slate-400 mt-0.5">WA: ${escapeHtml(m.whatsapp)} â€¢ Daftar: ${formatDateIndo(m.joinedAt)}</p>
                                             ${m.reason ? `<p class="text-[11px] text-slate-300 mt-1.5 italic bg-white/5 p-2 rounded-lg">"${escapeHtml(m.reason)}"</p>` : ''}
                                         </div>
                                     </div>
@@ -2875,8 +2930,8 @@
                                                 ${m.photo ? `<img src="${m.photo}" class="w-9 h-11 rounded-lg object-cover border border-white/15 shrink-0">` : ''}
                                                 <div>
                                                     <p class="font-bold text-white">${escapeHtml(m.name)}</p>
-                                                    <p class="text-xs text-slate-400">${escapeHtml(m.marga)} ${m.tubuniBr ? '• Tubuni ' + escapeHtml(m.tubuniBr) : ''}</p>
-                                                    ${m.huta || m.activity ? `<p class="text-[11px] text-slate-500">${escapeHtml(m.huta || '-')} • ${escapeHtml(m.activity || '-')}</p>` : ''}
+                                                    <p class="text-xs text-slate-400">${escapeHtml(m.marga)} ${m.tubuniBr ? 'â€¢ Tubuni ' + escapeHtml(m.tubuniBr) : ''}</p>
+                                                    ${m.huta || m.activity ? `<p class="text-[11px] text-slate-500">${escapeHtml(m.huta || '-')} â€¢ ${escapeHtml(m.activity || '-')}</p>` : ''}
                                                 </div>
                                             </div>
                                         </td>
@@ -3027,7 +3082,7 @@
                                 </div>
                                 <h4 class="text-base font-bold text-white">${escapeHtml(ev.title)}</h4>
                                 <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">${escapeHtml(ev.description)}</p>
-                                <p class="text-xs text-slate-400 mt-3"><strong class="text-slate-200">Waktu:</strong> ${escapeHtml(ev.time)} • <strong class="text-slate-200">Lokasi:</strong> ${escapeHtml(ev.location)}</p>
+                                <p class="text-xs text-slate-400 mt-3"><strong class="text-slate-200">Waktu:</strong> ${escapeHtml(ev.time)} â€¢ <strong class="text-slate-200">Lokasi:</strong> ${escapeHtml(ev.location)}</p>
                             </div>
                             <div class="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
                                 <button onclick="openEventModal('${ev.id}')" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-emas-500/20 text-xs font-semibold text-slate-200 hover:text-emas-300 transition">Edit</button>
@@ -3246,7 +3301,7 @@
             }
         }
 
-        function handleSaveAlbum(e) {
+        async function handleSaveAlbum(e) {
             e.preventDefault();
             if (!pendingAlbumPhotoData) {
                 showToast('Silakan pilih file foto terlebih dahulu.', 'error');
@@ -3257,13 +3312,23 @@
             const date = document.getElementById('mod-alb-date').value;
             const caption = document.getElementById('mod-alb-caption').value.trim();
 
+            let albumImageUrl = pendingAlbumPhotoData;
+            if (albumImageUrl.startsWith('data:image/')) {
+                try {
+                    showToast('Mengunggah foto album ke Google Drive...', 'info');
+                    albumImageUrl = await uploadImageToCloud(albumImageUrl, 'Album Kegiatan', 'album-' + Date.now() + '.jpg');
+                } catch (err) {
+                    showToast('Album belum disimpan karena foto gagal diunggah: ' + err.message, 'error');
+                    return;
+                }
+            }
             appData.albums.unshift({
                 id: generateId('alb'),
                 title,
                 category,
                 date,
                 caption,
-                image: pendingAlbumPhotoData
+                image: albumImageUrl
             });
             pendingAlbumPhotoData = '';
             saveData();
@@ -3441,7 +3506,7 @@
                                         <div class="min-w-0">
                                             <span class="text-[11px] font-bold uppercase text-emas-400">${escapeHtml(p.role)}</span>
                                             <p class="text-sm font-bold text-white truncate">${escapeHtml(p.name)}</p>
-                                            <p class="text-xs text-slate-400 truncate">${escapeHtml(p.marga)} ${p.period ? '• ' + escapeHtml(p.period) : ''}</p>
+                                            <p class="text-xs text-slate-400 truncate">${escapeHtml(p.marga)} ${p.period ? 'â€¢ ' + escapeHtml(p.period) : ''}</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-1 shrink-0">
@@ -3634,14 +3699,24 @@
             refreshIcons();
         }
 
-        function handleSaveBphModal(e, editId) {
+        async function handleSaveBphModal(e, editId) {
             e.preventDefault();
+            let bphPhotoUrl = pendingBphPhotoData || '';
+            if (bphPhotoUrl.startsWith('data:image/')) {
+                try {
+                    showToast('Mengunggah foto pengurus ke Google Drive...', 'info');
+                    bphPhotoUrl = await uploadImageToCloud(bphPhotoUrl, 'Foto Pengurus BPH', 'bph-' + Date.now() + '.jpg');
+                } catch (err) {
+                    showToast('Data pengurus belum disimpan karena foto gagal diunggah: ' + err.message, 'error');
+                    return;
+                }
+            }
             const payload = {
                 name: document.getElementById('mod-bph-name').value.trim(),
                 role: document.getElementById('mod-bph-role').value.trim(),
                 marga: document.getElementById('mod-bph-marga').value.trim(),
                 period: document.getElementById('mod-bph-period').value.trim(),
-                photo: pendingBphPhotoData || ''
+                photo: bphPhotoUrl
             };
 
             if (editId) {
@@ -3754,7 +3829,7 @@
                             <div>
                                 <h1 style="margin: 0; font-size: 19px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px;">${escapeHtml(s.orgName)}</h1>
                                 <p style="margin: 2px 0 0; font-size: 13px; font-weight: 700; color: #b91c1c;">${escapeHtml(s.orgSubtitle)}</p>
-                                <p style="margin: 2px 0 0; font-size: 11px; color: #4b5563;">${escapeHtml(s.address)} • WA: ${escapeHtml(s.whatsapp)}</p>
+                                <p style="margin: 2px 0 0; font-size: 11px; color: #4b5563;">${escapeHtml(s.address)} â€¢ WA: ${escapeHtml(s.whatsapp)}</p>
                             </div>
                         </div>
                         <div style="text-align: right; font-size: 11px; color: #4b5563;">
@@ -4180,8 +4255,8 @@
                                 </div>
                                 <p class="text-sm text-slate-300 leading-relaxed">
                                     ${isGasEnvironment()
-                                        ? 'Seluruh perubahan otomatis tersimpan ke <strong>Google Sheets</strong> melalui <code>Code.gs</code> dan dicadangkan di browser.'
-                                        : 'Seluruh data Punguan tersimpan secara lokal di browser Anda (<code>localStorage</code>). Saat dipasang di Google Apps Script, data otomatis tersinkron ke Google Sheets.'}
+                                        ? 'Seluruh perubahan tersimpan ke <strong>Google Sheets baru</strong>. Foto unggahan disimpan di <strong>Google Drive baru</strong>.'
+                                        : 'Mode pratinjau lokal aktif. Untuk website resmi, isi URL Web App Apps Script pada pengaturan GAS_WEB_APP_URL agar data tersimpan di Google Sheets dan foto di Google Drive.'}
                                 </p>
                             </div>
 
@@ -4289,9 +4364,10 @@
 
             switchView('public');
 
-            // Jika dijalankan sebagai Web App Google Apps Script, tarik data terbaru dari Google Sheets
-            if (isGasEnvironment()) {
-                syncFromGoogleSheets(false);
+            // Hubungkan GitHub Pages ke database Google Sheets BARU melalui iframe Apps Script.
+            if (isGasConfigured()) {
+                initGasBridge();
+                syncFromGoogleSheets(false).catch(() => {});
             }
         });
     </script>
