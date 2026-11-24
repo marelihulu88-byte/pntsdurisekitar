@@ -1262,9 +1262,6 @@
                     <button type="button" onclick="switchAdminMenu('musik')" id="admNav_musik" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-orange-500/30">
                         <i class="fa-brands fa-soundcloud w-5 text-center text-orange-400"></i> 11. Menu Musik SoundCloud
                     </button>
-                    <button type="button" onclick="switchAdminMenu('kta')" id="admNav_kta" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-3 text-slate-300 hover:bg-slate-800/80 border border-amber-500/30">
-                        <i class="fa-solid fa-id-card w-5 text-center text-amber-400"></i> 12. Pengaturan Desain KTA
-                    </button>
 
                 </div>
             </aside>
@@ -1748,61 +1745,6 @@
                     </button>
                 </div>
 
-
-                <!-- 12. PENGATURAN DESAIN DAN IDENTITAS KTA -->
-                <div id="admSec_kta" class="gorga-card rounded-2xl p-6 space-y-6 hidden">
-                    <div class="border-b border-slate-800 pb-4">
-                        <h2 class="font-batak text-xl font-bold text-amber-400">12. PENGATURAN DESAIN KTA PENGURUS</h2>
-                        <p class="text-xs text-slate-300 mt-1">Atur foto header rumah adat, logo, identitas wilayah, masa berlaku, dan label informasi pada kartu anggota.</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="md:col-span-2 rounded-xl border border-amber-500/30 bg-slate-950/70 p-4">
-                            <label class="block text-xs font-bold text-amber-300 mb-2">Upload Foto Header KTA (Rumah Adat Batak Toba)</label>
-                            <input id="admKtaHeaderImageFile" type="file" accept="image/*" onchange="previewKtaUpload('header', this)" class="w-full px-3 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm">
-                            <img id="admKtaHeaderPreview" alt="Pratinjau foto header KTA" class="mt-3 w-full max-h-36 object-cover rounded-lg border border-slate-700 hidden">
-                            <p class="text-[11px] text-slate-400 mt-2">Pilih foto dari komputer/HP. Foto lama tetap digunakan jika Anda tidak mengunggah foto baru. Maksimal 2 MB.</p>
-                        </div>
-                        <div class="rounded-xl border border-amber-500/30 bg-slate-950/70 p-4">
-                            <label class="block text-xs font-bold text-amber-300 mb-2">Upload Logo Organisasi pada KTA</label>
-                            <input id="admKtaLogoFile" type="file" accept="image/*" onchange="previewKtaUpload('logo', this)" class="w-full px-3 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm">
-                            <img id="admKtaLogoPreview" alt="Pratinjau logo KTA" class="mt-3 w-24 h-24 object-contain rounded-lg border border-slate-700 bg-white hidden">
-                            <p class="text-[11px] text-slate-400 mt-2">Pilih logo dari perangkat. Logo lama tetap dipakai jika tidak ada unggahan baru. Maksimal 2 MB.</p>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Nama Organisasi</label>
-                            <input id="admKtaOrgName" type="text" placeholder="PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Nama Wilayah KTA (default)</label>
-                            <input id="admKtaRegion" type="text" placeholder="DURI DAN SEKITARNYA" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Berlaku Hingga</label>
-                            <input id="admKtaValidUntil" type="text" placeholder="31 Desember 2028" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Label Jabatan</label>
-                            <input id="admKtaJabatanLabel" type="text" placeholder="JABATAN" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-300 mb-1.5">Label Wilayah</label>
-                            <input id="admKtaWilayahLabel" type="text" placeholder="WILAYAH" class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm">
-                        </div>
-                    </div>
-                    <div class="rounded-xl border border-amber-500/30 bg-slate-950/70 p-4 text-xs text-slate-300 space-y-1">
-                        <p><strong class="text-amber-300">Pengaturan jabatan:</strong> Jabatan pada setiap KTA otomatis mengikuti kolom Nama Jabatan/Seksi di Menu Profil Pengurus.</p>
-                        <p><strong class="text-amber-300">Wilayah per pengurus:</strong> Jika kolom wilayah khusus pengurus kosong, KTA memakai Nama Wilayah KTA (default) di atas.</p>
-                        <p><strong class="text-amber-300">QR Code:</strong> QR pada setiap KTA diarahkan langsung ke https://pntsduri.my.id.</p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <button type="button" onclick="saveKtaDesignSettings()" id="btnSaveKtaSettings" class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-red-700 text-white font-bold text-sm shadow-lg">
-                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA
-                        </button>
-                        <button type="button" onclick="previewKtaDesignSettings()" class="px-5 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white font-bold text-sm">
-                            <i class="fa-solid fa-eye mr-1.5"></i> Pratinjau Desain
-                        </button>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -2704,7 +2646,6 @@
                         <div class="inline-block px-3 py-1 rounded-full bg-red-950 border border-amber-400/70 text-amber-200 text-[10px] font-black uppercase tracking-wide mb-2">${p.jabatan || 'Pengurus'}</div>
                         <h3 class="font-extrabold text-sm sm:text-base text-white leading-snug">${p.nama || '-'}</h3>
                         <p class="text-xs text-amber-100/75 mt-1">${p.subMarga || ''}</p>
-                        <button type="button" class="pnts-kta-btn" onclick="printPengurusKTA('${String(p.id).replace(/'/g, '')}')"><i class="fa-solid fa-id-card mr-1"></i> CETAK KTA PENGURUS</button>
                     </article>`).join('')}</div></div>`;
             }
 
@@ -3003,7 +2944,7 @@
 
         // ==================== FUNGSI PANEL ADMIN (10 MENU) ====================
         function switchAdminMenu(menuKey) {
-            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik', 'kta']; 
+            const keys = ['dashboard', 'header', 'marquee', 'visimisi', 'album', 'profil', 'contact', 'newmember', 'ulasan', 'akunadmin', 'musik']; 
             keys.forEach(k => {
                 const sec = document.getElementById(`admSec_${k}`);
                 const nav = document.getElementById(`admNav_${k}`);
@@ -3305,28 +3246,6 @@
             if (modeEl) modeEl.value = dashInfo.modeAnggota || 'AUTO';
             if (manualEl && document.activeElement !== manualEl) manualEl.value = dashInfo.totalAnggotaManual != null ? dashInfo.totalAnggotaManual : 0;
 
-            const ktaFields = {
-                admKtaOrgName: appState.ktaSettings.organizationName,
-                admKtaRegion: appState.ktaSettings.regionName,
-                admKtaValidUntil: appState.ktaSettings.validUntil,
-                admKtaJabatanLabel: appState.ktaSettings.jabatanLabel,
-                admKtaWilayahLabel: appState.ktaSettings.wilayahLabel
-            };
-            Object.keys(ktaFields).forEach(id => {
-                const el = document.getElementById(id);
-                if (el && document.activeElement !== el) el.value = ktaFields[id] || '';
-            });
-            const ktaHeaderPreview = document.getElementById('admKtaHeaderPreview');
-            const ktaLogoPreview = document.getElementById('admKtaLogoPreview');
-            if (ktaHeaderPreview && appState.ktaSettings.headerImageUrl && !document.getElementById('admKtaHeaderImageFile')?.files?.length) {
-                ktaHeaderPreview.src = appState.ktaSettings.headerImageUrl;
-                ktaHeaderPreview.classList.remove('hidden');
-            }
-            if (ktaLogoPreview && appState.ktaSettings.logoUrl && !document.getElementById('admKtaLogoFile')?.files?.length) {
-                ktaLogoPreview.src = appState.ktaSettings.logoUrl;
-                ktaLogoPreview.classList.remove('hidden');
-            }
-
             document.getElementById('admPreviewLogo').src = appState.header.logoUrl;
             document.getElementById('admInputLogoUrl').value = appState.header.logoUrl;
             document.getElementById('admPreviewBanner').src = appState.header.bannerUrl;
@@ -3423,13 +3342,6 @@
                         <label class="block text-[11px] text-slate-400 mb-1">Upload Foto Baru / URL Foto</label>
                         <input type="file" accept="image/*" onchange="handleAdminFileUpload(event, 'admPengFoto_${idx}', 'admPengPreview_${idx}')" class="block w-full text-[11px] text-slate-300 mb-1.5 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:bg-red-700 file:text-white">
                         <input type="text" id="admPengFoto_${idx}" value="${p.photoUrl}" class="w-full px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-[11px] text-white">
-                    </div>
-                    <div class="rounded-xl border border-amber-500/30 bg-slate-950/80 p-3 space-y-2">
-                        <label class="block text-[11px] text-amber-300 font-bold">Sandi pribadi cetak KTA (minimal 6 karakter)</label>
-                        <input type="password" id="admPengSandi_${idx}" autocomplete="new-password" placeholder="Isi sandi baru (minimal 6 karakter)" class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
-                        <p class="text-[10px] text-slate-400">Sandi disimpan sebagai hash di server dan tidak ditampilkan kepada publik.</p>
-                        <button type="button" onclick="savePengurusKtaPassword(${idx})" class="w-full px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs"><i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Sandi Cetak KTA</button>
-                        <button type="button" onclick="printPengurusKTA('${String(p.id).replace(/'/g, '')}')" class="w-full px-3 py-2 rounded-lg bg-amber-500 text-slate-950 font-black text-xs"><i class="fa-solid fa-id-card mr-1"></i> Cetak / Pratinjau KTA (Admin)</button>
                     </div>
                 </div>
             `).join('');
@@ -3610,32 +3522,70 @@
         }
 
         function addAdminAlbumPhoto() {
-            const caption = document.getElementById('admAlbumCaption').value.trim();
-            const date = document.getElementById('admAlbumDate').value.trim();
-            const imageUrl = document.getElementById('admAlbumUrl').value.trim();
+            if (appState.currentRole !== 'admin') {
+                showToast('Silakan login sebagai Admin untuk menambahkan foto album.', 'danger');
+                return;
+            }
+
+            const captionEl = document.getElementById('admAlbumCaption');
+            const dateEl = document.getElementById('admAlbumDate');
+            const urlEl = document.getElementById('admAlbumUrl');
+            const addButton = document.querySelector('button[onclick="addAdminAlbumPhoto()"]');
+
+            const caption = captionEl ? captionEl.value.trim() : '';
+            const date = dateEl ? dateEl.value.trim() : '';
+            const imageUrl = urlEl ? urlEl.value.trim() : '';
 
             if (!caption || !imageUrl) {
-                showToast('Masukkan judul kegiatan dan pilih foto terlebih dahulu!', 'danger');
+                showToast('Isi judul kegiatan dan pilih foto terlebih dahulu. Tunggu sampai foto selesai diproses.', 'danger');
+                return;
+            }
+            if (!/^data:image\/(jpeg|jpg|png|webp|gif);base64,/i.test(imageUrl) &&
+                !/^https?:\/\//i.test(imageUrl)) {
+                showToast('Foto belum terbaca. Pilih ulang file foto atau masukkan URL gambar yang benar.', 'danger');
                 return;
             }
 
             const newPhoto = {
                 id: Date.now(),
-                caption,
-                date: date || '2026',
-                imageUrl,
+                caption: caption,
+                date: date || new Date().getFullYear().toString(),
+                imageUrl: imageUrl,
                 slides: [imageUrl]
             };
-            appState.albums.unshift(newPhoto);
 
-            document.getElementById('admAlbumCaption').value = '';
-            document.getElementById('admAlbumDate').value = '';
-            document.getElementById('admAlbumUrl').value = '';
+            if (addButton) {
+                addButton.disabled = true;
+                addButton.dataset.originalText = addButton.innerHTML;
+                addButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> MENYIMPAN FOTO...';
+            }
 
-            renderAllUserViews();
-            renderAdminAll();
-            showToast('Foto baru sedang diunggah ke Google Drive & Album Kegiatan!', 'success');
-            callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto]);
+            // Jangan masukkan foto ke tampilan sebelum server menyatakan penyimpanan berhasil.
+            // Ini mencegah foto sementara terlihat lalu hilang saat sinkronisasi server.
+            callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto], (res) => {
+                if (addButton) {
+                    addButton.disabled = false;
+                    addButton.innerHTML = addButton.dataset.originalText || 'Tambah Foto ke Album';
+                }
+                if (!res || res.success === false) {
+                    showToast((res && res.message) || 'Foto belum berhasil disimpan ke server. Data album tidak diubah.', 'danger');
+                    return;
+                }
+
+                if (captionEl) captionEl.value = '';
+                if (dateEl) dateEl.value = '';
+                if (urlEl) urlEl.value = '';
+                const fileInput = document.querySelector('input[type="file"][onchange*="admAlbumUrl"]');
+                if (fileInput) fileInput.value = '';
+
+                showToast((res && res.message) || 'Foto berhasil dikirim. Album sedang disinkronkan dari server.', 'success');
+            }, () => {
+                if (addButton) {
+                    addButton.disabled = false;
+                    addButton.innerHTML = addButton.dataset.originalText || 'Tambah Foto ke Album';
+                }
+                showToast('Server tidak dapat dihubungi. Foto belum dipastikan tersimpan; jangan tutup halaman sebelum mencoba kembali.', 'danger');
+            }, 45000);
         }
 
         const albumSlideIndexes = {};
@@ -3773,53 +3723,17 @@
             callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus]);
         }
 
-        function savePengurusKtaPassword(idx) {
-            if (appState.currentRole !== 'admin') {
-                showToast('Silakan login sebagai Admin untuk menyimpan sandi KTA.', 'danger');
-                return;
-            }
-            const pengurus = (appState.pengurus || [])[idx];
-            const passEl = document.getElementById(`admPengSandi_${idx}`);
-            const password = String(passEl && passEl.value || '').trim();
-            if (!pengurus || !pengurus.id) {
-                showToast('Data pengurus tidak ditemukan. Muat ulang menu Profil Pengurus.', 'danger');
-                return;
-            }
-            if (password.length < 6 || password.length > 100) {
-                showToast('Sandi cetak KTA wajib diisi minimal 6 dan maksimal 100 karakter.', 'danger');
-                if (passEl) passEl.focus();
-                return;
-            }
-            if (passEl) passEl.disabled = true;
-            callServerSafe('simpanSandiCetakKTA', [String(pengurus.id), password], (res) => {
-                if (passEl) { passEl.disabled = false; passEl.value = ''; }
-                if (!res || res.success !== true) {
-                    showToast((res && res.message) || 'Sandi cetak KTA gagal disimpan.', 'danger');
-                    return;
-                }
-                showToast(res.message || `Sandi cetak KTA untuk ${pengurus.nama || 'pengurus'} berhasil disimpan.`, 'success');
-                refreshStateFromServerSilent();
-            }, (err) => {
-                if (passEl) passEl.disabled = false;
-                console.error('Simpan sandi KTA gagal:', err);
-                showToast('Sandi KTA belum tersimpan. Periksa koneksi atau deployment Google Apps Script, lalu coba kembali.', 'danger');
-            });
-        }
-
         function saveAdminPengurus() {
             syncPengurusInputsToState();
-            appState.pengurus.forEach((p, idx) => {
-                const passEl = document.getElementById(`admPengSandi_${idx}`);
-                if (passEl && passEl.value.trim()) p.printPassword = passEl.value.trim();
-            });
             callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus], (res) => {
-                appState.pengurus.forEach(p => { delete p.printPassword; });
-                if (res && res.success === false) { showToast(res.message || 'Gagal menyimpan pengurus.', 'danger'); return; }
-                showToast('Profil pengurus dan pengaturan sandi KTA berhasil disimpan.', 'success');
+                if (res && res.success === false) {
+                    showToast(res.message || 'Gagal menyimpan profil pengurus.', 'danger');
+                    return;
+                }
+                showToast('Profil pengurus berhasil disimpan.', 'success');
                 refreshStateFromServerSilent();
             }, () => {
-                appState.pengurus.forEach(p => { delete p.printPassword; });
-                showToast('Gagal menyimpan data KTA. Periksa koneksi server.', 'danger');
+                showToast('Profil pengurus belum tersimpan. Periksa koneksi server lalu coba lagi.', 'danger');
             });
         }
 
