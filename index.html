@@ -28,17 +28,13 @@
     <meta property="og:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta property="og:description" content="Horas! Selamat datang di Portal Resmi Muda-Mudi Batak Toba Toga Simatupang (Sianturi â€¢ Siburian â€¢ Togatorop â€¢ Boru â€¢ Bere & Ibebere) Se-Duri, Bengkalis - Riau.">
     <meta property="og:url" content="https://pntsduri.my.id/">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85">
-    <meta property="og:image:alt" content="Foto kegiatan dalam Album PNTS Se-Duri">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80">
 
     <!-- ==================== 4. TWITTER CARD ==================== -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Punguan Naposo Toga Simatupang Se-Duri (PNTS Se-Duri)">
     <meta name="twitter:description" content="Wadah Persekutuan Muda-Mudi Batak Toba Toga Simatupang (Sianturi, Siburian, Togatorop) di Kota Duri, Riau.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85">
-    <meta name="twitter:image:alt" content="Foto kegiatan dalam Album PNTS Se-Duri">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1200&q=80">
 
     <!-- ==================== 5. SCHEMA.ORG JSON-LD (KUNCI PENGUBAH NAMA SITUS DI GOOGLE) ==================== -->
     <script type="application/ld+json">
@@ -87,24 +83,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* PNTS: daftar notifikasi dapat digulir vertikal dengan mouse maupun sentuhan */
-        #notifDropdownPanel { max-height: 75vh; }
-        #notifListContainer {
-            max-height: min(65vh, 480px) !important;
-            overflow-y: scroll !important;
-            overflow-x: hidden !important;
-            overscroll-behavior-y: contain;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y;
-            scrollbar-width: thin;
-            scrollbar-color: #d6a329 #251313;
-            padding-bottom: 12px;
-        }
-        #notifListContainer::-webkit-scrollbar { width: 8px; }
-        #notifListContainer::-webkit-scrollbar-track { background: #251313; border-radius: 8px; }
-        #notifListContainer::-webkit-scrollbar-thumb { background: #d6a329; border-radius: 8px; border: 2px solid #251313; }
-        #notifListContainer::-webkit-scrollbar-thumb:hover { background: #f2c94c; }
-
         :root {
             --batak-red: #991b1b;
             --batak-dark: #0f172a;
@@ -188,72 +166,13 @@
             50% { transform: translateY(-4px) scaleY(1.06); }
         }
 
-        /* Seluruh sapaan bergerak serempak: tulisan dan animasi tortor */
-        .tortor-greeting-group {
+        .tortor-couple {
             animation: tortorDance 2.6s ease-in-out infinite;
-            transform-origin: center bottom;
         }
-        .tortor-couple { animation: none; }
 
         .tortor-hands {
             animation: tortorHands 1.3s ease-in-out infinite;
             transform-origin: center;
-        }
-
-        /* Tampilan ringkas pada perangkat HP */
-        @media (max-width: 640px) {
-            .tortor-couple { width: 3.35rem !important; height: 3.35rem !important; }
-            #batakTortorWidget { right: 13px !important; bottom: 76px !important; }
-            #btnPlayPauseMusic { width: 2.75rem !important; height: 2.75rem !important; }
-            #btnPlayPauseMusic + div, #btnPlayPauseMusic ~ button { display: none !important; }
-            #btnPlayPauseMusic { flex: 0 0 auto; }
-            #btnPlayPauseMusic { margin: 0 !important; }
-            #btnPlayPauseMusic { box-shadow: 0 3px 12px #0008; }
-            #btnPlayPauseMusic { border-radius: 999px !important; }
-            #btnPlayPauseMusic { padding: 0 !important; }
-            #btnPlayPauseMusic { min-width: 44px; }
-            #btnPlayPauseMusic { min-height: 44px; }
-            #btnPlayPauseMusic { font-size: 14px; }
-            #btnPlayPauseMusic { transform: none !important; }
-            #btnPlayPauseMusic { outline-offset: 3px; }
-            #btnPlayPauseMusic { -webkit-tap-highlight-color: transparent; }
-            #btnPlayPauseMusic { touch-action: manipulation; }
-            #btnPlayPauseMusic { position: relative; z-index: 1; }
-            #btnPlayPauseMusic { color: #fff; }
-            #btnPlayPauseMusic { background: linear-gradient(135deg,#991b1b,#d97706); }
-            #btnPlayPauseMusic { border: 1px solid #fbbf24; }
-            #btnPlayPauseMusic { display: flex !important; }
-            #btnPlayPauseMusic { align-items: center; justify-content: center; }
-            #btnPlayPauseMusic { gap: 0 !important; }
-            #btnPlayPauseMusic { line-height: 1; }
-            #btnPlayPauseMusic { cursor: pointer; }
-            #btnPlayPauseMusic { -webkit-appearance: none; appearance: none; }
-            #btnPlayPauseMusic { box-sizing: border-box; }
-            #btnPlayPauseMusic { transition: background .2s ease; }
-            #btnPlayPauseMusic { opacity: 1; }
-            #btnPlayPauseMusic { visibility: visible; }
-            #btnPlayPauseMusic { overflow: hidden; }
-            #btnPlayPauseMusic { text-align: center; }
-            #btnPlayPauseMusic { vertical-align: middle; }
-            #btnPlayPauseMusic { user-select: none; }
-            #btnPlayPauseMusic { -webkit-user-select: none; }
-            #btnPlayPauseMusic { -moz-user-select: none; }
-            #btnPlayPauseMusic { -ms-user-select: none; }
-            #btnPlayPauseMusic { -webkit-touch-callout: none; }
-            #btnPlayPauseMusic { -webkit-tap-highlight-color: transparent; }
-            #btnPlayPauseMusic { box-shadow: 0 6px 18px #0009; }
-            #btnPlayPauseMusic { border-radius: 50% !important; }
-            #btnPlayPauseMusic { padding: 0 !important; }
-            #btnPlayPauseMusic { width: 46px !important; height: 46px !important; }
-            #btnPlayPauseMusic { min-width: 46px !important; min-height: 46px !important; }
-            #btnPlayPauseMusic { flex-shrink: 0; }
-            #btnPlayPauseMusic { margin: 0; }
-            #btnPlayPauseMusic { font-size: 0; }
-            #btnPlayPauseMusic i { font-size: 15px !important; }
-            #scPlayerBox { width: min(18rem, calc(100vw - 24px)); }
-            body > div.fixed.bottom-3.left-3 { padding: 0 !important; }
-            body > div.fixed.bottom-3.left-3 > .gorga-card { padding: 5px !important; border-width: 1px !important; border-radius: 999px !important; }
-            body > div.fixed.bottom-3.right-3 { transform: scale(.72); transform-origin: bottom right; }
         }
 
         /* Custom Scrollbar */
@@ -274,19 +193,7 @@
         .pnts-popup-star:focus-visible{outline:2px solid #fbbf24;outline-offset:4px;border-radius:6px;}
 
         /* Tema alternatif yang dapat dipilih Admin */
-    
-/* PNTS struktur organisasi: bagan dengan latar rumah adat dan aksen gorga */
-.pnts-org-chart{position:relative;isolation:isolate;padding:28px 18px;background:linear-gradient(180deg,rgba(15,23,42,.82),rgba(30,10,10,.90)),url('https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=1800&q=85') center/cover;border-radius:22px;overflow:hidden}
-.pnts-org-chart:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.20;background:repeating-linear-gradient(45deg,transparent 0 16px,#fbbf24 17px 19px,transparent 20px 34px),repeating-linear-gradient(-45deg,transparent 0 16px,#dc2626 17px 19px,transparent 20px 34px);mask-image:linear-gradient(to bottom,black,transparent 82%)}
-.pnts-org-chart:after{content:"á¯¤ á¯‚ á¯¤ á¯‚ á¯¤ á¯‚ á¯¤";display:block;text-align:center;color:#fbbf24;letter-spacing:12px;font-size:18px;margin-top:24px;text-shadow:0 2px 8px #000}
-.pnts-org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:22px;position:relative;z-index:1}
-.pnts-org-card{background:rgba(15,23,42,.94);border:1px solid rgba(251,191,36,.7);border-radius:18px;padding:18px 14px;text-align:center;box-shadow:0 12px 28px #0008;position:relative}
-.pnts-org-card:before{content:"";position:absolute;left:50%;top:-13px;height:13px;border-left:2px solid #fbbf24;opacity:.8}
-.pnts-org-photo{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid #fbbf24;box-shadow:0 0 0 4px #7f1d1d}
-.pnts-kta-btn{margin-top:12px;width:100%;padding:9px 12px;border-radius:10px;background:linear-gradient(90deg,#991b1b,#b45309);border:1px solid #fbbf24;color:#fff;font-size:11px;font-weight:900}
-@media(max-width:640px){.pnts-org-chart{padding:18px 10px}.pnts-org-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pnts-org-card{padding:14px 8px}.pnts-org-photo{width:76px;height:76px}}
-@media print{body>*{display:none!important}#pntsKtaPrintRoot{display:block!important}}
-</style>
+    </style>
 </head>
 <body class="selection:bg-red-700 selection:text-amber-200">
 
@@ -471,7 +378,7 @@
             <div class="relative rounded-3xl overflow-hidden border-2 border-amber-500/60 shadow-2xl">
                 <div class="relative h-56 sm:h-72 md:h-80 w-full bg-slate-900">
                     <img id="userHeaderBanner" 
-                         src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85" 
+                         src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80" 
                          alt="Header Danau Toba" 
                          onerror="this.src='https://placehold.co/1600x500/7f1d1d/f59e0b?text=DANAU+TOBA+-+PUNGUAN+NAPOSO+TOGA+SIMATUPANG+SE-DURI'"
                          class="w-full h-full object-cover object-center">
@@ -522,7 +429,7 @@
                                     </div>
                                     <span class="text-[10px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-extrabold">Pembaruan Website</span>
                                 </div>
-                                <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2" style="max-height:min(65vh,480px);overflow-y:scroll;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
+                                <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-slate-800/80 p-2 space-y-2">
                                 </div>
                             </div>
                         </div>
@@ -1129,21 +1036,13 @@
             </div>
         </div>
 
-        <style>
-          /* Animasi tortor ditempatkan tepat di atas kontrol musik, pada PC dan HP */
-          #batakTortorWidget { left: 22px !important; right: auto !important; bottom: 88px !important; }
-          @media (max-width: 640px) {
-            #batakTortorWidget { left: 12px !important; right: auto !important; bottom: 76px !important; transform: scale(.78) !important; transform-origin: bottom left !important; }
-          }
-        </style>
-        <!-- ==================== ANIMASI TORTOR TEPAT DI ATAS TOMBOL CUSTOMER SERVICE ==================== -->
-        <div id="batakTortorWidget" class="fixed z-[9997] flex flex-col items-center pointer-events-none" style="left:22px;right:auto;bottom:88px;transform:scale(.92);transform-origin:bottom left">
-          <div class="tortor-greeting-group flex flex-col items-center pointer-events-none">
-            <div id="batakSpeechBubble" class="mb-0 px-1 py-0.5 text-[10px] sm:text-[11px] font-extrabold text-amber-300 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] whitespace-nowrap">
+        <!-- ==================== POJOK KANAN BAWAH: ANIMASI COWO CEWEK BATAK ==================== -->
+        <div class="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-40 flex flex-col items-end pointer-events-none">
+            <div id="batakSpeechBubble" class="mb-1.5 px-3 py-1.5 rounded-2xl rounded-br-none bg-red-900/95 border border-amber-400 text-[11px] font-bold text-amber-200 shadow-lg pointer-events-auto">
                 Horas Dongan! âœ‹âœ¨
             </div>
-            <button type="button" onclick="triggerTortorGreeting()" class="pointer-events-auto group relative bg-transparent border-0 shadow-none p-0 m-0 rounded-none transition-transform hover:scale-105 focus:outline-none" title="Klik Animasi Cowo Cewek Batak (Manortor)">
-                <div class="tortor-couple w-[4.5rem] h-[4.5rem] flex items-center justify-center">
+            <button type="button" onclick="triggerTortorGreeting()" class="pointer-events-auto group relative bg-slate-950/90 hover:bg-slate-900 p-2 rounded-2xl border-2 border-amber-400 shadow-2xl transition-all" title="Klik Animasi Cowo Cewek Batak (Manortor)">
+                <div class="tortor-couple w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                     <svg viewBox="0 0 160 140" class="w-full h-full overflow-visible">
                         <ellipse cx="80" cy="130" rx="58" ry="7" fill="rgba(245, 158, 11, 0.28)" />
                         <g transform="translate(18, 12)">
@@ -1181,11 +1080,10 @@
                         </g>
                     </svg>
                 </div>
+                <div class="text-[10px] font-extrabold text-center text-amber-300 bg-red-950/90 rounded-lg py-0.5 px-2 border border-amber-500/40">
+                    Naposo Batak Toba
+                </div>
             </button>
-            <div class="mt-0 text-[9px] sm:text-[10px] font-extrabold text-amber-300 whitespace-nowrap drop-shadow-[0_2px_3px_rgba(0,0,0,0.95)] pointer-events-none">
-                Naposo Batak Toba
-            </div>
-          </div>
         </div>
     </div>
 
@@ -1361,7 +1259,7 @@
 
                         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
                             <label class="block text-xs font-bold uppercase text-amber-300">Foto Banner Header Website</label>
-                            <img id="admPreviewBanner" src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85" alt="Preview Header" class="w-full h-24 rounded-2xl object-cover border-2 border-amber-400">
+                            <img id="admPreviewBanner" src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80" alt="Preview Header" class="w-full h-24 rounded-2xl object-cover border-2 border-amber-400">
                             <input type="file" accept="image/*" onchange="handleAdminFileUpload(event, 'admInputBannerUrl', 'admPreviewBanner')" class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-red-700 file:text-white file:font-bold">
                             <input type="text" id="admInputBannerUrl" placeholder="Atau masukkan URL foto Header..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white">
                         </div>
@@ -1774,7 +1672,7 @@
             // 2. Data Header & Logo
             header: {
                 logoUrl: 'https://placehold.co/180x180/991b1b/fbbf24?text=PNTS+DURI',
-                bannerUrl: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85'
+                bannerUrl: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=1600&q=80'
             },
 
             // 3. Data Tulisan Berjalan
@@ -1911,17 +1809,6 @@
                 title: 'Musik & Lagu Batak Punguan',
                 soundcloudUrl: 'https://soundcloud.com/forss/flickermood',
                 autoPlay: true
-            },
-
-            // Pengaturan desain dan identitas KTA yang dapat diubah Admin.
-            ktaSettings: {
-                headerImageUrl: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=1200&q=85',
-                logoUrl: '',
-                organizationName: 'PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI',
-                regionName: 'DURI DAN SEKITARNYA',
-                validUntil: '31 Desember 2028',
-                jabatanLabel: 'JABATAN',
-                wilayahLabel: 'WILAYAH'
             }
         };
 
@@ -1949,7 +1836,7 @@
             const adminWriteFunctions = [
                 'resetStatistikKunjungan','hapusSemuaRiwayatKunjungan','simpanPengaturanHeader',
                 'simpanTulisanBerjalan','simpanVisiMisi','tambahAgendaSpreadsheet','hapusAgendaSpreadsheet',
-                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet','simpanSandiCetakKTA','simpanPengaturanKTA',
+                'tambahFotoAlbumSpreadsheet','hapusFotoAlbumSpreadsheet','simpanStrukturPengurusSpreadsheet',
                 'simpanKontakSpreadsheet','simpanMusikSpreadsheet','updateStatusAnggota','hapusRiwayatAnggota','moderasiRatingPengunjung','hapusUlasanPengunjung','tambahAnggotaManual','hapusNotifikasiPNTS','hapusSemuaNotifikasiPNTS'
             ];
             const requestArgs = Array.isArray(argsArray) ? argsArray.slice() : [];
@@ -2040,7 +1927,6 @@
             if (serverData.contacts) Object.assign(appState.contacts, serverData.contacts);
             if (Array.isArray(serverData.members)) appState.members = serverData.members;
             if (serverData.music) Object.assign(appState.music, serverData.music);
-            if (serverData.ktaSettings) Object.assign(appState.ktaSettings, serverData.ktaSettings);
             if (serverData.dashboardInfo || serverData.infoManual) {
                 appState.dashboardInfo = serverData.dashboardInfo || serverData.infoManual;
             }
@@ -2460,8 +2346,6 @@
             const badge = document.getElementById('activeRoleBadge');
             const btnUser = document.getElementById('btnSwitchUser');
             const btnAdmin = document.getElementById('btnSwitchAdmin');
-            document.body.classList.toggle('pnts-admin-mode', role === 'admin');
-            if (role === 'admin' && typeof closeKtaPasswordModal === 'function') closeKtaPasswordModal();
 
             if (role === 'admin') {
                 userView.classList.add('hidden');
@@ -2572,81 +2456,43 @@
                 albumGrid.innerHTML = `<div class="col-span-3 text-center py-8 text-slate-400 text-sm">Belum ada foto dalam album kegiatan.</div>`;
             } else {
                 albumGrid.innerHTML = appState.albums.map(alb => `
-                    <div id="pnts-album-photo-${alb.id}" class="group rounded-2xl overflow-hidden bg-slate-900 border border-amber-500/30 shadow-xl flex flex-col">
+                    <div class="group rounded-2xl overflow-hidden bg-slate-900 border border-amber-500/30 shadow-xl flex flex-col">
                         <div class="relative h-52 overflow-hidden bg-slate-950">
-                            <img id="album-slide-img-${String(alb.id)}" src="${(alb.slides && alb.slides[0]) || alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer"
+                            <img src="${alb.imageUrl}" alt="${alb.caption}" referrerpolicy="no-referrer"
                                  onerror="this.src='https://placehold.co/600x400/7f1d1d/fbbf24?text=Foto+Kegiatan'"
-                                 class="w-full h-full object-cover transition-transform duration-500">
-                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-amber-400/40 text-amber-300 text-[11px] font-bold">${alb.date}</span>
-                            ${(alb.slides && alb.slides.length > 1) ? `
-                              <button type="button" onclick="changeAlbumSlide('${String(alb.id)}',-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/75 text-white border border-amber-400/60">â€¹</button>
-                              <button type="button" onclick="changeAlbumSlide('${String(alb.id)}',1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-950/75 text-white border border-amber-400/60">â€º</button>
-                              <span id="album-slide-count-${String(alb.id)}" class="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-slate-950/75 text-white text-[10px]">1/${alb.slides.length}</span>` : ''}
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/85 border border-amber-400/40 text-amber-300 text-[11px] font-bold">
+                                ${alb.date}
+                            </span>
                         </div>
-                        <div class="p-4 flex-1 flex flex-col gap-3">
+                        <div class="p-4 flex-1 flex items-center">
                             <p class="text-xs sm:text-sm font-bold text-slate-100 leading-snug">${alb.caption}</p>
-                            <div class="mt-auto flex justify-end">
-                                <div class="relative">
-                                    <button type="button" aria-label="Pilihan berbagi foto"
-                                        aria-haspopup="true" aria-expanded="false"
-                                        onclick="toggleAlbumShareMenu(event, '${String(alb.id)}')"
-                                        class="w-10 h-10 rounded-full bg-slate-800 hover:bg-amber-500 text-white hover:text-slate-950 border border-amber-400/50 flex items-center justify-center transition-all shadow-lg">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-                                    <div id="album-share-menu-${String(alb.id)}"
-                                        class="hidden absolute right-0 bottom-12 z-50 w-48 rounded-xl overflow-hidden bg-slate-900 border border-amber-400/40 shadow-2xl">
-                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','native'); closeAlbumShareMenu('${String(alb.id)}')"
-                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
-                                            <i class="fa-solid fa-share-nodes w-4 text-amber-400"></i> Bagikan ke...
-                                        </button>
-                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','whatsapp'); closeAlbumShareMenu('${String(alb.id)}')"
-                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
-                                            <i class="fa-brands fa-whatsapp w-4 text-green-400"></i> WhatsApp
-                                        </button>
-                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','facebook'); closeAlbumShareMenu('${String(alb.id)}')"
-                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
-                                            <i class="fa-brands fa-facebook w-4 text-blue-400"></i> Facebook
-                                        </button>
-                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','telegram'); closeAlbumShareMenu('${String(alb.id)}')"
-                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
-                                            <i class="fa-brands fa-telegram w-4 text-sky-400"></i> Telegram
-                                        </button>
-                                        <button type="button" onclick="shareAlbumPhoto('${String(alb.id)}','copy'); closeAlbumShareMenu('${String(alb.id)}')"
-                                            class="w-full px-4 py-3 text-left text-sm text-white hover:bg-slate-800 flex items-center gap-3">
-                                            <i class="fa-solid fa-link w-4 text-amber-400"></i> Salin link
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 `).join('');
-
-                // Jika tautan khusus foto dibuka, arahkan pengunjung ke foto yang dimaksud.
-                const sharedPhotoId = new URLSearchParams(window.location.search).get('foto');
-                if (sharedPhotoId) {
-                    setTimeout(() => {
-                        const targetPhoto = document.getElementById(`pnts-album-photo-${sharedPhotoId}`);
-                        if (targetPhoto) {
-                            targetPhoto.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            targetPhoto.classList.add('ring-4', 'ring-amber-400');
-                            setTimeout(() => targetPhoto.classList.remove('ring-4', 'ring-amber-400'), 5000);
-                        }
-                    }, 500);
-                }
             }
 
             const pengurusGrid = document.getElementById('userPengurusGrid');
             if (appState.pengurus.length === 0) {
                 pengurusGrid.innerHTML = `<div class="col-span-4 text-center py-8 text-slate-400 text-sm">Belum ada data struktur pengurus.</div>`;
             } else {
-                pengurusGrid.innerHTML = `<div class="pnts-org-chart col-span-full"><div class="text-center mb-7"><div class="inline-block px-4 py-1 rounded-full border border-amber-300 bg-red-950/80 text-amber-200 text-xs font-black tracking-widest">PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI</div><h3 class="text-white font-black text-xl sm:text-2xl mt-3">BAGAN STRUKTUR KEPENGURUSAN</h3><p class="text-amber-100/90 text-xs mt-1">Horas â€¢ Marsada â€¢ Marsiurupan</p></div><div class="pnts-org-grid">${appState.pengurus.map(p => `
-                    <article class="pnts-org-card">
-                        <img src="${p.photoUrl}" alt="${p.nama}" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/300x300/7f1d1d/fbbf24?text=PENGURUS'" class="pnts-org-photo mb-4 mx-auto">
-                        <div class="inline-block px-3 py-1 rounded-full bg-red-950 border border-amber-400/70 text-amber-200 text-[10px] font-black uppercase tracking-wide mb-2">${p.jabatan || 'Pengurus'}</div>
-                        <h3 class="font-extrabold text-sm sm:text-base text-white leading-snug">${p.nama || '-'}</h3>
-                        <p class="text-xs text-amber-100/75 mt-1">${p.subMarga || ''}</p>
-                    </article>`).join('')}</div></div>`;
+                pengurusGrid.innerHTML = appState.pengurus.map(p => `
+                    <div class="rounded-2xl bg-slate-900/95 border border-amber-500/40 overflow-hidden shadow-lg hover:-translate-y-1 transition-all text-center flex flex-col">
+                        <div class="h-2 bg-gradient-to-r from-red-800 via-amber-500 to-red-800"></div>
+                        <div class="p-5 flex-1 flex flex-col items-center">
+                            <div class="relative mb-3">
+                                <img src="${p.photoUrl}" alt="${p.nama}" referrerpolicy="no-referrer"
+                                     onerror="this.src='https://placehold.co/300x300/7f1d1d/fbbf24?text=PENGURUS'"
+                                     class="w-24 h-24 rounded-2xl object-cover border-2 border-amber-400 shadow-md">
+                            </div>
+                            <span class="px-3 py-0.5 rounded-full bg-red-900/90 border border-amber-400/50 text-amber-300 text-[11px] font-extrabold uppercase tracking-wider mb-2">
+                                ${p.jabatan}
+                            </span>
+                            <h3 class="font-bold text-sm sm:text-base text-white leading-snug">${p.nama}</h3>
+                            <p class="text-xs text-slate-400 mt-1">${p.subMarga}</p>
+                        </div>
+                    </div>
+                `).join('');
             }
 
             document.getElementById('userBtnTiktok').href = appState.contacts.tiktokUrl;
@@ -3278,16 +3124,8 @@
                             <div class="text-[10px] text-amber-400 font-bold">${alb.date}</div>
                             <div class="text-xs font-bold text-white line-clamp-2">${alb.caption}</div>
                         </div>
-                        <div class="text-[10px] text-slate-300">Slide: ${(alb.slides || []).length || 1} foto</div>
-                        <input type="file" accept="image/*" id="admAlbumSlideFile-${alb.id}" class="hidden" onchange="addAlbumSlideFromFile(event,'${String(alb.id)}')">
-                        <button type="button" onclick="document.getElementById('admAlbumSlideFile-${alb.id}').click()" class="w-full py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500 text-amber-200 hover:text-slate-950 text-xs font-bold transition-all">
-                            <i class="fa-solid fa-plus mr-1"></i> Tambah Slide Foto
-                        </button>
-                        <button type="button" onclick="removeAlbumSlide('${String(alb.id)}')" class="w-full py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold transition-all">
-                            <i class="fa-solid fa-minus mr-1"></i> Hapus Slide Terakhir
-                        </button>
                         <button type="button" onclick="deleteAdminAlbumPhoto(${alb.id})" class="w-full py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white text-xs font-bold transition-all">
-                            <i class="fa-solid fa-trash mr-1"></i> Hapus Album
+                            <i class="fa-solid fa-trash mr-1"></i> Hapus Foto
                         </button>
                     </div>
                 </div>
@@ -3333,10 +3171,6 @@
                     <div>
                         <label class="block text-[11px] text-slate-400 mb-1">Keterangan Marga / Boru</label>
                         <input type="text" id="admPengMarga_${idx}" value="${p.subMarga}" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Wilayah khusus pada KTA (opsional)</label>
-                        <input type="text" id="admPengKtaWilayah_${idx}" value="${p.ktaWilayah || ''}" placeholder="Kosongkan untuk memakai wilayah default KTA" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white">
                     </div>
                     <div>
                         <label class="block text-[11px] text-slate-400 mb-1">Upload Foto Baru / URL Foto</label>
@@ -3522,117 +3356,31 @@
         }
 
         function addAdminAlbumPhoto() {
-            if (appState.currentRole !== 'admin') {
-                showToast('Silakan login sebagai Admin untuk menambahkan foto album.', 'danger');
-                return;
-            }
-
-            const captionEl = document.getElementById('admAlbumCaption');
-            const dateEl = document.getElementById('admAlbumDate');
-            const urlEl = document.getElementById('admAlbumUrl');
-            const addButton = document.querySelector('button[onclick="addAdminAlbumPhoto()"]');
-
-            const caption = captionEl ? captionEl.value.trim() : '';
-            const date = dateEl ? dateEl.value.trim() : '';
-            const imageUrl = urlEl ? urlEl.value.trim() : '';
+            const caption = document.getElementById('admAlbumCaption').value.trim();
+            const date = document.getElementById('admAlbumDate').value.trim();
+            const imageUrl = document.getElementById('admAlbumUrl').value.trim();
 
             if (!caption || !imageUrl) {
-                showToast('Isi judul kegiatan dan pilih foto terlebih dahulu. Tunggu sampai foto selesai diproses.', 'danger');
-                return;
-            }
-            if (!/^data:image\/(jpeg|jpg|png|webp|gif);base64,/i.test(imageUrl) &&
-                !/^https?:\/\//i.test(imageUrl)) {
-                showToast('Foto belum terbaca. Pilih ulang file foto atau masukkan URL gambar yang benar.', 'danger');
+                showToast('Masukkan judul kegiatan dan pilih foto terlebih dahulu!', 'danger');
                 return;
             }
 
             const newPhoto = {
                 id: Date.now(),
-                caption: caption,
-                date: date || new Date().getFullYear().toString(),
-                imageUrl: imageUrl,
-                slides: [imageUrl]
+                caption,
+                date: date || '2026',
+                imageUrl
             };
+            appState.albums.unshift(newPhoto);
 
-            if (addButton) {
-                addButton.disabled = true;
-                addButton.dataset.originalText = addButton.innerHTML;
-                addButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> MENYIMPAN FOTO...';
-            }
+            document.getElementById('admAlbumCaption').value = '';
+            document.getElementById('admAlbumDate').value = '';
+            document.getElementById('admAlbumUrl').value = '';
 
-            // Jangan masukkan foto ke tampilan sebelum server menyatakan penyimpanan berhasil.
-            // Ini mencegah foto sementara terlihat lalu hilang saat sinkronisasi server.
-            callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto], (res) => {
-                if (addButton) {
-                    addButton.disabled = false;
-                    addButton.innerHTML = addButton.dataset.originalText || 'Tambah Foto ke Album';
-                }
-                if (!res || res.success === false) {
-                    showToast((res && res.message) || 'Foto belum berhasil disimpan ke server. Data album tidak diubah.', 'danger');
-                    return;
-                }
-
-                if (captionEl) captionEl.value = '';
-                if (dateEl) dateEl.value = '';
-                if (urlEl) urlEl.value = '';
-                const fileInput = document.querySelector('input[type="file"][onchange*="admAlbumUrl"]');
-                if (fileInput) fileInput.value = '';
-
-                showToast((res && res.message) || 'Foto berhasil dikirim. Album sedang disinkronkan dari server.', 'success');
-            }, () => {
-                if (addButton) {
-                    addButton.disabled = false;
-                    addButton.innerHTML = addButton.dataset.originalText || 'Tambah Foto ke Album';
-                }
-                showToast('Server tidak dapat dihubungi. Foto belum dipastikan tersimpan; jangan tutup halaman sebelum mencoba kembali.', 'danger');
-            }, 45000);
-        }
-
-        const albumSlideIndexes = {};
-        function getAlbumSlides(album) {
-            if (!Array.isArray(album.slides) || !album.slides.length) album.slides = [album.imageUrl].filter(Boolean);
-            return album.slides;
-        }
-        function changeAlbumSlide(albumId, direction) {
-            const album = appState.albums.find(a => String(a.id) === String(albumId));
-            if (!album) return;
-            const slides = getAlbumSlides(album);
-            const current = albumSlideIndexes[albumId] || 0;
-            const next = (current + direction + slides.length) % slides.length;
-            albumSlideIndexes[albumId] = next;
-            const img = document.getElementById(`album-slide-img-${albumId}`);
-            const count = document.getElementById(`album-slide-count-${albumId}`);
-            if (img) img.src = slides[next];
-            if (count) count.textContent = `${next + 1}/${slides.length}`;
-        }
-        function addAlbumSlideFromFile(event, albumId) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            compressImageFile(file, 1000, function(dataUrl) {
-                const album = appState.albums.find(a => String(a.id) === String(albumId));
-                if (!album) return;
-                const slides = getAlbumSlides(album);
-                slides.push(dataUrl);
-                album.slides = slides;
-                persistAlbumSlides(album);
-                renderAllUserViews(); renderAdminAll();
-                showToast('Slide foto berhasil ditambahkan.', 'success');
-            });
-        }
-        function removeAlbumSlide(albumId) {
-            const album = appState.albums.find(a => String(a.id) === String(albumId));
-            if (!album) return;
-            const slides = getAlbumSlides(album);
-            if (slides.length <= 1) { showToast('Album harus memiliki minimal satu foto.', 'danger'); return; }
-            slides.pop(); album.slides = slides;
-            albumSlideIndexes[albumId] = 0;
-            persistAlbumSlides(album);
-            renderAllUserViews(); renderAdminAll();
-            showToast('Slide foto terakhir berhasil dihapus.', 'success');
-        }
-        function persistAlbumSlides(album) {
-            // Endpoint backend ini perlu tersedia di Code.gs agar perubahan slide tersimpan permanen.
-            callServerSafe('updateFotoAlbumSlidesSpreadsheet', [album.id, album.slides]);
+            renderAllUserViews();
+            renderAdminAll();
+            showToast('Foto baru sedang diunggah ke Google Drive & Album Kegiatan!', 'success');
+            callServerSafe('tambahFotoAlbumSpreadsheet', [newPhoto]);
         }
 
         function deleteAdminAlbumPhoto(id) {
@@ -3650,13 +3398,11 @@
                 const namaEl = document.getElementById(`admPengNama_${idx}`);
                 const margaEl = document.getElementById(`admPengMarga_${idx}`);
                 const fotoEl = document.getElementById(`admPengFoto_${idx}`);
-                const wilayahEl = document.getElementById(`admPengKtaWilayah_${idx}`);
 
                 if (jabEl && jabEl.value.trim()) p.jabatan = jabEl.value.trim();
                 if (namaEl && namaEl.value.trim()) p.nama = namaEl.value.trim();
                 if (margaEl && margaEl.value.trim()) p.subMarga = margaEl.value.trim();
                 if (fotoEl && fotoEl.value.trim()) p.photoUrl = fotoEl.value.trim();
-                if (wilayahEl) p.ktaWilayah = wilayahEl.value.trim();
             });
         }
 
@@ -3725,279 +3471,11 @@
 
         function saveAdminPengurus() {
             syncPengurusInputsToState();
-            callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus], (res) => {
-                if (res && res.success === false) {
-                    showToast(res.message || 'Gagal menyimpan profil pengurus.', 'danger');
-                    return;
-                }
-                showToast('Profil pengurus berhasil disimpan.', 'success');
-                refreshStateFromServerSilent();
-            }, () => {
-                showToast('Profil pengurus belum tersimpan. Periksa koneksi server lalu coba lagi.', 'danger');
-            });
+            renderAllUserViews();
+            renderAdminAll();
+            showToast('Seluruh Struktur & Foto Profil Pengurus sedang disimpan ke Google Drive & Spreadsheet!', 'success');
+            callServerSafe('simpanStrukturPengurusSpreadsheet', [appState.pengurus]);
         }
-
-        let pntsPendingKtaPengurusId = '';
-
-        function openKtaPasswordModal(pengurusId) {
-            const target = (appState.pengurus || []).find(p => String(p.id) === String(pengurusId));
-            if (!target) {
-                showToast('Data pengurus tidak ditemukan. Silakan muat ulang halaman.', 'danger');
-                return;
-            }
-            pntsPendingKtaPengurusId = String(pengurusId);
-            const overlay = document.getElementById('pntsKtaPasswordOverlay');
-            const input = document.getElementById('pntsKtaPasswordInput');
-            const error = document.getElementById('pntsKtaPasswordError');
-            const title = document.getElementById('pntsKtaPasswordPengurus');
-            if (title) title.textContent = target.nama || 'Pengurus PNTS';
-            if (input) input.value = '';
-            if (error) { error.textContent = ''; error.classList.add('hidden'); }
-            if (overlay) {
-                overlay.classList.add('open');
-                overlay.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-                window.setTimeout(() => input && input.focus(), 80);
-            }
-        }
-
-        function closeKtaPasswordModal() {
-            const overlay = document.getElementById('pntsKtaPasswordOverlay');
-            if (overlay) {
-                overlay.classList.remove('open');
-                overlay.setAttribute('aria-hidden', 'true');
-            }
-            const input = document.getElementById('pntsKtaPasswordInput');
-            if (input) input.value = '';
-            pntsPendingKtaPengurusId = '';
-            document.body.style.overflow = '';
-        }
-
-        function setKtaPasswordError(message) {
-            const error = document.getElementById('pntsKtaPasswordError');
-            if (error) {
-                error.textContent = message || 'Sandi tidak sesuai atau KTA belum diaktifkan Admin.';
-                error.classList.remove('hidden');
-            }
-        }
-
-        function submitKtaPassword(event) {
-            if (event) event.preventDefault();
-            const input = document.getElementById('pntsKtaPasswordInput');
-            const button = document.getElementById('pntsKtaPasswordSubmit');
-            const pass = String(input && input.value || '').trim();
-            const pengurusId = pntsPendingKtaPengurusId;
-            if (!pengurusId) {
-                setKtaPasswordError('Data pengurus tidak ditemukan. Tutup lalu coba kembali.');
-                return;
-            }
-            if (pass.length < 6 || pass.length > 100) {
-                setKtaPasswordError('Sandi KTA harus terdiri dari 6 sampai 100 karakter.');
-                if (input) input.focus();
-                return;
-            }
-            const error = document.getElementById('pntsKtaPasswordError');
-            if (error) error.classList.add('hidden');
-            if (button) {
-                button.disabled = true;
-                button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> MEMERIKSA SANDI...';
-            }
-            callServerSafe('verifikasiCetakKTA', [pengurusId, pass], (res) => {
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = '<i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA';
-                }
-                if (!res || !res.success || !res.pengurus) {
-                    setKtaPasswordError((res && res.message) || 'Sandi salah atau KTA belum diaktifkan Admin.');
-                    if (input) { input.value = ''; input.focus(); }
-                    return;
-                }
-                closeKtaPasswordModal();
-                const p = res.pengurus;
-                openKtaPrintWindow(p, res.ktaSettings || appState.ktaSettings);
-            }, (err) => {
-                if (button) {
-                    button.disabled = false;
-                    button.innerHTML = '<i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA';
-                }
-                setKtaPasswordError('Server tidak dapat memverifikasi sandi. Periksa koneksi lalu coba kembali.');
-            });
-        }
-
-        function previewKtaUpload(kind, input) {
-            const file = input && input.files && input.files[0];
-            const preview = document.getElementById(kind === 'header' ? 'admKtaHeaderPreview' : 'admKtaLogoPreview');
-            if (!file || !preview) return;
-            if (!file.type || !file.type.startsWith('image/')) {
-                input.value = '';
-                showToast('File harus berupa gambar.', 'danger');
-                return;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                input.value = '';
-                showToast('Ukuran gambar maksimal 2 MB. Kompres gambar lalu unggah kembali.', 'danger');
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = () => {
-                preview.src = String(reader.result || '');
-                preview.classList.remove('hidden');
-            };
-            reader.onerror = () => showToast('Gambar gagal dibaca. Coba pilih file lain.', 'danger');
-            reader.readAsDataURL(file);
-        }
-
-        function readKtaUploadAsDataUrl(input) {
-            return new Promise((resolve, reject) => {
-                const file = input && input.files && input.files[0];
-                if (!file) return resolve('');
-                if (!file.type || !file.type.startsWith('image/')) return reject(new Error('File KTA harus berupa gambar.'));
-                if (file.size > 2 * 1024 * 1024) return reject(new Error('Ukuran setiap gambar maksimal 2 MB.'));
-                const reader = new FileReader();
-                reader.onload = () => resolve(String(reader.result || ''));
-                reader.onerror = () => reject(new Error('Gagal membaca file gambar.'));
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function collectKtaSettingsFromForm(headerImageUrl, logoUrl) {
-            return {
-                headerImageUrl: headerImageUrl || appState.ktaSettings.headerImageUrl || '',
-                logoUrl: logoUrl || appState.ktaSettings.logoUrl || '',
-                organizationName: String(document.getElementById('admKtaOrgName')?.value || '').trim(),
-                regionName: String(document.getElementById('admKtaRegion')?.value || '').trim(),
-                validUntil: String(document.getElementById('admKtaValidUntil')?.value || '').trim(),
-                jabatanLabel: String(document.getElementById('admKtaJabatanLabel')?.value || '').trim(),
-                wilayahLabel: String(document.getElementById('admKtaWilayahLabel')?.value || '').trim()
-            };
-        }
-
-        async function saveKtaDesignSettings() {
-            if (appState.currentRole !== 'admin') {
-                showToast('Hanya Admin yang dapat mengubah desain KTA.', 'danger');
-                return;
-            }
-            const btn = document.getElementById('btnSaveKtaSettings');
-            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> MEMBACA FOTO...'; }
-            try {
-                const headerData = await readKtaUploadAsDataUrl(document.getElementById('admKtaHeaderImageFile'));
-                const logoData = await readKtaUploadAsDataUrl(document.getElementById('admKtaLogoFile'));
-                const settings = collectKtaSettingsFromForm(headerData, logoData);
-                if (!settings.headerImageUrl) throw new Error('Silakan upload foto header KTA terlebih dahulu.');
-                if (!settings.organizationName || !settings.regionName || !settings.validUntil) {
-                    throw new Error('Nama organisasi, wilayah, dan masa berlaku wajib diisi.');
-                }
-                if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> MENGUNGGAH & MENYIMPAN...';
-                callServerSafe('simpanPengaturanKTA', [settings], (res) => {
-                    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA'; }
-                    if (!res || res.success !== true) {
-                        showToast((res && res.message) || 'Pengaturan KTA gagal disimpan.', 'danger');
-                        return;
-                    }
-                    if (res.ktaSettings) Object.assign(appState.ktaSettings, res.ktaSettings);
-                    else Object.assign(appState.ktaSettings, settings);
-                    const headerInput = document.getElementById('admKtaHeaderImageFile');
-                    const logoInput = document.getElementById('admKtaLogoFile');
-                    if (headerInput) headerInput.value = '';
-                    if (logoInput) logoInput.value = '';
-                    showToast('Foto header, logo, dan identitas KTA berhasil disimpan.', 'success');
-                    refreshStateFromServerSilent();
-                }, () => {
-                    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA'; }
-                    showToast('Upload gagal. Periksa koneksi Google Apps Script dan izin Google Drive.', 'danger');
-                }, 60000);
-            } catch (err) {
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Pengaturan KTA'; }
-                showToast(err && err.message ? err.message : 'Gagal memproses gambar KTA.', 'danger');
-            }
-        }
-
-        function previewKtaDesignSettings() {
-            Promise.all([
-                readKtaUploadAsDataUrl(document.getElementById('admKtaHeaderImageFile')),
-                readKtaUploadAsDataUrl(document.getElementById('admKtaLogoFile'))
-            ]).then(([headerData, logoData]) => {
-                const settings = collectKtaSettingsFromForm(headerData, logoData);
-                const sample = (appState.pengurus || [])[0] || {nama:'CONTOH PENGURUS',jabatan:'Ketua',subMarga:'Toga Simatupang',photoUrl:''};
-                openKtaPrintWindow(sample, settings, false);
-            }).catch(err => showToast(err.message || 'Gambar pratinjau gagal dibaca.', 'danger'));
-        }
-
-        function printPengurusKTA(pengurusId) {
-            openKtaPasswordModal(pengurusId);
-        }
-
-        function openKtaPrintWindow(p, settings, autoPrint = true) {
-            const win = window.open('', '_blank');
-            if (!win) { showToast('Izinkan pop-up browser untuk mencetak KTA.', 'danger'); return; }
-            const esc = v => String(v == null || v === '' ? '-' : v).replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
-            const cfg = Object.assign({
-                headerImageUrl:'', logoUrl:'', organizationName:'PUNGUAN NAPOSO TOGA SIMATUPANG SE-DURI',
-                regionName:'DURI DAN SEKITARNYA', validUntil:'31 Desember 2028',
-                jabatanLabel:'JABATAN', wilayahLabel:'WILAYAH'
-            }, settings || {});
-            const qrUrl = 'https://quickchart.io/qr?size=220&margin=1&text=' + encodeURIComponent('https://pntsduri.my.id');
-            const header = cfg.headerImageUrl ? `<div class="photo-header" style="background-image:linear-gradient(180deg,rgba(20,8,5,.05),rgba(20,8,5,.82)),url('${esc(cfg.headerImageUrl)}')"></div>` : '<div class="photo-header"></div>';
-            const logo = cfg.logoUrl ? `<img class="logo" src="${esc(cfg.logoUrl)}" alt="Logo PNTS">` : '<div class="logo-placeholder">PNTS</div>';
-            win.document.open();
-            win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KTA PNTS - ${esc(p.nama)}</title>
-<style>
-*{box-sizing:border-box}
-@page{size:85mm 135mm;margin:0}
-html,body{margin:0;width:85mm;height:135mm;background:#eee;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{padding:0}
-.kta{width:85mm;height:135mm;position:relative;overflow:hidden;margin:12px auto;background:#260f10;color:#fff;border:1.2mm solid #c99b42;box-shadow:0 4px 20px #0004}
-.kta:before{content:"";position:absolute;inset:2mm;border:1px solid #e8bd60;pointer-events:none;z-index:8}
-.photo-header{height:43mm;background-size:cover;background-position:center;position:relative}
-.photo-header:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(25,8,5,.10),rgba(25,8,5,.78))}
-.logo,.logo-placeholder{position:absolute;top:4mm;left:4mm;width:16mm;height:16mm;object-fit:contain;border-radius:50%;background:#fff;border:1mm solid #d6aa55;padding:1mm;z-index:4}
-.logo-placeholder{display:flex;align-items:center;justify-content:center;background:#6b1d25;color:#f8d77c;font-weight:900;font-size:11px}
-.headline{position:absolute;top:5mm;left:22mm;right:4mm;z-index:3;text-align:center;text-shadow:0 2px 4px #000;min-height:20mm;display:flex;flex-direction:column;justify-content:center}
-.title{margin:0 0 1.5mm;color:#f6d27b;font-size:13px;line-height:1.12;font-weight:900;letter-spacing:.25px}
-.org{font-size:6.2px;letter-spacing:.55px;font-weight:bold;line-height:1.3;overflow-wrap:anywhere}
-.gorga{position:absolute;left:0;right:0;height:7mm;z-index:4;opacity:.98;background-color:#5c1721;background-image:repeating-linear-gradient(135deg,transparent 0 5px,#d7a64d 5px 7px,transparent 7px 12px),repeating-linear-gradient(45deg,transparent 0 8px,#a97832 8px 10px,transparent 10px 16px);border-top:1px solid #edc66e;border-bottom:1px solid #edc66e}
-.gorga.top{top:42mm}
-.gorga.bottom{bottom:0;height:6mm}
-.content{position:relative;z-index:2;padding:7mm 5mm 3mm;background:linear-gradient(145deg,#401319,#260f12 55%,#17151b);height:65mm}
-.profile{display:flex;gap:3.5mm;align-items:flex-start}
-.person{width:27mm;height:35mm;object-fit:cover;border:1.1mm solid #d6aa55;padding:.7mm;background:#180d0d;flex:none;border-radius:2mm}
-.details{flex:1;min-width:0}
-.name{font-size:12px;line-height:1.12;font-weight:900;color:#fff;margin:0 0 2.5mm;text-transform:uppercase;overflow-wrap:anywhere}
-.rowdata{margin:0 0 1.5mm;padding-bottom:1mm;border-bottom:1px solid #ffffff25}
-.label{display:block;color:#e7bd68;font-size:6.5px;font-weight:800;letter-spacing:.4px;margin-bottom:.4mm}
-.value{font-size:7.5px;line-height:1.15;font-weight:700;color:#fff;overflow-wrap:anywhere}
-.meta{margin-top:2.5mm;border-top:1px solid #c69a4c;padding-top:2mm;display:grid;grid-template-columns:1fr 1fr;gap:2mm}
-.meta .value{font-size:7px}
-.kta-bottom{height:25mm;position:relative;background:linear-gradient(120deg,#321116,#17151b);border-top:1px solid #c69a4c}
-.qrbox{position:absolute;right:5mm;top:2mm;width:19mm;text-align:center;z-index:6;background:#fff;padding:1mm;border:1mm solid #d6aa55;border-radius:1mm}
-.qrbox img{display:block;width:17mm;height:17mm}
-.qrbox small{display:block;color:#301016;font-size:4.5px;font-weight:bold;margin-top:.3mm}
-.footer{position:absolute;left:5mm;right:27mm;top:7mm;color:#f4d58d;font-size:5.7px;letter-spacing:.55px;z-index:6;line-height:1.5}
-@media screen{body{background:#d6d6d6;padding:14px}.kta{margin:0 auto;box-shadow:0 5px 24px #0005}}
-@media print{html,body{width:85mm;height:135mm;background:#fff}.kta{margin:0;box-shadow:none;page-break-after:avoid}}
-</style></head><body>
-<main class="kta">
-${header}
-${logo}
-<div class="headline"><h1 class="title">KARTU TANDA ANGGOTA</h1><div class="org">${esc(cfg.organizationName)}</div></div>
-<div class="gorga top"></div><section class="content">
-<div class="profile"><img class="person" src="${esc(p.photoUrl)}" alt="Foto Pengurus"><div class="details">
-<h2 class="name">${esc(p.nama)}</h2>
-<div class="rowdata"><span class="label">${esc(cfg.jabatanLabel || 'JABATAN')}</span><div class="value">${esc(p.jabatan)}</div></div>
-<div class="rowdata"><span class="label">MARGA / BORU</span><div class="value">${esc(p.subMarga)}</div></div>
-<div class="rowdata"><span class="label">${esc(cfg.wilayahLabel || 'WILAYAH')}</span><div class="value">${esc(p.ktaWilayah || cfg.regionName)}</div></div>
-</div></div>
-<div class="meta"><div><span class="label">NO. KTA</span><div class="value">${esc(p.ktaNumber)}</div></div><div><span class="label">BERLAKU HINGGA</span><div class="value">${esc(cfg.validUntil)}</div></div></div>
-</section>
-<div class="kta-bottom"><div class="footer">HORAS â€¢ MARSIURUPAN â€¢ MARSADA<br>SCAN QR UNTUK MEMBUKA WEBSITE PNTS</div>
-<div class="qrbox"><img src="${qrUrl}" alt="QR Code Website PNTS"><small>pntsduri.my.id</small></div></div>
-<div class="gorga bottom"></div>
-</main><script>
-Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload=r;im.onerror=r}))).then(()=>{if(${autoPrint ? 'true' : 'false'})setTimeout(()=>window.print(),500);});
-<\/script></body></html>`);
-            win.document.close();
-        }
-
 
         function saveAdminContacts() {
             appState.contacts.tiktokUrl = document.getElementById('admContactTiktok').value.trim();
@@ -4413,100 +3891,6 @@ Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload
             );
         }
 
-        // ==================== BAGIKAN FOTO ALBUM PNTS ====================
-        function getAlbumShareData(photoId) {
-            const photo = (appState.albums || []).find(item => String(item.id) === String(photoId));
-            if (!photo) {
-                showToast('Foto album tidak ditemukan. Muat ulang halaman lalu coba lagi.', 'danger');
-                return null;
-            }
-            const photoUrl = new URL(window.location.origin + window.location.pathname);
-            photoUrl.searchParams.set('foto', String(photo.id));
-            photoUrl.hash = `pnts-album-photo-${photo.id}`;
-            const title = `${photo.caption || 'Foto Kegiatan'} - Album PNTS Se-Duri`;
-            const text = `Lihat foto kegiatan ${photo.caption || 'PNTS Se-Duri'} di website resmi Punguan Naposo Toga Simatupang Se-Duri.`;
-            return { photo, url: photoUrl.toString(), title, text };
-        }
-
-        function toggleAlbumShareMenu(event, photoId) {
-            if (event) event.stopPropagation();
-            const menu = document.getElementById(`album-share-menu-${photoId}`);
-            if (!menu) return;
-            const willOpen = menu.classList.contains('hidden');
-            document.querySelectorAll('[id^="album-share-menu-"]').forEach(item => item.classList.add('hidden'));
-            if (willOpen) menu.classList.remove('hidden');
-        }
-
-        function closeAlbumShareMenu(photoId) {
-            const menu = document.getElementById(`album-share-menu-${photoId}`);
-            if (menu) menu.classList.add('hidden');
-        }
-
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('[id^="album-share-menu-"]') &&
-                !event.target.closest('button[aria-label="Pilihan berbagi foto"]')) {
-                document.querySelectorAll('[id^="album-share-menu-"]').forEach(item => item.classList.add('hidden'));
-            }
-        });
-
-        async function shareAlbumPhoto(photoId, platform = 'native') {
-            const data = getAlbumShareData(photoId);
-            if (!data) return;
-            const encodedUrl = encodeURIComponent(data.url);
-            const message = `${data.text}\n${data.url}`;
-
-            if (platform === 'copy') {
-                try {
-                    await navigator.clipboard.writeText(data.url);
-                    showToast('Link foto berhasil disalin. Silakan tempel di aplikasi mana saja!', 'success');
-                } catch (err) {
-                    const temp = document.createElement('textarea');
-                    temp.value = data.url;
-                    temp.style.position = 'fixed';
-                    temp.style.opacity = '0';
-                    document.body.appendChild(temp);
-                    temp.select();
-                    const copied = document.execCommand('copy');
-                    temp.remove();
-                    showToast(copied ? 'Link foto berhasil disalin!' : 'Tidak dapat menyalin link. Silakan salin dari alamat browser.', copied ? 'success' : 'danger');
-                }
-                return;
-            }
-
-            if (platform === 'whatsapp') {
-                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
-                return;
-            }
-
-            if (platform === 'facebook') {
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, '_blank', 'noopener,noreferrer');
-                return;
-            }
-
-            if (platform === 'telegram') {
-                window.open(`https://t.me/share/url?url=${encodedUrl}&text=${encodeURIComponent(data.text)}`, '_blank', 'noopener,noreferrer');
-                return;
-            }
-
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: data.title, text: data.text, url: data.url });
-                } catch (err) {
-                    if (err && err.name !== 'AbortError') {
-                        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
-                    }
-                }
-            } else {
-                // Fallback desktop/browser yang belum mendukung Web Share API.
-                const choice = prompt('Ketik pilihan berbagi: WA (WhatsApp), FB (Facebook), TG (Telegram), atau LINK (salin link).');
-                const normalized = String(choice || '').trim().toLowerCase();
-                if (normalized === 'wa' || normalized === 'whatsapp') shareAlbumPhoto(photoId, 'whatsapp');
-                else if (normalized === 'fb' || normalized === 'facebook') shareAlbumPhoto(photoId, 'facebook');
-                else if (normalized === 'tg' || normalized === 'telegram') shareAlbumPhoto(photoId, 'telegram');
-                else if (normalized === 'link') shareAlbumPhoto(photoId, 'copy');
-            }
-        }
-
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initWebApp);
         } else {
@@ -4518,7 +3902,7 @@ Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload
      TOMBOL PENGADUAN PNTS DURI
      ================================================================ -->
 <style>
-#pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:50%;width:62px;height:62px;padding:7px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#pntsComplaintLauncher{position:fixed;right:22px;bottom:22px;z-index:9998;border:1px solid #fbbf24;background:linear-gradient(135deg,#991b1b,#7f1d1d);color:#fff;border-radius:999px;padding:13px 18px;font-weight:800;box-shadow:0 12px 35px #0008;display:flex;align-items:center;gap:10px;cursor:pointer}
 .pnts-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
 .pnts-overlay.open{display:flex}
 .pnts-modal{width:min(440px,100%);max-height:90vh;overflow:auto;background:#0f172a;color:#f8fafc;border:1px solid #d69e26;border-radius:20px;box-shadow:0 20px 70px #000b;padding:20px}
@@ -4535,9 +3919,9 @@ Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload
 .pnts-review-star.selected{color:#fbbf24}
 .pnts-review-bar{height:9px;flex:1;background:#334155;border-radius:99px;overflow:hidden}
 .pnts-review-bar>span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:99px}
-@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;width:54px;height:54px;padding:5px}#pntsComplaintLauncher svg{width:38px;height:38px}.pnts-modal{padding:16px}}
+@media(max-width:480px){#pntsComplaintLauncher{right:13px;bottom:14px;padding:12px 15px}.pnts-modal{padding:16px}}
 </style>
-<button id="pntsComplaintLauncher" type="button" aria-label="Customer Service PNTS Duri" title="Customer Service" onclick="pntsOpenComplaint()"><span class="pnts-ulos-emblem" aria-hidden="true"><svg viewBox="0 0 64 64" width="42" height="42"><circle cx="32" cy="32" r="29" fill="#7f1d1d" stroke="#fbbf24" stroke-width="2.5"/><path d="M10 18h44M10 46h44M14 13l8 5-8 5 8 5-8 5 8 5-8 5M50 13l-8 5 8 5-8 5 8 5-8 5 8 5" fill="none" stroke="#fbbf24" stroke-width="2"/><path d="M20 34v-5a12 12 0 0 1 24 0v5M18 32h5v10h-5zM41 32h5v10h-5zM24 45q8 7 16 0" fill="none" stroke="#fff1c2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+<button id="pntsComplaintLauncher" type="button" aria-label="Buka formulir pengaduan" onclick="pntsOpenComplaint()"><span style="font-size:18px">ðŸ“</span><span>PENGADUAN</span></button>
 
 <div id="pntsComplaintOverlay" class="pnts-overlay" role="dialog" aria-modal="true" aria-labelledby="pntsComplaintTitle">
   <section class="pnts-modal">
@@ -4710,71 +4094,5 @@ Promise.all(imgs.map(im=>im.complete?Promise.resolve():new Promise(r=>{im.onload
   };
 })();
 </script>
-
-<!-- MODAL VERIFIKASI SANDI KTA PENGURUS - GAYA FORM CETAK PNTS -->
-<style>
-#pntsKtaPasswordOverlay{position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.82);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
-#pntsKtaPasswordOverlay.open{display:flex}
-#pntsKtaPasswordOverlay .pnts-kta-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0f172a;color:#f8fafc;border:1px solid #d6a43b;border-radius:17px;box-shadow:0 24px 75px #000c}
-#pntsKtaPasswordOverlay .pnts-kta-head{display:flex;align-items:center;gap:12px;padding:15px 18px;background:linear-gradient(110deg,#7f1d1d,#35151b 68%,#111827);border-bottom:1px solid #d6a43b}
-#pntsKtaPasswordOverlay .pnts-kta-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:#f59e0b;color:#111827;display:flex;align-items:center;justify-content:center;font-size:17px}
-#pntsKtaPasswordOverlay .pnts-kta-head h2{font-family:Georgia,serif;font-weight:900;color:#fcd34d;font-size:16px;line-height:1.25}
-#pntsKtaPasswordOverlay .pnts-kta-head p{font-size:10px;color:#fde7b0;margin-top:3px}
-#pntsKtaPasswordOverlay .pnts-kta-close{margin-left:auto;background:#111827aa;color:#e2e8f0;border:1px solid #ffffff22;border-radius:8px;padding:7px 10px}
-#pntsKtaPasswordOverlay .pnts-kta-content{padding:20px 22px 22px}
-#pntsKtaPasswordOverlay .pnts-kta-input{width:100%;background:#020617;border:1px solid #d6a43b;border-radius:11px;padding:13px 15px;color:white;text-align:center;font-size:16px;letter-spacing:2px;outline:none}
-#pntsKtaPasswordOverlay .pnts-kta-input:focus{box-shadow:0 0 0 3px #f59e0b33;border-color:#fbbf24}
-#pntsKtaPasswordOverlay .pnts-kta-submit{width:100%;margin-top:13px;border:0;border-radius:11px;background:#f59e0b;color:#111827;padding:13px;font-weight:900;cursor:pointer}
-#pntsKtaPasswordOverlay .pnts-kta-submit:disabled{opacity:.65;cursor:wait}
-#pntsKtaPasswordOverlay .pnts-kta-footer{padding:12px 18px;background:#020617;border-top:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
-#pntsKtaPasswordOverlay .pnts-kta-error{margin-top:10px;padding:9px 11px;border:1px solid #ef444466;border-radius:9px;background:#7f1d1d55;color:#fecaca;font-size:12px}
-#pntsKtaPasswordOverlay .pnts-kta-cancel{background:#334155;color:#e2e8f0;border-radius:9px;padding:8px 15px;font-size:12px;font-weight:800}
-body.pnts-admin-mode #batakTortorWidget,
-body.pnts-admin-mode #pntsComplaintLauncher,
-body.pnts-admin-mode #pntsComplaintOverlay,
-body.pnts-admin-mode #pntsKtaPasswordOverlay{display:none!important}
-@media(max-width:480px){#pntsKtaPasswordOverlay .pnts-kta-content{padding:16px}#pntsKtaPasswordOverlay .pnts-kta-head{padding:13px}#pntsKtaPasswordOverlay .pnts-kta-head h2{font-size:14px}}
-</style>
-<div id="pntsKtaPasswordOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="pntsKtaPasswordTitle">
-  <section class="pnts-kta-modal">
-    <header class="pnts-kta-head">
-      <div class="pnts-kta-icon"><i class="fa-solid fa-id-card"></i></div>
-      <div>
-        <h2 id="pntsKtaPasswordTitle">VERIFIKASI SANDI KTA PENGURUS</h2>
-        <p>Masukkan sandi pribadi KTA yang diberikan Admin</p>
-      </div>
-      <button type="button" class="pnts-kta-close" onclick="closeKtaPasswordModal()" aria-label="Tutup">âœ•</button>
-    </header>
-    <form class="pnts-kta-content" onsubmit="submitKtaPassword(event)">
-      <label for="pntsKtaPasswordInput" class="block text-xs font-semibold text-slate-200 mb-2">Sandi KTA untuk:</label>
-      <div id="pntsKtaPasswordPengurus" class="text-sm font-extrabold text-amber-300 mb-3">Pengurus PNTS</div>
-      <input id="pntsKtaPasswordInput" class="pnts-kta-input" type="password" minlength="6" maxlength="100" autocomplete="current-password" placeholder="MASUKKAN SANDI PRIBADI" required>
-      <div id="pntsKtaPasswordError" class="pnts-kta-error hidden" role="alert"></div>
-      <button id="pntsKtaPasswordSubmit" type="submit" class="pnts-kta-submit"><i class="fa-solid fa-id-card mr-2"></i> VERIFIKASI & CETAK KTA</button>
-    </form>
-    <footer class="pnts-kta-footer">
-      <span class="text-[10px] text-slate-400">Sandi diverifikasi langsung oleh server PNTS</span>
-      <button type="button" class="pnts-kta-cancel" onclick="closeKtaPasswordModal()">Tutup</button>
-    </footer>
-  </section>
-</div>
-<script>
-(function(){
-  const overlay=document.getElementById('pntsKtaPasswordOverlay');
-  if(overlay){
-    overlay.addEventListener('click',function(e){if(e.target===overlay)closeKtaPasswordModal();});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))closeKtaPasswordModal();});
-  }
-  // Sinkronkan visibilitas elemen khusus pengunjung dengan role aktif.
-  const admin=document.getElementById('adminAppView');
-  const observer=new MutationObserver(function(){
-    const isAdmin=admin&&!admin.classList.contains('hidden');
-    document.body.classList.toggle('pnts-admin-mode',!!isAdmin);
-  });
-  if(admin)observer.observe(admin,{attributes:true,attributeFilter:['class']});
-  document.body.classList.toggle('pnts-admin-mode',!!(admin&&!admin.classList.contains('hidden')));
-})();
-</script>
-
 </body>
 </html>
